@@ -1,0 +1,10 @@
+# exclude netbeans stuff
+nb-configuration.xml
+nbactions.xml
+
+# vscode stuff
+.vscode/
+
+# intermediate build files, classes etc.
+target/
+
