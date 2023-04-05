@@ -100,30 +100,39 @@ public class GssMethod {
             case INT:
                 classTypes[parameterIndex] = Integer.TYPE;
                 params[parameterIndex] = in.readInt();
+                break;
             case BYTE:
                 classTypes[parameterIndex] = Byte.TYPE;
                 params[parameterIndex] = in.readByte();
+                break;
             case SHORT:
                 classTypes[parameterIndex] = Short.TYPE;
                 params[parameterIndex] = in.readShort();
+                break;
             case LONG:
                 classTypes[parameterIndex] = Long.TYPE;
                 params[parameterIndex] = in.readLong();
+                break;
             case FLOAT:
                 classTypes[parameterIndex] = Float.TYPE;
                 params[parameterIndex] = in.readFloat();
+                break;
             case DOUBLE:
                 classTypes[parameterIndex] = Double.TYPE;
                 params[parameterIndex] = in.readDouble();
+                break;
             case CHAR:
                 classTypes[parameterIndex] = Character.TYPE;
                 params[parameterIndex] = in.readChar();
+                break;
             case STRING:
                 classTypes[parameterIndex] = String.class;
                 params[parameterIndex] = readUTF8Raw(in);
+                break;
             case ARRAY:
                 params[parameterIndex] = readArray(in);
                 classTypes[parameterIndex] = params[parameterIndex].getClass();
+                break;
             default:
                 throw new Exception("[GssException] undefined parameter type: " + type);
         }
@@ -202,15 +211,15 @@ public class GssMethod {
                 byte type = in.readByte();
                 
                 switch (type) {
-                    case INT: ar[i] = in.readInt();
-                    case BYTE: ar[i] = in.readByte();
-                    case SHORT: ar[i] = in.readShort();
-                    case LONG: ar[i] = in.readLong();
-                    case FLOAT: ar[i] = in.readFloat();
-                    case DOUBLE: ar[i] = in.readDouble();
-                    case CHAR: ar[i] = in.readChar();
-                    case STRING: ar[i] = readUTF8Raw(in);
-                    case ARRAY: ar[i] = readArray(in);
+                    case INT: ar[i] = in.readInt(); break;
+                    case BYTE: ar[i] = in.readByte(); break;
+                    case SHORT: ar[i] = in.readShort(); break;
+                    case LONG: ar[i] = in.readLong(); break;
+                    case FLOAT: ar[i] = in.readFloat(); break;
+                    case DOUBLE: ar[i] = in.readDouble(); break;
+                    case CHAR: ar[i] = in.readChar(); break;
+                    case STRING: ar[i] = readUTF8Raw(in); break;
+                    case ARRAY: ar[i] = readArray(in); break;
                 }
                 
             }
