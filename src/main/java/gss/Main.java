@@ -15,6 +15,7 @@ public class Main {
         
         GssConfig config = new GssConfig();
         config.setLocalPort(16666);
+        config.addInterface(new DefaultInterface());
         
         Gss.startServer(config);       
         
