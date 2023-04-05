@@ -18,7 +18,7 @@ public class GssConfig {
     private int localPort;
     private String remoteIp;
     private int remotePort;
-    private final ArrayList<GssModule> modules = new ArrayList<GssModule>();
+    private final ArrayList<GssInterface> interfaces = new ArrayList<GssInterface>();
     
     public GssConfig() {
         
@@ -66,12 +66,12 @@ public class GssConfig {
         return remotePort;
     }
     
-    public void addModule(GssModule module) {
-        modules.add(module);
+    public void addInterface(GssInterface module) {
+        interfaces.add(module);
     }
     
-    public ArrayList<GssModule> getMoules() {
-        return modules;
+    public ArrayList<GssInterface> getMoules() {
+        return interfaces;
     }
     
     private void applyDefaults() {

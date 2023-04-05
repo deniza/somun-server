@@ -29,7 +29,7 @@ public class GssMethod {
     private Object[] params;
     private Class<?>[] classTypes;
     private GssConnection connection;
-    private GssModule module;
+    private GssInterface interfaceModule;
     
     public GssMethod(GssConnection connection) {
         this.connection = connection;
@@ -52,12 +52,10 @@ public class GssMethod {
             String moduleName = stk.nextToken();
 
             methodName = stk.nextToken();
-            module = connection.getModule(moduleName);
-            if (module == null) {
-                logError("Error: module not found: " + moduleName);
+            interfaceModule = connection.getInterface(moduleName);
+            if (interfaceModule == null) {
+                logError("Error: interface module not found: " + moduleName);
             }
-
-            module = connection.getModule(moduleName);
 
             paramLen = in.readByte();
 
@@ -74,7 +72,7 @@ public class GssMethod {
                 }
             }
 
-            method = module.getClass().getMethod(methodName, classTypes);
+            method = interfaceModule.getClass().getMethod(methodName, classTypes);
             return this;
         }
         catch (IOException ex) {
@@ -505,7 +503,7 @@ public class GssMethod {
             try {
                 Object[] params2 = Arrays.copyOf(params, params.length + 1);
                 params2[params.length] = connection;
-                method.invoke(module, params2);
+                method.invoke(interfaceModule, params2);
             }
             catch (IllegalAccessException ex) {
                 logError("[GssException] IllegalAccessException while invoking method: "+method.getName());

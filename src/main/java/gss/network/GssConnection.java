@@ -11,12 +11,12 @@ public class GssConnection {
     private String peerIp = "";
     private int peerPort;
 
-    private HashMap<String, GssModule> modules = new HashMap<String, GssModule>();
+    private HashMap<String, GssInterface> interfaces = new HashMap<String, GssInterface>();
     private HashMap<String, Object> attributes = new HashMap<String, Object>();
 
-    protected GssConnection(Collection<GssModule> moduleList){
-        for(GssModule m:moduleList){            
-            modules.put(m.getClass().getSimpleName(), m);            
+    protected GssConnection(Collection<GssInterface> interfaceList){
+        for(GssInterface m : interfaceList){            
+            interfaces.put(m.getClass().getSimpleName(), m);            
         }
     }
     
@@ -60,23 +60,23 @@ public class GssConnection {
     }
 
     public void start(){
-        for(GssModule m:modules.values()){
+        for(GssInterface m : interfaces.values()){
             m.clientConnected(this);
         }
     }
     
     public void end(){
-        for(GssModule m:modules.values()){
+        for(GssInterface m : interfaces.values()){
             m.clientDisconnected(this);
         }
     }
 
-    public void addModule(GssModule m){
-        modules.put(m.getClass().getSimpleName(), m);
+    public void addInterface(GssInterface m){
+        interfaces.put(m.getClass().getSimpleName(), m);
     }
 
-    GssModule getModule(String moduleName) {
-        return modules.get(moduleName);
+    GssInterface getInterface(String interfaceName) {
+        return interfaces.get(interfaceName);
     }
 
     public void setAttribute(String key, Object value){

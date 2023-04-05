@@ -11,10 +11,10 @@ public class GssIoHandler extends IoHandlerAdapter {
     public static ConcurrentHashMap<Long,IoSession> sessions = new ConcurrentHashMap<Long,IoSession>();
     public static ConcurrentHashMap<IoSession,GssConnection> connections = new ConcurrentHashMap<IoSession,GssConnection>();
     
-    private final Collection<GssModule> modules;
+    private final Collection<GssInterface> interfaces;
     
-    public GssIoHandler(Collection<GssModule> modules){
-        this.modules = modules;
+    public GssIoHandler(Collection<GssInterface> interfaces){
+        this.interfaces = interfaces;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GssIoHandler extends IoHandlerAdapter {
             peerPort = 0;
         }
         
-        GssConnection cb = new GssConnection(modules);
+        GssConnection cb = new GssConnection(interfaces);
         cb.setSession(session);
         cb.setPeerIp(peerIp);
         cb.setPeerPort(peerPort);
