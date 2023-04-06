@@ -7,9 +7,16 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 
 public class GssProtocolCodec implements ProtocolCodecFactory {
 
-    private GssMessageEncoder encoder = new GssMessageEncoder();
-    private GssMessageDecoder decoder = new GssMessageDecoder();
+    private GssMessageEncoder encoder;
+    private GssMessageDecoder decoder;
     
+    public GssProtocolCodec(GssIoHandler ioHandler) {
+
+        encoder = new GssMessageEncoder();
+        decoder = new GssMessageDecoder(ioHandler);
+
+    }
+
     @Override
     public ProtocolEncoder getEncoder(IoSession session) throws Exception {
         return encoder;

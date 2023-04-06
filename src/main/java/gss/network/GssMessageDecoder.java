@@ -13,6 +13,12 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
  */
 public class GssMessageDecoder extends CumulativeProtocolDecoder {
         
+    private GssIoHandler ioHandler;
+    
+    public GssMessageDecoder(GssIoHandler ioHandler) {
+        this.ioHandler = ioHandler;
+    }
+
     protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
 
         int streamStartPos = in.position();
@@ -31,7 +37,7 @@ public class GssMessageDecoder extends CumulativeProtocolDecoder {
                 return false;                        
             }
 
-            GssConnection cb = GssIoHandler.connections.get(session);
+            GssConnection cb = ioHandler.getConnection(session);
             if (cb == null) {
                 din.close();
                 throw new Exception("GssConnection is NULL");

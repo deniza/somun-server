@@ -17,22 +17,26 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 public class Gss {
     
     private static boolean debugFunctionCalls = false;
-    private static NioSocketAcceptor acceptor;
+    
+    private static NioSocketAcceptor serverAcceptor;
+    private static GssConnection clientConnection;
     
     public static void startServer(GssConfig config) {
       
         final int messageExecutorThreadCount = config.getThreadsCount();
                 
-        acceptor = new NioSocketAcceptor();
-        acceptor.setHandler(new GssIoHandler(config.getMoules()));
-        
-        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new GssProtocolCodec()));
-        acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(messageExecutorThreadCount, messageExecutorThreadCount)); 
+        serverAcceptor = new NioSocketAcceptor();
 
-        acceptor.setReuseAddress(true);        
+        GssIoHandler handler = new GssIoHandler(config.getMoules());        
+        serverAcceptor.setHandler(handler);
+        
+        serverAcceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new GssProtocolCodec(handler)));
+        serverAcceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(messageExecutorThreadCount, messageExecutorThreadCount)); 
+
+        serverAcceptor.setReuseAddress(true);        
         
         try {
-            acceptor.bind(new InetSocketAddress(config.getLocalIp(), config.getLocalPort()));
+            serverAcceptor.bind(new InetSocketAddress(config.getLocalIp(), config.getLocalPort()));
             log("server started on " + config.getLocalIp() + ":" + config.getLocalPort() + " thread count: " + messageExecutorThreadCount);
         }
         catch (IOException ex) {
@@ -42,22 +46,25 @@ public class Gss {
         
     }
 
-    public static void startClient(GssConfig config) {
+    public static GssConnection startClient(GssConfig config) {
         
         GssIoHandler handler = new GssIoHandler(config.getMoules());
         
         NioSocketConnector connector = new NioSocketConnector();        
         connector.setHandler(handler);
-        connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new GssProtocolCodec()));
+        connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new GssProtocolCodec(handler)));
         
         ConnectFuture connFuture = connector.connect(new InetSocketAddress(config.getRemoteIp(), config.getRemotePort()));
         connFuture.awaitUninterruptibly();
 
+        clientConnection = handler.getFirstConnection();
+        return clientConnection;
+
     }        
     
-    public static long getIoWrittenBytes() {
+    public static long getServerIoWrittenBytes() {
         
-        IoServiceStatistics stats = acceptor.getStatistics();
+        IoServiceStatistics stats = serverAcceptor.getStatistics();
         return stats.getWrittenBytes();
         
     }
@@ -70,9 +77,16 @@ public class Gss {
         return debugFunctionCalls;
     }
     
-    public static void shutdown() {        
-        acceptor.unbind();
-        acceptor.dispose(true);        
+    public static void shutdownServer() {
+        serverAcceptor.unbind();
+        serverAcceptor.dispose(true);  
+        
+        log("server shutdown");
+    }
+
+    public static void shutdownClient() {
+        clientConnection.closeConnection();
+        log("client shutdown");
     }
     
     private static void log(String message) {

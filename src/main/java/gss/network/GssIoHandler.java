@@ -8,13 +8,23 @@ import org.apache.mina.core.session.IoSession;
 
 public class GssIoHandler extends IoHandlerAdapter {
     
-    public static ConcurrentHashMap<Long,IoSession> sessions = new ConcurrentHashMap<Long,IoSession>();
-    public static ConcurrentHashMap<IoSession,GssConnection> connections = new ConcurrentHashMap<IoSession,GssConnection>();
+    private ConcurrentHashMap<Long,IoSession> sessions = new ConcurrentHashMap<Long,IoSession>();
+    private ConcurrentHashMap<IoSession,GssConnection> connections = new ConcurrentHashMap<IoSession,GssConnection>();
     
+    private GssConnection firstConnection;
+
     private final Collection<GssInterface> interfaces;
     
     public GssIoHandler(Collection<GssInterface> interfaces){
         this.interfaces = interfaces;
+    }
+
+    public GssConnection getConnection(IoSession session) {
+        return connections.get(session);
+    }
+
+    public GssConnection getFirstConnection() {
+        return firstConnection;
     }
 
     @Override
@@ -57,7 +67,11 @@ public class GssIoHandler extends IoHandlerAdapter {
         cb.setPeerPort(peerPort);
         
         session.setAttribute("connectionbase", cb);
-        connections.put(session, cb);        
+        connections.put(session, cb);
+
+        if (firstConnection == null) {
+            firstConnection = cb;
+        }
         
     }
 
@@ -80,8 +94,7 @@ public class GssIoHandler extends IoHandlerAdapter {
 
         sessions.remove(session.getId());
         
-        GssConnection cb = connections.get(session);
-        cb.end();
+        getConnection(session).end();
         
         connections.remove(session);                
         
@@ -102,6 +115,12 @@ public class GssIoHandler extends IoHandlerAdapter {
             log("ERROR: Handler.messageReceived message is null! possibly data decoding error occured. Check exceptions.");
         }
         
+    }
+
+    // Messages sent asynchronously. This method is called after a message is sent through socket pipe. 
+    @Override
+    public void messageSent(IoSession session, Object message) throws Exception {
+        // Empty handler
     }
     
     private void log(String message) {

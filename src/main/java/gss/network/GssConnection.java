@@ -3,6 +3,10 @@ package gss.network;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
+import org.apache.mina.core.future.IoFuture;
+import org.apache.mina.core.future.IoFutureListener;
+import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.session.IoSession;
 
 public class GssConnection {
@@ -48,9 +52,25 @@ public class GssConnection {
         return peerPort;
     }
     
-    public void invokeMethod( String methodName, Object[] params){
+    public void invokeMethod(String methodName, Object[] params){
         GssMethod mc = new GssMethod(methodName, params);        
-        session.write(mc);                
+        session.write(mc);
+    }
+
+    public void invokeMethod(String methodName, Object[] params, GssEventListener listener){
+        
+        GssMethod mc = new GssMethod(methodName, params);        
+        
+        WriteFuture future = session.write(mc);
+        future.addListener(new IoFutureListener<IoFuture>() {
+            @Override
+            public void operationComplete(IoFuture future) {
+                listener.messageSent();
+            }            
+        });
+
+        //future.awaitUninterruptibly();
+
     }
 
     public static void broadCastMethod(ArrayList<GssConnection> cbs, String methodName, Object[] params){

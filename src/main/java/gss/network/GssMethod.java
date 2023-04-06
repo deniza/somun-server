@@ -497,31 +497,25 @@ public class GssMethod {
             logInfo(logBuffer.toString());
             
         }
-        
-        if (connection.isConnected()) {
-        
-            try {
-                Object[] params2 = Arrays.copyOf(params, params.length + 1);
-                params2[params.length] = connection;
-                method.invoke(interfaceModule, params2);
-            }
-            catch (IllegalAccessException ex) {
-                logError("[GssException] IllegalAccessException while invoking method: "+method.getName());
-                ex.printStackTrace(System.out);
-            }
-            catch (IllegalArgumentException ex) {
-                logError("[GssException] IllegalArgumentException while invoking method: "+method.getName());
-                ex.printStackTrace(System.out);
-            }
-            catch (InvocationTargetException ex) {
-                logError("[GssException] InvocationTargetException while invoking method: "+method.getName());
-                ex.printStackTrace(System.out);
-            }
+                
+        try {
+            Object[] params2 = Arrays.copyOf(params, params.length + 1);
+            params2[params.length] = connection;
+            method.invoke(interfaceModule, params2);
+        }
+        catch (IllegalAccessException ex) {
+            logError("[GssException] IllegalAccessException while invoking method: "+method.getName());
+            ex.printStackTrace(System.out);
+        }
+        catch (IllegalArgumentException ex) {
+            logError("[GssException] IllegalArgumentException while invoking method: "+method.getName());
+            ex.printStackTrace(System.out);
+        }
+        catch (InvocationTargetException ex) {
+            logError("[GssException] InvocationTargetException while invoking method: "+method.getName());
+            ex.printStackTrace(System.out);
+        }
             
-        }
-        else {
-            logError("GSS: cb not connected " + method.getName());
-        }
     }
     
     private void logError(String message) {
