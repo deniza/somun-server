@@ -1,4 +1,4 @@
-package gss.model;
+package gss.server.model;
 
 import java.io.IOException;
 

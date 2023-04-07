@@ -1,16 +1,20 @@
-package gss.manager;
+package gss.server.manager;
 
 import java.util.concurrent.ConcurrentMap;
 
 import org.mapdb.*;
-import gss.model.Player;
-import gss.model.PlayerSerializer;
+
+import gss.server.model.Player;
+import gss.server.model.PlayerSerializer;
 
 public class StorageManager {
     
     private static StorageManager instance;
     private DB db;
     private ConcurrentMap<Integer, Player> playersMap;
+
+    private volatile int nextAvailablePlayerId;
+    private volatile int nextAvailableGameId = 0;
 
     private StorageManager() {
 
@@ -21,8 +25,8 @@ public class StorageManager {
     private void initialize() {
 
         db = DBMaker.fileDB("players.db")
-                    .fileMmapEnable()
                     .closeOnJvmShutdown()
+                    .transactionEnable()
                     .make();
         
         playersMap = db.hashMap("players")                    
@@ -30,6 +34,7 @@ public class StorageManager {
                         .valueSerializer(new PlayerSerializer())
                         .createOrOpen();
 
+        nextAvailablePlayerId = playersMap.size();
     }
 
     public void shutdown() {
@@ -43,10 +48,20 @@ public class StorageManager {
         return instance;
     }
 
+    public int getNextAvailablePlayerId() {
+        return nextAvailablePlayerId;
+    }
+
+    public synchronized int getAndIncrementNextAvailableGameId() {
+        return nextAvailableGameId++;
+    }
+
     public void storePlayer(Player player) {
         
         playersMap.put(player.getPlayerId(), player);
         db.commit();
+
+        nextAvailablePlayerId = playersMap.size();
 
     }
 

@@ -122,7 +122,7 @@ public class GssIoHandler extends IoHandlerAdapter {
     public void messageSent(IoSession session, Object message) throws Exception {
         // Empty handler
     }
-    
+
     private void log(String message) {
 
         StringBuilder output = new StringBuilder();                

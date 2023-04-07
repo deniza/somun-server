@@ -1,14 +1,14 @@
-package gss.manager;
+package gss.server.manager;
 
 import java.util.HashMap;
 
-import gss.model.Player;
+import gss.network.GssConnection;
+import gss.server.model.Player;
 
 public class PlayerManager {
     
     private static PlayerManager instance;
 
-    private volatile int nextAvailablePlayerId = 0;
     private final HashMap<Integer, Player> players = new HashMap<>();
 
     private PlayerManager() {
@@ -22,8 +22,8 @@ public class PlayerManager {
     }
 
     public synchronized int createPlayer() {
-
-        int playerId = nextAvailablePlayerId++;
+        
+        int playerId = StorageManager.get().getNextAvailablePlayerId();
         Player player = new Player(playerId);
 
         players.put(player.getPlayerId(), player);
@@ -34,6 +34,11 @@ public class PlayerManager {
 
     public Player getPlayer(int playerId) {
         return players.get(playerId);
+    }
+
+    public Player getPlayer(GssConnection con) {
+        int playerId = ConnectionManager.get().getPlayerId(con);
+        return getPlayer(playerId);
     }
 
 }

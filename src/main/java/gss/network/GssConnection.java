@@ -52,6 +52,10 @@ public class GssConnection {
         return peerPort;
     }
     
+    public void invokeMethod(String methodName){
+        invokeMethod(methodName, new Object[]{});
+    }
+
     public void invokeMethod(String methodName, Object[] params){
         GssMethod mc = new GssMethod(methodName, params);        
         session.write(mc);

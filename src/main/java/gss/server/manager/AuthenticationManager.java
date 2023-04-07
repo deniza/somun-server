@@ -1,6 +1,6 @@
-package gss.manager;
+package gss.server.manager;
 
-import gss.model.Player;
+import gss.server.model.Player;
 
 public class AuthenticationManager {
 

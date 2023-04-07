@@ -1,4 +1,4 @@
-package gss.util;
+package gss.server.util;
 
 import java.util.Random;
 
