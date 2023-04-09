@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.mapdb.*;
 
+import gss.server.model.GameHandler;
 import gss.server.model.Player;
 import gss.server.model.PlayerSerializer;
 
@@ -12,6 +13,7 @@ public class StorageManager {
     private static StorageManager instance;
     private DB db;
     private ConcurrentMap<Integer, Player> playersMap;
+    private ConcurrentMap<Integer, String> gameStateMap;
 
     private volatile int nextAvailablePlayerId;
     private volatile int nextAvailableGameId = 0;
@@ -24,15 +26,20 @@ public class StorageManager {
 
     private void initialize() {
 
-        db = DBMaker.fileDB("players.db")
-                    .closeOnJvmShutdown()
-                    .transactionEnable()
-                    .make();
-        
-        playersMap = db.hashMap("players")                    
-                        .keySerializer(Serializer.INTEGER)
-                        .valueSerializer(new PlayerSerializer())
-                        .createOrOpen();
+        db = DBMaker.fileDB("datastore.db")
+        .closeOnJvmShutdown()
+        .transactionEnable()
+        .make();
+
+        playersMap = db.hashMap("players")
+        .keySerializer(Serializer.INTEGER)
+        .valueSerializer(new PlayerSerializer())
+        .createOrOpen();
+
+        gameStateMap = db.hashMap("games")
+        .keySerializer(Serializer.INTEGER)
+        .valueSerializer(Serializer.STRING)
+        .createOrOpen();
 
         nextAvailablePlayerId = playersMap.size();
     }
@@ -65,16 +72,18 @@ public class StorageManager {
 
     }
 
-    public void createPlayer(Player player) {
-
-        storePlayer(player);
-
-    }
-
     public Player loadPlayer(int playerId) {
 
         return playersMap.get(playerId);
 
     }
+
+    public void storeGameState(GameHandler gameHandler, int gameId) {
+
+        String state = gameHandler.save(gameId);
+
+        gameStateMap.put(gameId, state);
+
+    }    
 
 }

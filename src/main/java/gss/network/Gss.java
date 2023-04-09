@@ -85,7 +85,11 @@ public class Gss {
     }
 
     public static void shutdownClient() {
-        clientConnection.closeConnection();
+        
+        if (clientConnection != null) {
+            clientConnection.closeConnection();
+        }
+        
         log("client shutdown");
     }
     

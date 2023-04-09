@@ -28,7 +28,7 @@ public class AccountManager {
         player.setName(guestAccountNamePrefix + playerId);
         player.setPassword(PasswordGenerator.generatePassword(16));
 
-        StorageManager.get().createPlayer(player);
+        StorageManager.get().storePlayer(player);
 
         return player;
 

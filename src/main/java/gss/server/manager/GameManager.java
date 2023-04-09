@@ -1,10 +1,13 @@
 package gss.server.manager;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 
-import gss.GssLogger;
+import gss.server.event.EventManager;
+import gss.server.event.GameEventListener.*;
+import gss.server.model.GameHandler;
 import gss.server.model.GameRules;
+import gss.server.model.GameSession;
 import gss.server.model.Player;
 import gss.server.model.PlayerWaitingList;
 import gss.server.model.ServiceUpdateInterface;
@@ -14,7 +17,9 @@ public class GameManager implements ServiceUpdateInterface {
     private static GameManager instance;
 
     private GameRules gameRules;
+    private GameHandler gameHandler;
     private final PlayerWaitingList waitingList = new PlayerWaitingList();
+    private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();
 
     private GameManager() {
 
@@ -31,11 +36,30 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void setGameRules(GameRules rules) {
         this.gameRules = rules;
-    }    
+    }
+
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+    }
 
     public void registerToCreateRandomGame(Player player) {
 
         waitingList.addPlayer(player);
+
+    }
+
+    public void makeMove(Player player, int gameId, String jsonData) {
+
+        GameSession session = gameSessions.get(gameId);
+
+        if (session.checkIfPlayerIsTurnOwner(player) == false) {
+            return;
+        }
+
+        EventManager.get().dispatch(new PlayerMakeMove(session, player.getPlayerId(), jsonData));
+
+        session.iterateTurnOwner();
+        session.saveState();
 
     }
 
@@ -47,7 +71,12 @@ public class GameManager implements ServiceUpdateInterface {
 
             for (ArrayList<Player> pairs : matchedPlayers) {
 
-                // create games here!
+                int gameId = StorageManager.get().getAndIncrementNextAvailableGameId();
+
+                GameSession session = gameHandler.createGameSession(gameId, pairs);
+                gameSessions.put(gameId, session);
+
+                EventManager.get().dispatch(new GameCreated(session));
 
             }
             

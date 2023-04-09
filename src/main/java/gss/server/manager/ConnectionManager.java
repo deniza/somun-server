@@ -29,8 +29,10 @@ public class ConnectionManager {
     }
 
     public void unregister(GssConnection con) {
-        int playerId = conPidMap.remove(con);
-        pidConMap.remove(playerId);
+        Integer playerId = conPidMap.remove(con);
+        if (playerId != null) {
+            pidConMap.remove(playerId);
+        }
     }
 
     public int getPlayerId(GssConnection con) {

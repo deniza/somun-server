@@ -85,12 +85,16 @@ public class GssIoHandler extends IoHandlerAdapter {
         session.setAttribute("active",true);
         sessions.put(session.getId(), session);
         
+        log(String.format("sessionOpened sid: %d", session.getId()));
+
         cb.start();                
         
     }
     
     @Override
     public void sessionClosed(IoSession session){
+
+        log(String.format("sessionClosed sid: %d", session.getId()));
 
         sessions.remove(session.getId());
         

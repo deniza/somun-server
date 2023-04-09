@@ -1,7 +1,6 @@
 package gss.server.model;
 
 import java.io.IOException;
-
 import org.mapdb.*;
 
 public class PlayerSerializer implements Serializer<Player> {

@@ -69,7 +69,7 @@ public class GssConnection {
         future.addListener(new IoFutureListener<IoFuture>() {
             @Override
             public void operationComplete(IoFuture future) {
-                listener.messageSent();
+                listener.onMessageSent();
             }            
         });
 

@@ -1,6 +1,8 @@
 package gss;
 
+import gss.client.SimpleClient;
 import gss.server.Somun;
+import gss.server.samplegame.SampleGameHandler;
 
 /**
  *
@@ -13,9 +15,9 @@ public class Main {
         GssLogger.info("Running GSS test driver");
 
         Somun server = new Somun();
-        server.start();
+        server.start(new SampleGameHandler());
 
-        SimpleClient client = new SimpleClient(0, "deniz", "8uh32etn8b8zn7de");
+        SimpleClient client = new SimpleClient(0, "deniz", "5hoe3ea5zdw0lcd0");
         client.start();
 
     }
