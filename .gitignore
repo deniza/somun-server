@@ -8,3 +8,5 @@ nbactions.xml
 # intermediate build files, classes etc.
 target/
 
+**/.DS_Store
+
