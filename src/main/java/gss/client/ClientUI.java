@@ -113,10 +113,13 @@ public class ClientUI {
 
         print("1) Create New Random Game");
         print("2) List Games");
-        print("3) Join Game");
+        print("3) Enter Game");
         print("4) Exit App");
 
         int command = read("?> ");
+        if (command == 3) {
+            listener.onEnterGameUICommand();
+        }
         if (command == 4) {
             executeExitApp();            
         }
@@ -136,6 +139,12 @@ public class ClientUI {
         print("4) Exit App");
 
         int command = read("?> ");
+        if (command == 1) {
+            
+            int move = read("move?> ");
+            listener.onMakeMoveUICommand(move);
+
+        }
         if (command == 4) {
             executeExitApp();
         }
@@ -171,11 +180,11 @@ public class ClientUI {
         public void onExitAppUICommand();
         public void onConnectServerUICommand();
         public void onCreateNewAccountUICommand();
-        public void onLoginUICommand();
-        public void onQuitGameUICommand();
-        public void onExitToLobbyUICommand();
-        public void onMakeMoveUICommand();
-        public void onJoinGameUICommand();
+        public void onLoginUICommand();        
+        public void onMakeMoveUICommand(int number);
+        public void onEnterGameUICommand();
+        public void onExitGameUICommand();
+        public void onResignGameUICommand();
         public void onListGamesUICommand();
         public void onCreateRandomGameUICommand();
     }

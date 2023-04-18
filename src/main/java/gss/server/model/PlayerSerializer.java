@@ -1,6 +1,8 @@
 package gss.server.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.mapdb.*;
 
 public class PlayerSerializer implements Serializer<Player> {
@@ -11,6 +13,12 @@ public class PlayerSerializer implements Serializer<Player> {
         out.writeInt(player.getPlayerId());
         out.writeUTF(player.getName());
         out.writeUTF(player.getPassword());
+        
+        ArrayList<Integer> gameIds = player.getGameIds();
+        out.writeInt(gameIds.size());
+        for (int gid : gameIds) {
+            out.writeInt(gid);
+        }
 
     }
 
@@ -24,6 +32,14 @@ public class PlayerSerializer implements Serializer<Player> {
         Player player = new Player(playerId);
         player.setName(name);
         player.setPassword(password);
+
+        int gameIdCount = input.readInt();
+        ArrayList<Integer> gameIds = new ArrayList<>(gameIdCount);
+        for (int i=0;i<gameIdCount;++i) {
+            gameIds.add(input.readInt());
+        }
+
+        player.setGameIds(gameIds);
 
         return player;
 

@@ -8,10 +8,11 @@ import java.util.ArrayList;
  */
 public class GssConfig {
     
+    private final int DefaultProcessorCount = Runtime.getRuntime().availableProcessors();
     private final String DefaultLocalIp = "127.0.0.1";
     private final String DefaultRemoteIp = "127.0.0.1";
     private final int DefaultLocalPort = 27888;
-    private final int DefaultRemotePort = 27889;
+    private final int DefaultRemotePort = 27889;    
     
     private int threadsCount;
     private String localIp;
@@ -76,9 +77,7 @@ public class GssConfig {
     
     private void applyDefaults() {
         
-        final int processorCount = Runtime.getRuntime().availableProcessors();
-        
-        setThreadsCount(processorCount);
+        setThreadsCount(DefaultProcessorCount);
         setLocalIp(DefaultLocalIp);
         setRemoteIp(DefaultRemoteIp);
         setLocalPort(DefaultLocalPort);

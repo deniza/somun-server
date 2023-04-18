@@ -9,6 +9,7 @@ import gss.server.model.GameHandler;
 import gss.server.model.GameRules;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
+import gss.server.model.PlayerGameList;
 import gss.server.model.PlayerWaitingList;
 import gss.server.model.ServiceUpdateInterface;
 
@@ -19,7 +20,8 @@ public class GameManager implements ServiceUpdateInterface {
     private GameRules gameRules;
     private GameHandler gameHandler;
     private final PlayerWaitingList waitingList = new PlayerWaitingList();
-    private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();
+    private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();  // gameId, gameSession
+    private final PlayerGameList playerGameList = new PlayerGameList();
 
     private GameManager() {
 
@@ -45,6 +47,12 @@ public class GameManager implements ServiceUpdateInterface {
     public void registerToCreateRandomGame(Player player) {
 
         waitingList.addPlayer(player);
+
+    }
+
+    public int[] getGameList(Player player) {
+        
+        return playerGameList.getGameIdList(player.getPlayerId());
 
     }
 
@@ -75,6 +83,8 @@ public class GameManager implements ServiceUpdateInterface {
 
                 GameSession session = gameHandler.createGameSession(gameId, pairs);
                 gameSessions.put(gameId, session);
+                
+                playerGameList.create(pairs, session);                
 
                 EventManager.get().dispatch(new GameCreated(session));
 

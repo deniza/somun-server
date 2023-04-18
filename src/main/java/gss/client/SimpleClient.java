@@ -10,12 +10,14 @@ import gss.client.interfaces.Account.*;
 import gss.network.Gss;
 import gss.network.GssConfig;
 import gss.network.GssConnection;
+import gss.server.samplegame.Move;
 
 public class SimpleClient implements UIListener {
     
     private int playerId;
     private String playerName;
     private String playerPassword;
+    private int currentGameId = 0;
     private GssConnection con;
 
     private Auth auth = new Auth();
@@ -53,6 +55,19 @@ public class SimpleClient implements UIListener {
 
         play.addListener(new PlayListener() {
             @Override
+            public void enterGameResponse(int status) {
+            }
+            @Override
+            public void exitGameResponse(int status) {
+                currentGameId = 0;
+            }
+            @Override
+            public void resignGameResponse(int status) {
+            }
+            @Override
+            public void listGamesResponse(int[] gameIds) {
+            }
+            @Override
             public void makeMoveResponse(int status) {
             }
         });
@@ -87,23 +102,37 @@ public class SimpleClient implements UIListener {
     }
 
     @Override
-    public void onQuitGameUICommand() {
+    public void onEnterGameUICommand() {
+
+        con.invokeMethod("Play_enterGame", new Object[]{ currentGameId });
     }
 
     @Override
-    public void onExitToLobbyUICommand() {
+    public void onExitGameUICommand() {
+
+        con.invokeMethod("Play_exitGame", new Object[]{ currentGameId });
+
     }
 
     @Override
-    public void onMakeMoveUICommand() {
+    public void onResignGameUICommand() {
+
+        con.invokeMethod("Play_resignGame", new Object[]{ currentGameId });
+
     }
 
     @Override
-    public void onJoinGameUICommand() {
+    public void onMakeMoveUICommand(int number) {
+
+        con.invokeMethod("Play_makeMove", new Object[]{ currentGameId, new Move(number).toJson() });
+
     }
 
     @Override
     public void onListGamesUICommand() {
+
+        con.invokeMethod("Play_listGames", new Object[]{});
+
     }
 
     @Override
