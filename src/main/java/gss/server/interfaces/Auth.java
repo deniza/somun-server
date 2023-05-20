@@ -5,6 +5,7 @@ import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AuthenticationManager;
 import gss.server.manager.ConnectionManager;
+import gss.server.manager.PlayerManager;
 
 public class Auth extends GssInterface {
 
@@ -15,6 +16,7 @@ public class Auth extends GssInterface {
         if (AuthenticationManager.get().authenticate(playerId, password) == true) {
 
             ConnectionManager.get().register(playerId, con);
+            PlayerManager.get().registerExistingPlayer(playerId);
 
             call(con, "Auth", "loginResponse", 1);
 

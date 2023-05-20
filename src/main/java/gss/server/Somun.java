@@ -22,7 +22,9 @@ public class Somun {
         config.setLocalPort(Config.getInt("port"));
         config.addInterface(new gss.server.interfaces.Auth());
         config.addInterface(new gss.server.interfaces.Account());
+        config.addInterface(new gss.server.interfaces.Play());
         
+        Gss.enableDebugFunctionCalls(true);
         Gss.startServer(config);
 
         ServiceUpdateScheduler.get().register(GameManager.get());

@@ -32,6 +32,8 @@ public class SimpleClient implements UIListener {
 
     public void start() {
 
+        Gss.enableDebugFunctionCalls(true);
+        
         ClientUI.get().start(this);        
 
         account.addListener(new AccountListener() {

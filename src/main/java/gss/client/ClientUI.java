@@ -43,7 +43,7 @@ public class ClientUI {
 
     private synchronized void display() {
 
-        print("[ ** CLIENT MENU ** ]");
+        print("[ ** CLIENT MENU ** (" + state + ")]");
 
         int menuStatus = 0;
 
@@ -117,9 +117,18 @@ public class ClientUI {
         print("4) Exit App");
 
         int command = read("?> ");
+        if (command == 1) {
+            listener.onCreateRandomGameUICommand();
+        }
+        else
+        if (command == 2) {
+            listener.onListGamesUICommand();
+        }
+        else
         if (command == 3) {
             listener.onEnterGameUICommand();
         }
+        else
         if (command == 4) {
             executeExitApp();            
         }

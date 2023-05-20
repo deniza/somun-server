@@ -1,6 +1,5 @@
 package gss;
 
-import gss.client.SimpleClient;
 import gss.server.Somun;
 import gss.server.samplegame.SampleGameHandler;
 

@@ -16,7 +16,7 @@ public class StorageManager {
     private ConcurrentMap<Integer, String> gameStateMap;
 
     private volatile int nextAvailablePlayerId;
-    private volatile int nextAvailableGameId = 0;
+    private volatile int nextAvailableGameId;
 
     private StorageManager() {
 
@@ -42,6 +42,7 @@ public class StorageManager {
         .createOrOpen();
 
         nextAvailablePlayerId = playersMap.size();
+        nextAvailableGameId = gameStateMap.size();
     }
 
     public void shutdown() {

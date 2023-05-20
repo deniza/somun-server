@@ -32,6 +32,13 @@ public class PlayerManager {
 
     }
 
+    public synchronized void registerExistingPlayer(int playerId) {
+
+        Player player = new Player(playerId);
+        players.put(playerId, player);
+
+    }
+
     public Player getPlayer(int playerId) {
         return players.get(playerId);
     }
