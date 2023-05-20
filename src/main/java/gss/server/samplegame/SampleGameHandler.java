@@ -5,9 +5,12 @@ import java.util.Random;
 import gss.server.event.GameEventListener;
 import gss.server.model.GameHandler;
 import gss.server.model.GameSession;
+import gss.server.model.GameState;
 
 public class SampleGameHandler extends GameHandler {
-    
+
+    private final String VAR_NUMBER_TO_FIND = "numberToFind";
+
     @Override
     public void start() {
 
@@ -16,12 +19,12 @@ public class SampleGameHandler extends GameHandler {
     }
 
     @Override
-    public void onGameCreated(GameSession s) {
+    public void onGameCreated(GameSession session) {
 
-        SampleGameState state = new SampleGameState();
-        state.numberToFind = new Random().nextInt(100) + 1;
+        GameState state = new GameState();
 
-        s.setState(state);
+        state.setData(VAR_NUMBER_TO_FIND, new Random().nextInt(100) + 1);
+        session.setState(state);
 
     }
 
@@ -30,11 +33,12 @@ public class SampleGameHandler extends GameHandler {
     public void onPlayerMakeMove(GameSession s, String jsonData) {
 
         SampleGameSession session = (SampleGameSession) s;
-        SampleGameState state = (SampleGameState) session.getState();
-        
+        GameState state = session.getState();
+        int numberToFind = (Integer) state.getData(VAR_NUMBER_TO_FIND);
+
         Move move = Move.fromJson(jsonData);
         
-        if (move.number == state.numberToFind) {
+        if (move.number == numberToFind) {
 
             // player wins!
 

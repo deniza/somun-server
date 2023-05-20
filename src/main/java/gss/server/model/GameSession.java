@@ -1,6 +1,7 @@
 package gss.server.model;
 
 import com.google.gson.Gson;
+import gss.server.manager.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,8 @@ import java.util.Iterator;
 
 public class GameSession {
  
-    protected final int gameId;
-    protected final ArrayList<Player> players;
+    protected int gameId;
+    protected ArrayList<Player> players;
     protected Player turnOwner;
     protected GameState state;
 
@@ -57,30 +58,66 @@ public class GameSession {
 
     public String serialize() {
 
-        GameSessionData sessionData = new GameSessionData(this);
-
+        GameSessionData sessionData = GameSessionData.createUsingGameSession(this);
         return sessionData.serialize();
 
     }
 
-    private class GameSessionData {
+    public void deserialize(int gameId, String jsonData) {
 
-        final int turnOwnerPid;
-        final int[] playerPids;
-        final String gameStateData;
+        GameSessionData sessionData = GameSessionData.createUsingJson(jsonData);
 
-        public GameSessionData(GameSession session) {
+        this.gameId = gameId;
+        this.players = new ArrayList<>();
 
-            turnOwnerPid = session.turnOwner.getPlayerId();
+        for (int i=0;i<sessionData.playerPids.length;++i) {
 
-            playerPids = new int[session.players.size()];
-            int playerIndex = 0;
-            for (Player p : session.players) {
-                playerPids[playerIndex] = p.getPlayerId();
+            int pid = sessionData.playerPids[i];
+            Player player = PlayerManager.get().getPlayer(pid);
+
+            players.add(player);
+            if (pid == sessionData.turnOwnerPid) {
+                this.turnOwner = player;
             }
 
-            gameStateData = state.saveState();
+        }
 
+        this.state = new GameState();
+        this.state.deserialize(sessionData.gameStateData);
+
+    }
+
+    private static class GameSessionData {
+
+        protected int turnOwnerPid;
+        protected int[] playerPids;
+        protected String gameStateData;
+
+        public static GameSessionData createUsingGameSession(GameSession session) {
+
+            GameSessionData data = new GameSessionData();
+
+            data.turnOwnerPid = session.turnOwner.getPlayerId();
+            data.playerPids = new int[session.players.size()];
+
+            int playerIndex = 0;
+            for (Player p : session.players) {
+                data.playerPids[playerIndex] = p.getPlayerId();
+            }
+
+            data.gameStateData = session.state.serialize();
+
+            return data;
+
+        }
+        public static GameSessionData createUsingJson(String sessionDataJson) {
+
+            GameSessionData gameSessionData = new Gson().fromJson(sessionDataJson, GameSessionData.class);
+            return gameSessionData;
+
+        }
+
+        private GameSessionData() {
         }
 
         public String serialize() {
