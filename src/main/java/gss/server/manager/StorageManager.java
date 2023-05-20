@@ -2,6 +2,7 @@ package gss.server.manager;
 
 import java.util.concurrent.ConcurrentMap;
 
+import gss.server.Somun;
 import org.mapdb.*;
 
 import gss.server.model.GameHandler;
@@ -64,7 +65,7 @@ public class StorageManager {
         return nextAvailableGameId++;
     }
 
-    public void storePlayer(Player player) {
+    public synchronized void storePlayer(Player player) {
         
         playersMap.put(player.getPlayerId(), player);
         db.commit();
@@ -73,17 +74,19 @@ public class StorageManager {
 
     }
 
-    public Player loadPlayer(int playerId) {
+    public synchronized Player loadPlayer(int playerId) {
 
         return playersMap.get(playerId);
 
     }
 
-    public void storeGameState(GameHandler gameHandler, int gameId) {
+    public synchronized void storeGameState(int gameId) {
 
+        GameHandler gameHandler = Somun.getGameHandler();
         String state = gameHandler.save(gameId);
 
         gameStateMap.put(gameId, state);
+        db.commit();
 
     }    
 

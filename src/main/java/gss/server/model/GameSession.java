@@ -1,14 +1,17 @@
 package gss.server.model;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class GameSession {
  
-    private final int gameId;
-    private final ArrayList<Player> players;
-    private Player turnOwner;
-    private GameState state;
+    protected final int gameId;
+    protected final ArrayList<Player> players;
+    protected Player turnOwner;
+    protected GameState state;
 
     public GameSession(int gameId, ArrayList<Player> players) {
         this.gameId = gameId;
@@ -52,7 +55,38 @@ public class GameSession {
 
     }
 
-    public void saveState() {        
+    public String serialize() {
+
+        GameSessionData sessionData = new GameSessionData(this);
+
+        return sessionData.serialize();
+
+    }
+
+    private class GameSessionData {
+
+        final int turnOwnerPid;
+        final int[] playerPids;
+        final String gameStateData;
+
+        public GameSessionData(GameSession session) {
+
+            turnOwnerPid = session.turnOwner.getPlayerId();
+
+            playerPids = new int[session.players.size()];
+            int playerIndex = 0;
+            for (Player p : session.players) {
+                playerPids[playerIndex] = p.getPlayerId();
+            }
+
+            gameStateData = state.saveState();
+
+        }
+
+        public String serialize() {
+            return new Gson().toJson(this);
+        }
+
     }
 
 }

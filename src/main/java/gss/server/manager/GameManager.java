@@ -67,7 +67,8 @@ public class GameManager implements ServiceUpdateInterface {
         EventManager.get().dispatch(new PlayerMakeMove(session, player.getPlayerId(), jsonData));
 
         session.iterateTurnOwner();
-        session.saveState();
+
+        StorageManager.get().storeGameState(gameId);
 
     }
 

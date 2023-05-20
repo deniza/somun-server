@@ -24,8 +24,10 @@ public abstract class GameHandler extends GameEventHandler {
     }
 
     public String save(int gameId) {
-        //return gameStates.get(gameId).saveState();
-        return "";
+
+        final String stateData = gameSessions.get(gameId).serialize();
+        return stateData;
+
     }
 
     public void load(int gameId, String data) {

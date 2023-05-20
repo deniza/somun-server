@@ -10,7 +10,7 @@ import gss.server.util.Config;
 
 public class Somun {
     
-    private GameHandler gameHandler;
+    private static GameHandler gameHandler;
 
     public void start(GameHandler gameHandler) {
 
@@ -33,6 +33,10 @@ public class Somun {
         GameManager.get().setGameHandler(gameHandler);
         this.gameHandler.start();
 
+    }
+
+    public static GameHandler getGameHandler() {
+        return gameHandler;
     }
 
 }
