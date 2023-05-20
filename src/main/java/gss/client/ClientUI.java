@@ -4,7 +4,7 @@ public class ClientUI {
     
     public enum UIState {notconnected, connected, login, ingame}
 
-    private static ClientUI instance = new ClientUI();
+    private static final ClientUI instance = new ClientUI();
     private UIState state = UIState.notconnected;
     private boolean isRunning = true;
 
@@ -18,19 +18,14 @@ public class ClientUI {
 
         this.listener = listener;
 
-        Thread uithread = new Thread(new Runnable() {
+        Thread uithread = new Thread(() -> {
 
-            @Override
-            public void run() {
+            while (isRunning) {
 
-                while (isRunning) {
-
-                    display();
-
-                }
+                display();
 
             }
-            
+
         });
 
         uithread.start();
@@ -185,17 +180,17 @@ public class ClientUI {
         }        
     }
 
-    public static interface UIListener {
-        public void onExitAppUICommand();
-        public void onConnectServerUICommand();
-        public void onCreateNewAccountUICommand();
-        public void onLoginUICommand();        
-        public void onMakeMoveUICommand(int number);
-        public void onEnterGameUICommand();
-        public void onExitGameUICommand();
-        public void onResignGameUICommand();
-        public void onListGamesUICommand();
-        public void onCreateRandomGameUICommand();
+    public interface UIListener {
+        void onExitAppUICommand();
+        void onConnectServerUICommand();
+        void onCreateNewAccountUICommand();
+        void onLoginUICommand();
+        void onMakeMoveUICommand(int number);
+        void onEnterGameUICommand();
+        void onExitGameUICommand();
+        void onResignGameUICommand();
+        void onListGamesUICommand();
+        void onCreateRandomGameUICommand();
     }
 
 }
