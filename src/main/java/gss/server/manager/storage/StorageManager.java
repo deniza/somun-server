@@ -1,4 +1,4 @@
-package gss.server.manager;
+package gss.server.manager.storage;
 
 import java.util.concurrent.ConcurrentMap;
 

@@ -1,5 +1,6 @@
 package gss.server.manager;
 
+import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 
 public class AuthenticationManager {
