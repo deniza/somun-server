@@ -5,6 +5,7 @@ import gss.network.Gss;
 import gss.network.GssConfig;
 import gss.server.manager.GameManager;
 import gss.server.manager.ServiceUpdateScheduler;
+import gss.server.manager.storage.StorageManager;
 import gss.server.model.GameHandler;
 import gss.server.util.Config;
 
@@ -18,12 +19,14 @@ public class Somun {
 
         this.gameHandler = gameHandler;
 
+        StorageManager.get().initialize();
+
         GssConfig config = new GssConfig();
         config.setLocalPort(Config.getInt("port"));
         config.addInterface(new gss.server.interfaces.Auth());
         config.addInterface(new gss.server.interfaces.Account());
         config.addInterface(new gss.server.interfaces.Play());
-        
+
         Gss.enableDebugFunctionCalls(true);
         Gss.startServer(config);
 

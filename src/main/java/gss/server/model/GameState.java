@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GameState {
 
@@ -20,6 +21,9 @@ public class GameState {
     public Object getData(String key) {
         return stateVariables.get(key);
     }
+    public HashMap<String, Object> getDataMap() {
+        return stateVariables;
+    }
 
     public void updated(boolean up) {
         stateUpdated = up;
@@ -32,6 +36,14 @@ public class GameState {
     public void deserialize(String stateJson) {
 
         this.stateVariables = new Gson().fromJson(stateJson, new TypeToken<Map<String, Object>>(){}.getType());
+
+    }
+
+    public void deserialize(HashMap<String, Object> stateMap) {
+
+        for (Map.Entry<String, Object> e : stateMap.entrySet()) {
+            this.stateVariables.put(e.getKey(), e.getValue());
+        }
 
     }
 

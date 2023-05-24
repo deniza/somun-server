@@ -3,6 +3,7 @@ package gss.server.model;
 import com.google.gson.Gson;
 import gss.server.manager.PlayerManager;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +20,9 @@ public class GameSession {
         this.players = players;
     }
 
+    public GameSession() {
+    }
+
     public int getGameId() {
         return gameId;
     }
@@ -27,8 +31,27 @@ public class GameSession {
         return state;
     }
 
+    public Player getTurnOwner() {
+        return turnOwner;
+    }
+
     public void setState(GameState state) {
         this.state = state;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+    public ArrayList<Integer> getPlayerIds() {
+
+        ArrayList<Integer> pids = new ArrayList();
+
+        for (Player p : players) {
+            pids.add(p.getPlayerId());
+        }
+
+        return pids;
+
     }
 
     public Player getPlayer(int index) {
@@ -60,6 +83,21 @@ public class GameSession {
 
         GameSessionData sessionData = GameSessionData.createUsingGameSession(this);
         return sessionData.serialize();
+
+    }
+
+    public void deserialize(int gameId, int turnOwnerId, ArrayList<Integer> playerIds, GameState state) {
+
+        this.gameId = gameId;
+        this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
+
+        this.players = new ArrayList<>(playerIds.size());
+        for (Integer pid : playerIds) {
+            Player player = PlayerManager.get().getPlayer(pid);
+            this.players.add(player);
+        }
+
+        setState(state);
 
     }
 

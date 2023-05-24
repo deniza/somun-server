@@ -69,7 +69,7 @@ public class GameManager implements ServiceUpdateInterface {
 
         session.iterateTurnOwner();
 
-        StorageManager.get().storeGameState(gameId);
+        StorageManager.get().storeGameSession(session);
 
     }
 
