@@ -2,7 +2,6 @@ package gss.server.samplegame;
 
 import java.util.Random;
 
-import gss.server.event.GameEventListener;
 import gss.server.model.GameHandler;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
@@ -13,9 +12,6 @@ public class SampleGameHandler extends GameHandler {
 
     @Override
     public void start() {
-
-        GameEventListener.get().addHandler(this);
-
     }
 
     @Override
@@ -27,7 +23,6 @@ public class SampleGameHandler extends GameHandler {
         session.setState(state);
 
     }
-
 
     @Override
     public void onPlayerMakeMove(GameSession s, String jsonData) {

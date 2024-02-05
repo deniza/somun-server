@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import gss.server.event.GameEventHandler;
 
-public abstract class GameHandler extends GameEventHandler {
+public abstract class GameHandler {
     
     protected ConcurrentHashMap<Integer, GameSession> gameSessions = new ConcurrentHashMap<>();
 
@@ -32,6 +32,15 @@ public abstract class GameHandler extends GameEventHandler {
 
     public void load(int gameId, String data) {
         //gameStates.get(gameId).loadState(data);
+    }
+
+    public void onGameCreated(GameSession session) {
+    }
+
+    public void onGameFinished(GameSession session) {
+    }
+
+    public void onPlayerMakeMove(GameSession session, String jsonData) {
     }
 
 }

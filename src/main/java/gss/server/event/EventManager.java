@@ -3,8 +3,6 @@ package gss.server.event;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import gss.server.event.GameEventListener.GameEvent;
-
 public class EventManager {
     
     private HashMap<Class<? extends SomunEvent>, ArrayList<SomunEventListener>> listeners = new HashMap<>();

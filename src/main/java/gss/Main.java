@@ -1,5 +1,6 @@
 package gss;
 
+import gss.experiments.MongoExperiments;
 import gss.server.Somun;
 import gss.server.samplegame.SampleGameHandler;
 
@@ -10,7 +11,9 @@ import gss.server.samplegame.SampleGameHandler;
 public class Main {
     
     public static void main(String args[]) {
-        
+
+        //MongoExperiments.run();
+
         GssLogger.info("Running GSS server");
 
         Somun server = new Somun();

@@ -3,9 +3,7 @@ package gss.server.model;
 import com.google.gson.Gson;
 import gss.server.manager.PlayerManager;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class GameSession {
