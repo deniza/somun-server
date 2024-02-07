@@ -3,8 +3,7 @@ package gss.server.manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import gss.server.event.EventManager;
-import gss.server.event.GameEvent;
+import gss.GssLogger;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.GameHandler;
 import gss.server.model.GameRules;
@@ -13,6 +12,7 @@ import gss.server.model.Player;
 import gss.server.model.PlayerGameList;
 import gss.server.model.PlayerWaitingList;
 import gss.server.model.ServiceUpdateInterface;
+import gss.server.util.ArrayHelper;
 
 public class GameManager implements ServiceUpdateInterface {
     
@@ -73,6 +73,12 @@ public class GameManager implements ServiceUpdateInterface {
 
     }
 
+    public void playerDisconnected(Player player) {
+
+        waitingList.removePlayer(player);
+
+    }
+
     private void createRandomGames() {
 
         ArrayList<ArrayList<Player>> matchedPlayers = waitingList.matchRandomPlayers(gameRules.playerCount);
@@ -81,14 +87,7 @@ public class GameManager implements ServiceUpdateInterface {
 
             for (ArrayList<Player> pairs : matchedPlayers) {
 
-                int gameId = StorageManager.get().getAndIncrementNextAvailableGameId();
-
-                GameSession session = gameHandler.createGameSession(gameId, pairs);
-                gameSessions.put(gameId, session);
-                
-                playerGameList.create(pairs, session);
-
-                gameHandler.onGameCreated(session);
+                createGameAmongPlayers(pairs);
 
             }
             
@@ -96,11 +95,27 @@ public class GameManager implements ServiceUpdateInterface {
         
     }
 
+    private void createGameAmongPlayers(ArrayList<Player> players) {
+
+        int gameId = StorageManager.get().getAndIncrementNextAvailableGameId();
+
+        GameSession session = gameHandler.createGameSession(gameId, players);
+        gameSessions.put(gameId, session);
+
+        playerGameList.create(players, session);
+
+        gameHandler.onGameCreated(session);
+
+        ConnectionManager.get().call(players, "Play", "gameCreated", gameId,
+                ArrayHelper.toIntArray(session.getPlayerIds()), session.getTurnOwner().getPlayerId(), session.getState().serialize());
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
 
         createRandomGames();
-        
+
     }
 
 }

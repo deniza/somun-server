@@ -36,7 +36,7 @@ public class PlayerWaitingList {
 
         Collections.shuffle(players);
 
-        while (players.size() > count) {
+        while (players.size() >= count) {
 
             ArrayList<Player> pairs = new ArrayList<>();
             for (int i=0;i<count;++i) {

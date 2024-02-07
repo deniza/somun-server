@@ -7,6 +7,8 @@ import gss.server.manager.AuthenticationManager;
 import gss.server.manager.ConnectionManager;
 import gss.server.manager.PlayerManager;
 
+import java.util.ArrayList;
+
 public class Auth extends GssInterface {
 
     public void loginUsingIdPassword(int playerId, String password, GssConnection con) {

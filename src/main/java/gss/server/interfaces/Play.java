@@ -50,6 +50,24 @@ public class Play extends GssInterface {
 
     }
 
+    public void createRandomGame(GssConnection con) {
+
+        Player player = getPlayer(con);
+
+        GameManager.get().registerToCreateRandomGame(player);
+
+        call(con, "Play", "createRandomGameResponse", new Object[]{1});
+
+    }
+
+    public void clientDisconnected(GssConnection con) {
+
+        Player player = getPlayer(con);
+
+        GameManager.get().playerDisconnected(player);
+
+    }
+
     private Player getPlayer(GssConnection con) {
         return PlayerManager.get().getPlayer(con);
     }

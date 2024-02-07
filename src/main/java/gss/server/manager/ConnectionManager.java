@@ -1,8 +1,10 @@
 package gss.server.manager;
 
 import java.util.HashMap;
+import java.util.List;
 
 import gss.network.GssConnection;
+import gss.server.model.Player;
 
 public class ConnectionManager {
     
@@ -39,13 +41,21 @@ public class ConnectionManager {
         return conPidMap.get(con);
     }
 
-    public void call(int playerId, String module, String function, Object... args) {
+    public void call(Player player, String module, String function, Object... args) {
         
-        GssConnection con = pidConMap.get(playerId);
+        GssConnection con = pidConMap.get(player.getPlayerId());
         
         if (con != null) {
             con.invokeMethod(module + "_" + function, args);
         }
+    }
+
+    public void call(List<Player> players, String module, String function, Object... args) {
+
+        for (Player p : players) {
+            call(p, module, function, args);
+        }
+
     }
 
 }

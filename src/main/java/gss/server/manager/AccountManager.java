@@ -44,12 +44,12 @@ public class AccountManager {
 
             StorageManager.get().storePlayer(player);
 
-            ConnectionManager.get().call(player.getPlayerId(), "Account", "changeCredentialsResponse", 1);
+            ConnectionManager.get().call(player, "Account", "changeCredentialsResponse", 1);
 
         }
         else {
 
-            ConnectionManager.get().call(player.getPlayerId(), "Account", "changeCredentialsResponse", 0);
+            ConnectionManager.get().call(player, "Account", "changeCredentialsResponse", 0);
 
         }
 
