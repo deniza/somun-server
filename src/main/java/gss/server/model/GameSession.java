@@ -16,6 +16,11 @@ public class GameSession {
     public GameSession(int gameId, ArrayList<Player> players) {
         this.gameId = gameId;
         this.players = players;
+
+        randomizeTurnOwner();
+    }
+
+    public GameSession() {
     }
 
     public int getGameId() {
@@ -117,6 +122,12 @@ public class GameSession {
 
         this.state = new GameState();
         this.state.deserialize(sessionData.gameStateData);
+
+    }
+
+    private void randomizeTurnOwner() {
+
+        turnOwner = players.get((int) Math.random() * players.size());
 
     }
 

@@ -103,8 +103,9 @@ public class GameManager implements ServiceUpdateInterface {
         gameSessions.put(gameId, session);
 
         playerGameList.create(players, session);
-
         gameHandler.onGameCreated(session);
+
+        StorageManager.get().storeGameSession(session);
 
         ConnectionManager.get().call(players, "Play", "gameCreated", gameId,
                 ArrayHelper.toIntArray(session.getPlayerIds()), session.getTurnOwner().getPlayerId(), session.getState().serialize());
