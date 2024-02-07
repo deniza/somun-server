@@ -80,6 +80,14 @@ public class SimpleClient implements UIListener {
             @Override
             public void makeMoveResponse(int status) {
             }
+            @Override
+            public void createRandomGameResponse(int status) {
+            }
+            @Override
+            public void gameCreated(int gameId, int[] pids, int turnOwner, String state) {
+                currentGameId = gameId;
+                System.out.println("game created: " + gameId + " " + pids + " " + turnOwner + " " + state);
+            }
         });
 
     }
@@ -143,6 +151,11 @@ public class SimpleClient implements UIListener {
 
     @Override
     public void onCreateRandomGameUICommand() {
+
+        System.out.println("create random game called");
+
+        con.invokeMethod("Play_createRandomGame");
+
     }
 
     @Override

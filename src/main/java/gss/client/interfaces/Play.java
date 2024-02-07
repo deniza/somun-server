@@ -71,12 +71,24 @@ public class Play extends GssInterface {
         
     }
 
+    public void createRandomGameResponse(int status, GssConnection con) {
+
+        GssLogger.info("[Play] createRandomGameResponse called status: %d", status);
+
+        for (PlayListener l : listeners) {
+            l.createRandomGameResponse(status);
+        }
+        
+    }
+
     public static interface PlayListener {
         public void enterGameResponse(int status);
         public void exitGameResponse(int status);
         public void resignGameResponse(int status);
         public void listGamesResponse(int[] gameIds);
         public void makeMoveResponse(int status);
+        public void createRandomGameResponse(int status);
+        public void gameCreated(int gameId, int[] pids, int turnOwner, String state);
     }
 
 }
