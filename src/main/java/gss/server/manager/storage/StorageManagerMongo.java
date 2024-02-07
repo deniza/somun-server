@@ -3,6 +3,7 @@ package gss.server.manager.storage;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import gss.GssLogger;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
@@ -20,6 +21,7 @@ public class StorageManagerMongo implements StorageInterface {
     private final String MongoDatabase = Config.get("mongo_database");
     private final String PlayersCollection = "players";
     private final String GamesCollection = "games";
+    private final String ConfigCollection = "config";
 
     MongoClient client;
     MongoDatabase database;
@@ -43,6 +45,19 @@ public class StorageManagerMongo implements StorageInterface {
     public void shutdown() {
 
         client.close();
+
+    }
+
+    @Override
+    public int getAndIncrementNextAvailableGameId() {
+
+        return getAndIncrementConfigValue("nextGameId");
+
+    }
+    @Override
+    public int getAndIncrementNextAvailablePlayerId() {
+
+        return getAndIncrementConfigValue("nextPlayerId");
 
     }
 
@@ -120,5 +135,20 @@ public class StorageManagerMongo implements StorageInterface {
 
         return session;
     }
+
+    private synchronized int getAndIncrementConfigValue(String configKey) {
+
+        MongoCollection<Document> config = database.getCollection(ConfigCollection);
+
+        Document doc = config.findOneAndUpdate(
+                Filters.empty(),
+                new Document("$inc", new Document(configKey, 1)),
+                new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE)
+        );
+
+        return doc.getInteger(configKey);
+
+    }
+
 
 }

@@ -9,9 +9,6 @@ public class StorageManager {
 
     private final StorageManagerMongo mongo = new StorageManagerMongo();
 
-    private volatile int nextAvailablePlayerId;
-    private volatile int nextAvailableGameId;
-
     private StorageManager() {
     }
 
@@ -35,11 +32,11 @@ public class StorageManager {
     }
 
     public int getNextAvailablePlayerId() {
-        return nextAvailablePlayerId;
+        return mongo.getAndIncrementNextAvailablePlayerId();
     }
 
     public synchronized int getAndIncrementNextAvailableGameId() {
-        return nextAvailableGameId++;
+        return mongo.getAndIncrementNextAvailableGameId();
     }
 
     public synchronized void storePlayer(Player player) {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import gss.server.event.EventManager;
 import gss.server.event.GameEvent;
-import gss.server.event.GameEventListener.*;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.GameHandler;
 import gss.server.model.GameRules;
@@ -66,7 +65,7 @@ public class GameManager implements ServiceUpdateInterface {
             return;
         }
 
-        EventManager.get().dispatch(new GameEvent.PlayerMakeMove(session, player.getPlayerId(), jsonData));
+        gameHandler.onPlayerMakeMove(session, jsonData);
 
         session.iterateTurnOwner();
 
@@ -87,9 +86,9 @@ public class GameManager implements ServiceUpdateInterface {
                 GameSession session = gameHandler.createGameSession(gameId, pairs);
                 gameSessions.put(gameId, session);
                 
-                playerGameList.create(pairs, session);                
+                playerGameList.create(pairs, session);
 
-                EventManager.get().dispatch(new GameEvent.GameCreated(session));
+                gameHandler.onGameCreated(session);
 
             }
             
