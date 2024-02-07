@@ -99,7 +99,7 @@ public class GameManager implements ServiceUpdateInterface {
 
         int gameId = StorageManager.get().getAndIncrementNextAvailableGameId();
 
-        GameSession session = gameHandler.createGameSession(gameId, players);
+        GameSession session = new GameSession(gameId, players);
         gameSessions.put(gameId, session);
 
         playerGameList.create(players, session);

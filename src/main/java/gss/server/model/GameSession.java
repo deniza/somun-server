@@ -18,9 +18,6 @@ public class GameSession {
         this.players = players;
     }
 
-    public GameSession() {
-    }
-
     public int getGameId() {
         return gameId;
     }
