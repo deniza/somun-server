@@ -52,6 +52,14 @@ public class SimpleClient implements UIListener {
         auth.addListener(new AuthListener() {
             @Override
             public void loginResponse(int status) {
+                if (status == 0) {
+                    System.out.println("login failed");
+                    ClientUI.get().update(UIState.loginerr);
+                }
+                else {
+                    System.out.println("login success");
+                    ClientUI.get().update(UIState.login);
+                }
             }            
         });
 
@@ -88,18 +96,14 @@ public class SimpleClient implements UIListener {
     @Override
     public void onCreateNewAccountUICommand() {
 
-        con.invokeMethod("Account_createGuestAccount");
-
-        ClientUI.get().update(UIState.login);
+        con.invokeMethod("Account_createGuestAccount");        
 
     }
 
     @Override
     public void onLoginUICommand() {
 
-        con.invokeMethod("Auth_loginUsingIdPassword", new Object[]{ playerId, playerPassword });
-
-        ClientUI.get().update(UIState.login);
+        con.invokeMethod("Auth_loginUsingIdPassword", new Object[]{ playerId, playerPassword });        
 
     }
 

@@ -8,7 +8,7 @@ public class ClientMain {
 
         GssLogger.info("Running GSS sample client");
 
-        SimpleClient client = new SimpleClient(1, "deniz", "clpfwg0nc8n5nsfa");
+        SimpleClient client = new SimpleClient(14, "guest_14", "7v3phcukpp8xs2ua");
         client.start();
 
     }

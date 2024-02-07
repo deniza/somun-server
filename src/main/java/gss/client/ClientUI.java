@@ -2,7 +2,7 @@ package gss.client;
 
 public class ClientUI {
     
-    public enum UIState {notconnected, connected, login, ingame}
+    public enum UIState {notconnected, connected, loginerr, login, ingame}
 
     private static final ClientUI instance = new ClientUI();
     private UIState state = UIState.notconnected;
@@ -17,7 +17,9 @@ public class ClientUI {
     public void start(UIListener listener) {
 
         this.listener = listener;
+        display();
 
+        /*
         Thread uithread = new Thread(() -> {
 
             while (isRunning) {
@@ -29,11 +31,13 @@ public class ClientUI {
         });
 
         uithread.start();
+        */
 
     }    
 
     public synchronized void update(UIState state) {
         this.state = state;
+        display();
     }
 
     private synchronized void display() {
@@ -50,6 +54,9 @@ public class ClientUI {
         }
         else if (state == UIState.login) {
             menuStatus = displayLogin();
+        }
+        else if (state == UIState.loginerr) {
+            menuStatus = displayConnected();
         }
         else if (state == UIState.ingame) {
             menuStatus = displayInGame();            
