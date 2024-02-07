@@ -81,6 +81,16 @@ public class Play extends GssInterface {
         
     }
 
+    public void gameCreated(int gameId, int[] pids, int turnOwner, String state, GssConnection con) {
+
+        GssLogger.info("[Play] gameCreated called state: %s", state);
+
+        for (PlayListener l : listeners) {
+            l.gameCreated(gameId, pids, turnOwner, state);
+        }
+        
+    }
+
     public static interface PlayListener {
         public void enterGameResponse(int status);
         public void exitGameResponse(int status);

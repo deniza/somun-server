@@ -76,12 +76,14 @@ public class SimpleClient implements UIListener {
             }
             @Override
             public void listGamesResponse(int[] gameIds) {
+                ClientUI.get().update();
             }
             @Override
             public void makeMoveResponse(int status) {
             }
             @Override
             public void createRandomGameResponse(int status) {
+                ClientUI.get().update();
             }
             @Override
             public void gameCreated(int gameId, int[] pids, int turnOwner, String state) {

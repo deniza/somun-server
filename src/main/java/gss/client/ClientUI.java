@@ -35,6 +35,10 @@ public class ClientUI {
 
     }    
 
+    public synchronized void update() {
+        display();
+    }
+
     public synchronized void update(UIState state) {
         this.state = state;
         display();
