@@ -20,4 +20,8 @@ public class PasswordGenerator {
 
     }
 
+    public static String generateDebugPassword() {
+        return "qwerty";
+    }
+
 }
