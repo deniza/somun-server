@@ -25,7 +25,16 @@ public class AuthenticationManager {
             return false;
         }
         else {
-            return  player.getPassword().equals(password);
+            if (player.getPassword().equals(password)) {
+
+                PlayerManager.get().addPlayer(player);
+                GameManager.get().loadPlayerGameSessions(playerId);
+
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
     }

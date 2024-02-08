@@ -27,6 +27,10 @@ public class Player {
         this.gameIds = gameIds;
     }
 
+    public void addGameId(int gameId) {
+        gameIds.add(gameId);
+    }
+
     public String getName() {
         return name;
     }

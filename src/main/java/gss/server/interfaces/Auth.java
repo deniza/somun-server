@@ -19,8 +19,6 @@ public class Auth extends GssInterface {
         if (AuthenticationManager.get().authenticate(playerId, password) == true) {
 
             ConnectionManager.get().register(playerId, con);
-            PlayerManager.get().registerExistingPlayer(playerId);
-            GameManager.get().loadPlayerGameSessions(playerId);
 
             call(con, "Auth", "loginResponse", 1);
 

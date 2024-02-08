@@ -33,10 +33,9 @@ public class PlayerManager {
 
     }
 
-    public synchronized void registerExistingPlayer(int playerId) {
+    public synchronized void addPlayer(Player player) {
 
-        Player player = new Player(playerId);
-        players.put(playerId, player);
+        players.put(player.getPlayerId(), player);
 
     }
 
