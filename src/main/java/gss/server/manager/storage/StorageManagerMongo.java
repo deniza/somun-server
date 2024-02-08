@@ -86,16 +86,25 @@ public class StorageManagerMongo implements StorageInterface {
         MongoCollection<Document> collection = database.getCollection(PlayersCollection);
 
         Document doc = collection.find(Filters.eq("playerId", playerId)).first();
-        final String name = doc.getString("name");
-        final String password = doc.getString("password");
-        final List<Integer> gameIds = doc.getList("games", Integer.class);
 
-        Player player = new Player(playerId);
-        player.setName(name);
-        player.setPassword(password);
-        player.setGameIds(new ArrayList(gameIds));
+        if (doc != null) {
 
-        return player;
+            final String name = doc.getString("name");
+            final String password = doc.getString("password");
+            final List<Integer> gameIds = doc.getList("games", Integer.class);
+
+            Player player = new Player(playerId);
+            player.setName(name);
+            player.setPassword(password);
+            player.setGameIds(new ArrayList(gameIds));
+
+            return player;
+
+        }
+        else {
+            return null;
+        }
+
     }
 
     @Override

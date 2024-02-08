@@ -21,11 +21,11 @@ public class AuthenticationManager {
 
         Player player = StorageManager.get().loadPlayer(playerId);
 
-        if (player.getPassword().equals(password)) {
-            return true;
+        if (player == null) {
+            return false;
         }
         else {
-            return false;
+            return  player.getPassword().equals(password);
         }
 
     }
