@@ -9,7 +9,7 @@ public class ClientMain {
         GssLogger.info("Running GSS sample client");
 
         int pid = 1;
-        String password = "i1a6qitriv00cxyl";
+        String password = "qwerty";
 
         if (args.length > 1) {
             pid = Integer.parseInt(args[0]);
@@ -17,7 +17,7 @@ public class ClientMain {
         }
 
         SimpleClient client = new SimpleClient(pid, "guest_" + pid, password);
-        //SimpleClient client = new SimpleClient(2, "guest_2", "csgh8d8q9rvvua5s");
+        //SimpleClient client = new SimpleClient(2, "guest_2", "qwerty");
         client.start();
 
     }
