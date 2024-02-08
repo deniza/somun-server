@@ -8,8 +8,16 @@ public class ClientMain {
 
         GssLogger.info("Running GSS sample client");
 
-        SimpleClient client = new SimpleClient(1, "guest_1", "99ucis8fexowmlsq");
-        //SimpleClient client = new SimpleClient(2, "guest_2", "x1oschdtwgjegy8v");
+        int pid = 1;
+        String password = "i1a6qitriv00cxyl";
+
+        if (args.length > 1) {
+            pid = Integer.parseInt(args[0]);
+            password = args[1];
+        }
+
+        SimpleClient client = new SimpleClient(pid, "guest_" + pid, password);
+        //SimpleClient client = new SimpleClient(2, "guest_2", "csgh8d8q9rvvua5s");
         client.start();
 
     }
