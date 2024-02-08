@@ -73,7 +73,7 @@ public class StorageManagerMongo implements StorageInterface {
             .append("games", player.getGameIds());
 
         collection.findOneAndUpdate(
-                Filters.eq("playerId", 1),
+                Filters.eq("playerId", player.getPlayerId()),
                 new Document("$set", playerDoc),
                 new FindOneAndUpdateOptions().upsert(true)
         );
