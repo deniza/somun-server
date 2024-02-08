@@ -40,7 +40,17 @@ public class PlayerManager {
     }
 
     public Player getPlayer(int playerId) {
-        return players.get(playerId);
+
+        Player player = players.get(playerId);
+
+        if (player == null) {
+            player = StorageManager.get().loadPlayer(playerId);
+            if (player != null) {
+                addPlayer(player);
+            }
+        }
+
+        return player;
     }
 
     public Player getPlayer(GssConnection con) {

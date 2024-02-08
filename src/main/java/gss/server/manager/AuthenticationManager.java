@@ -19,13 +19,15 @@ public class AuthenticationManager {
 
     public boolean authenticate(int playerId, String password) {
 
-        Player player = StorageManager.get().loadPlayer(playerId);
+        Player player = PlayerManager.get().getPlayer(playerId);
 
         if (player == null) {
             return false;
         }
         else {
             if (player.getPassword().equals(password)) {
+
+                player.setOnline(true);
 
                 PlayerManager.get().addPlayer(player);
                 GameManager.get().loadPlayerGameSessions(player);
