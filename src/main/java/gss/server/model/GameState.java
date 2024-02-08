@@ -12,6 +12,12 @@ public class GameState {
 
     protected boolean stateUpdated = false;
 
+    public GameState() {
+    }
+    public GameState(String stateJson) {
+        deserialize(stateJson);
+    }
+
     public void setData(String key, Object value) {
         stateVariables.put(key, value);
         updated(true);
@@ -34,15 +40,7 @@ public class GameState {
 
     public void deserialize(String stateJson) {
 
-        this.stateVariables = new Gson().fromJson(stateJson, new TypeToken<Map<String, Object>>(){}.getType());
-
-    }
-
-    public void deserialize(HashMap<String, Object> stateMap) {
-
-        for (Map.Entry<String, Object> e : stateMap.entrySet()) {
-            this.stateVariables.put(e.getKey(), e.getValue());
-        }
+        this.stateVariables = new Gson().fromJson(stateJson, new TypeToken<HashMap<String, Object>>(){}.getType());
 
     }
 

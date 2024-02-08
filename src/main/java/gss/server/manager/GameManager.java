@@ -48,9 +48,7 @@ public class GameManager implements ServiceUpdateInterface {
 
     }
 
-    public void loadPlayerGameSessions(int playerId) {
-
-        Player player = PlayerManager.get().getPlayer(playerId);
+    public void loadPlayerGameSessions(Player player) {
 
         ArrayList<GameSession> loadedGameSessions = StorageManager.get().loadGameSessions(player.getGameIds());
         for (GameSession session : loadedGameSessions) {

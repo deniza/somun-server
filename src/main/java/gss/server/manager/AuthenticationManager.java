@@ -28,7 +28,7 @@ public class AuthenticationManager {
             if (player.getPassword().equals(password)) {
 
                 PlayerManager.get().addPlayer(player);
-                GameManager.get().loadPlayerGameSessions(playerId);
+                GameManager.get().loadPlayerGameSessions(player);
 
                 return true;
             }
