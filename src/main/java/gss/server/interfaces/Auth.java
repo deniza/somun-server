@@ -5,6 +5,7 @@ import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AuthenticationManager;
 import gss.server.manager.ConnectionManager;
+import gss.server.manager.GameManager;
 import gss.server.manager.PlayerManager;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Auth extends GssInterface {
 
             ConnectionManager.get().register(playerId, con);
             PlayerManager.get().registerExistingPlayer(playerId);
+            GameManager.get().loadPlayerGameSessions(playerId);
 
             call(con, "Auth", "loginResponse", 1);
 

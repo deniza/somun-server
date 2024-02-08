@@ -121,11 +121,33 @@ public class StorageManagerMongo implements StorageInterface {
     public GameSession loadGameSession(int gameId) {
 
         MongoCollection<Document> collection = database.getCollection(GamesCollection);
+        Document gameDoc = collection.find(Filters.eq("gameId", gameId)).first();
 
-        Document doc = collection.find(Filters.eq("gameId", gameId)).first();
-        final Integer turnOwnerId = doc.getInteger("turnowner");
-        final List<Integer> playerIds = doc.getList("players", Integer.class);
-        final HashMap<String, Object> stateMap = (HashMap<String, Object>) doc.get("state");
+        return createSessionFromDocument(gameDoc);
+
+    }
+
+    @Override
+    public ArrayList<GameSession> loadGameSessions(ArrayList<Integer> gameIds) {
+
+        MongoCollection<Document> collection = database.getCollection(GamesCollection);
+        FindIterable<Document> results = collection.find(Filters.in("gameId", gameIds));
+
+        ArrayList<GameSession> sessions = new ArrayList<>();
+        for (Document gameDoc : results) {
+            sessions.add(createSessionFromDocument(gameDoc));
+        }
+
+        return sessions;
+
+    }
+
+    private GameSession createSessionFromDocument(Document gameDoc) {
+
+        final Integer gameId = gameDoc.getInteger("gameId");
+        final Integer turnOwnerId = gameDoc.getInteger("turnowner");
+        final List<Integer> playerIds = gameDoc.getList("players", Integer.class);
+        final HashMap<String, Object> stateMap = (HashMap<String, Object>) gameDoc.get("state");
 
         GameState state = new GameState();
         state.deserialize(stateMap);
@@ -134,6 +156,7 @@ public class StorageManagerMongo implements StorageInterface {
         session.deserialize(gameId, turnOwnerId, new ArrayList<>(playerIds), state);
 
         return session;
+
     }
 
     private synchronized int getAndIncrementConfigValue(String configKey) {

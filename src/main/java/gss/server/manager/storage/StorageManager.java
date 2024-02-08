@@ -3,6 +3,8 @@ package gss.server.manager.storage;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
+import java.util.ArrayList;
+
 public class StorageManager {
     
     private static StorageManager instance;
@@ -56,5 +58,11 @@ public class StorageManager {
         mongo.storeGameSession(session);
 
     }    
+
+    public synchronized ArrayList<GameSession> loadGameSessions(ArrayList<Integer> gameIds) {
+
+        return mongo.loadGameSessions(gameIds);
+
+    }
 
 }
