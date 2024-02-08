@@ -5,6 +5,7 @@ import gss.network.GssInterface;
 import gss.server.manager.GameManager;
 import gss.server.manager.PlayerManager;
 import gss.server.model.Player;
+import gss.server.util.ArrayHelper;
 
 public class Play extends GssInterface {
     
@@ -36,9 +37,7 @@ public class Play extends GssInterface {
 
         Player player = getPlayer(con);
 
-        final int[] gameIds = GameManager.get().getGameList(player);
-
-        call(con, "Play", "listGamesResponse", gameIds);
+        call(con, "Play", "listGamesResponse", ArrayHelper.toIntArray(player.getGameIds()));
 
     }
 
