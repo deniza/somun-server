@@ -25,9 +25,8 @@ public class SampleGameHandler extends GameHandler {
     }
 
     @Override
-    public void onPlayerMakeMove(GameSession s, String jsonData) {
+    public void onPlayerMakeMove(GameSession session, String jsonData) {
 
-        SampleGameSession session = (SampleGameSession) s;
         GameState state = session.getState();
         int numberToFind = (Integer) state.getData(VAR_NUMBER_TO_FIND);
 
