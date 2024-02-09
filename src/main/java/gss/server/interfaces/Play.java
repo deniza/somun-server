@@ -11,17 +11,29 @@ public class Play extends GssInterface {
     
     public void enterGame(int gameId, GssConnection con) {
 
-        //Player player = getPlayer(con);
+        Player player = getPlayer(con);
 
-        // enter game here
+        if (player.getActiveGameId() == -1) {
+            GameManager.get().enterGame(player, gameId);
+            call(con, "Play", "enterGameResponse", new Object[]{1});
+        }
+        else {
+            call(con, "Play", "enterGameResponse", new Object[]{0});
+        }
 
     }
 
     public void exitGame(int gameId, GssConnection con) {
 
-        //Player player = getPlayer(con);
+        Player player = getPlayer(con);
 
-        // exit game here
+        if (player.getActiveGameId() == gameId) {
+            GameManager.get().exitGame(player, gameId);
+            call(con, "Play", "exitGameResponse", new Object[]{1});
+        }
+        else {
+            call(con, "Play", "exitGameResponse", new Object[]{0});
+        }
 
     }
 
@@ -45,7 +57,9 @@ public class Play extends GssInterface {
 
         Player player = getPlayer(con);
 
-        GameManager.get().makeMove(player, gameId, jsonData);
+        if (player.getActiveGameId() == gameId) {
+            GameManager.get().makeMove(player, gameId, jsonData);
+        }
 
     }
 

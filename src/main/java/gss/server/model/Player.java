@@ -9,12 +9,14 @@ public class Player {
     private String password;
     private ArrayList<Integer> gameIds = new ArrayList<>();
     private boolean online;
+    private int activeGameId;
 
     public Player(int playerId) {
         this.playerId = playerId;
         setName("");
         setPassword("");
         setOnline(false);
+        setActiveGameId(-1);
     }
 
     public int getPlayerId() {
@@ -55,6 +57,12 @@ public class Player {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+    public void setActiveGameId(int gameId) {
+        this.activeGameId = gameId;
+    }
+    public int getActiveGameId() {
+        return activeGameId;
     }
 
 

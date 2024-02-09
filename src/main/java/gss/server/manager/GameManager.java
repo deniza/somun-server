@@ -57,6 +57,17 @@ public class GameManager implements ServiceUpdateInterface {
 
     }
 
+    public void enterGame(Player player, int gameId) {
+
+        player.setActiveGameId(gameId);
+
+    }
+    public void exitGame(Player player, int gameId) {
+
+        player.setActiveGameId(-1);
+
+    }
+
     public void makeMove(Player player, int gameId, String jsonData) {
 
         GameSession session = gameSessions.get(gameId);
