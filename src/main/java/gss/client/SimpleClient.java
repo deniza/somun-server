@@ -115,6 +115,7 @@ public class SimpleClient implements UIListener {
             @Override
             public void gameStateUpdated(int gameId, String state) {
                 System.out.println("game state updated: " + gameId + " " + state);
+                ClientUI.get().update(ClientUI.UIState.ingame);
             }
         });
 
