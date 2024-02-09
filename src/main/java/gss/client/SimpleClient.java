@@ -112,6 +112,10 @@ public class SimpleClient implements UIListener {
                 currentGameId = gameId;
                 System.out.println("game created: " + gameId + " " + pids + " " + turnOwner + " " + state);
             }
+            @Override
+            public void gameStateUpdated(int gameId, String state) {
+                System.out.println("game state updated: " + gameId + " " + state);
+            }
         });
 
     }

@@ -91,6 +91,16 @@ public class Play extends GssInterface {
         
     }
 
+    public void gameStateUpdated(int gameId, String state, GssConnection con) {
+
+        GssLogger.info("[Play] gameStateUpdated called gameId: %d state: %s", gameId, state);
+
+        for (PlayListener l : listeners) {
+            l.gameStateUpdated(gameId, state);
+        }
+        
+    }
+
     public static interface PlayListener {
         public void enterGameResponse(int status);
         public void exitGameResponse(int status);
@@ -99,6 +109,7 @@ public class Play extends GssInterface {
         public void makeMoveResponse(int status);
         public void createRandomGameResponse(int status);
         public void gameCreated(int gameId, int[] pids, int turnOwner, String state);
+        public void gameStateUpdated(int gameId, String state);
     }
 
 }
