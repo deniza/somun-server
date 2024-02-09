@@ -1,7 +1,7 @@
 package gss.server.model;
 
-import com.google.gson.Gson;
 import gss.server.manager.PlayerManager;
+import gss.server.util.JsonHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -156,7 +156,7 @@ public class GameSession {
         }
         public static GameSessionData createUsingJson(String sessionDataJson) {
 
-            GameSessionData gameSessionData = new Gson().fromJson(sessionDataJson, GameSessionData.class);
+            GameSessionData gameSessionData = JsonHelper.fromJson(sessionDataJson, GameSessionData.class);
             return gameSessionData;
 
         }
@@ -165,7 +165,7 @@ public class GameSession {
         }
 
         public String serialize() {
-            return new Gson().toJson(this);
+            return JsonHelper.toJson(this);
         }
 
     }

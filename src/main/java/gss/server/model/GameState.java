@@ -1,10 +1,7 @@
 package gss.server.model;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import gss.server.util.JsonHelper;
 import java.util.HashMap;
-import java.util.Map;
 
 public class GameState {
 
@@ -35,12 +32,12 @@ public class GameState {
     }
 
     public String serialize() {
-        return new Gson().toJson(stateVariables);
+        return JsonHelper.hashmapToJson(stateVariables);
     }
 
     public void deserialize(String stateJson) {
 
-        this.stateVariables = new Gson().fromJson(stateJson, new TypeToken<HashMap<String, Object>>(){}.getType());
+        this.stateVariables = JsonHelper.jsonToHashmap(stateJson);
 
     }
 

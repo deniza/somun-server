@@ -1,6 +1,5 @@
 package gss.server.manager.storage;
 
-import com.google.gson.Gson;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -10,10 +9,9 @@ import gss.server.model.GameSession;
 import gss.server.model.GameState;
 import gss.server.model.Player;
 import gss.server.util.Config;
+import gss.server.util.JsonHelper;
 import org.bson.Document;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class StorageManagerMongo implements StorageInterface {
@@ -160,8 +158,7 @@ public class StorageManagerMongo implements StorageInterface {
 
         Object stateObj = gameDoc.get("state");
 
-        Gson gson = new Gson();
-        GameState state = new GameState(gson.toJson(stateObj));
+        GameState state = new GameState(JsonHelper.toJson(stateObj));
 
         GameSession session = new GameSession();
         session.deserialize(gameId, turnOwnerId, new ArrayList<>(playerIds), state);

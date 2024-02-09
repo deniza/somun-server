@@ -1,6 +1,6 @@
 package gss.server.samplegame;
 
-import com.google.gson.Gson;
+import gss.server.util.JsonHelper;
 
 public class Move {    
     
@@ -11,11 +11,11 @@ public class Move {
     }
 
     public static Move fromJson(String json) {
-        return new Gson().fromJson(json, Move.class);
+        return JsonHelper.fromJson(json, Move.class);
     }
 
     public String toJson() {
-        return new Gson().toJson(this);
+        return JsonHelper.toJson(this);
     }
 
 }
