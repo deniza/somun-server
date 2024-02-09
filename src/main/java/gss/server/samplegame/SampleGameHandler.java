@@ -1,10 +1,13 @@
 package gss.server.samplegame;
 
+import java.util.HashMap;
 import java.util.Random;
 
+import gss.server.manager.ConnectionManager;
 import gss.server.model.GameHandler;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
+import gss.server.util.JsonHelper;
 
 public class SampleGameHandler extends GameHandler {
 
@@ -28,7 +31,7 @@ public class SampleGameHandler extends GameHandler {
     public void onPlayerMakeMove(GameSession session, String jsonData) {
 
         GameState state = session.getState();
-        int numberToFind = (Integer) state.getData(VAR_NUMBER_TO_FIND);
+        int numberToFind = state.getInteger(VAR_NUMBER_TO_FIND);
 
         Move move = Move.fromJson(jsonData);
         
@@ -36,10 +39,29 @@ public class SampleGameHandler extends GameHandler {
 
             // player wins!
 
+            setGameFinished();
+            session.setWinner(session.getTurnOwner());
+
+            HashMap<String, Object> stateMap = new HashMap<>();
+            stateMap.put("numberToFind", numberToFind);
+            stateMap.put("winner", session.getTurnOwner().getPlayerId());
+
+            ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), JsonHelper.hashmapToJson(stateMap));
+
         }
         else {
 
             // keep continue the game
+
+            HashMap<String, Object> stateMap = new HashMap<>();
+            if (move.number > numberToFind) {
+                stateMap.put("target", "smaller");
+            }
+            else {
+                stateMap.put("target", "bigger");
+            }
+
+            ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), JsonHelper.hashmapToJson(stateMap));
 
         }
 

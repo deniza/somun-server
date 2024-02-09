@@ -117,6 +117,10 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("players", session.getPlayerIds())
                 .append("state", session.getState().getDataMap());
 
+        if (session.getWinner() != null) {
+            gameDoc.append("winner", session.getWinner().getPlayerId());
+        }
+
         collection.findOneAndUpdate(
                 Filters.eq("gameId", session.getGameId()),
                 new Document("$set", gameDoc),
@@ -154,6 +158,7 @@ public class StorageManagerMongo implements StorageInterface {
 
         final Integer gameId = gameDoc.getInteger("gameId");
         final Integer turnOwnerId = gameDoc.getInteger("turnowner");
+        final Integer winnerId = gameDoc.getInteger("winner");
         final List<Integer> playerIds = gameDoc.getList("players", Integer.class);
 
         Object stateObj = gameDoc.get("state");
@@ -161,7 +166,7 @@ public class StorageManagerMongo implements StorageInterface {
         GameState state = new GameState(JsonHelper.toJson(stateObj));
 
         GameSession session = new GameSession();
-        session.deserialize(gameId, turnOwnerId, new ArrayList<>(playerIds), state);
+        session.deserialize(gameId, turnOwnerId, winnerId == null ? 0 : winnerId, new ArrayList<>(playerIds), state);
 
         return session;
 

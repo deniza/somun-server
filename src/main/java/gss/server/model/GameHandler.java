@@ -1,11 +1,13 @@
 package gss.server.model;
 
 public abstract class GameHandler {
-    
+
+    private boolean isGameFinished = false;
+
     public void start() {
     }
 
-    public void updateState(int gameId, GameState state) {
+    public final void updateState(int gameId, GameState state) {
         //gameStates.put(gameId, state);
         //state.updated(true);
     }
@@ -17,6 +19,14 @@ public abstract class GameHandler {
     }
 
     public void onPlayerMakeMove(GameSession session, String jsonData) {
+    }
+
+    public final void setGameFinished() {
+        isGameFinished = true;
+    }
+
+    public final boolean isGameFinished() {
+        return isGameFinished;
     }
 
 }

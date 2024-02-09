@@ -11,6 +11,7 @@ public class GameSession {
     protected int gameId;
     protected ArrayList<Player> players;
     protected Player turnOwner;
+    protected Player winner;
     protected GameState state;
 
     public GameSession(int gameId, ArrayList<Player> players) {
@@ -33,6 +34,14 @@ public class GameSession {
 
     public Player getTurnOwner() {
         return turnOwner;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player player) {
+        this.winner = player;
     }
 
     public void setState(GameState state) {
@@ -86,10 +95,11 @@ public class GameSession {
 
     }
 
-    public void deserialize(int gameId, int turnOwnerId, ArrayList<Integer> playerIds, GameState state) {
+    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState state) {
 
         this.gameId = gameId;
         this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
+        this.winner = PlayerManager.get().getPlayer(winnerId);
 
         this.players = new ArrayList<>(playerIds.size());
         for (Integer pid : playerIds) {

@@ -23,6 +23,22 @@ public class GameState {
     public Object getData(String key) {
         return stateVariables.get(key);
     }
+    public Integer getInteger(String key) {
+        Object obj = getData(key);
+        if (obj instanceof Integer) {
+            return (int) obj;
+        }
+        else if (obj instanceof Double) {
+            return (int) Math.round((Double) obj);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public String getString(String key) {
+        return String.valueOf(getData(key));
+    }
     public HashMap<String, Object> getDataMap() {
         return stateVariables;
     }

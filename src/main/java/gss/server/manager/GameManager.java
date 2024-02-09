@@ -78,7 +78,12 @@ public class GameManager implements ServiceUpdateInterface {
 
         gameHandler.onPlayerMakeMove(session, jsonData);
 
-        session.iterateTurnOwner();
+        if (gameHandler.isGameFinished()) {
+
+        }
+        else {
+            session.iterateTurnOwner();
+        }
 
         StorageManager.get().storeGameSession(session);
 
