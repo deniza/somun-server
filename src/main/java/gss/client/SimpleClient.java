@@ -17,7 +17,7 @@ public class SimpleClient implements UIListener {
     private int playerId;
     private String playerName;
     private String playerPassword;
-    private int currentGameId = 0;
+    public static int currentGameId = -1;
     private GssConnection con;
 
     private Auth auth = new Auth();
@@ -66,16 +66,38 @@ public class SimpleClient implements UIListener {
         play.addListener(new PlayListener() {
             @Override
             public void enterGameResponse(int status) {
+                if (status == 0) {
+                    System.out.println("enter game failed");
+                }
+                else {
+                    System.out.println("enter game success");
+                    ClientUI.get().update(UIState.ingame);
+                }
             }
             @Override
             public void exitGameResponse(int status) {
-                currentGameId = 0;
+                if (status == 0) {
+                    System.out.println("exit game failed");
+                }
+                else {
+                    System.out.println("exit game success");
+                    currentGameId = -1;
+                    ClientUI.get().update(UIState.login);
+                }                                
             }
             @Override
             public void resignGameResponse(int status) {
             }
             @Override
             public void listGamesResponse(int[] gameIds) {
+                if (gameIds.length == 0) {
+                    System.out.println("no games");
+                    currentGameId = -1;
+                }
+                else {
+                    System.out.println("games: " + gameIds);
+                    currentGameId = gameIds[0];
+                }
                 ClientUI.get().update();
             }
             @Override

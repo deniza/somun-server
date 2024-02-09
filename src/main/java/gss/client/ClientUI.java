@@ -2,7 +2,7 @@ package gss.client;
 
 public class ClientUI {
     
-    public enum UIState {notconnected, connected, loginerr, login, ingame}
+    public enum UIState {notconnected, connected, loginerr, login, ingame, makingmove}
 
     private static final ClientUI instance = new ClientUI();
     private UIState state = UIState.notconnected;
@@ -71,8 +71,7 @@ public class ClientUI {
         }
         else if (state == UIState.ingame) {
             if (command.equals("1")) {
-                //int move = ConsoleInputReader.get().readCommandInt("move?> ");
-                //listener.onMakeMoveUICommand(move);
+                update(UIState.makingmove);
             }
             else if (command.equals("2")) {
                 listener.onExitGameUICommand();
@@ -83,6 +82,9 @@ public class ClientUI {
             else if (command.equals("4")) {
                 executeExitApp();
             }
+        }
+        else if (state == UIState.makingmove) {
+            listener.onMakeMoveUICommand(Integer.parseInt(command));
         }
 
     }
@@ -115,6 +117,9 @@ public class ClientUI {
         else if (state == UIState.ingame) {
             displayInGame();            
         }
+        else if (state == UIState.makingmove) {
+            displayMakingMove();
+        }
 
     }
 
@@ -136,7 +141,7 @@ public class ClientUI {
 
         print("1) Create New Random Game");
         print("2) List Games");
-        print("3) Enter Game");
+        print("3) Enter Game " + SimpleClient.currentGameId);
         print("4) Exit App");
 
     }
@@ -147,6 +152,12 @@ public class ClientUI {
         print("2) Exit Game (to lobby)");
         print("3) Quit Game");
         print("4) Exit App");
+
+    }
+
+    private void displayMakingMove() {
+
+        print("> Guess the number: ");
 
     }
 
