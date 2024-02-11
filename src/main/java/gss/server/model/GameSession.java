@@ -12,7 +12,8 @@ public class GameSession {
     protected ArrayList<Player> players;
     protected Player turnOwner;
     protected Player winner;
-    protected GameState privateState;
+    protected GameState privateState = new GameState();
+    protected GameState publicState = new GameState();
 
     public GameSession(int gameId, ArrayList<Player> players) {
         this.gameId = gameId;
@@ -31,6 +32,9 @@ public class GameSession {
     public GameState getPrivateState() {
         return privateState;
     }
+    public GameState getPublicState() {
+        return publicState;
+    }
 
     public Player getTurnOwner() {
         return turnOwner;
@@ -46,6 +50,9 @@ public class GameSession {
 
     public void setPrivateState(GameState state) {
         this.privateState = state;
+    }
+    public void setPublicState(GameState state) {
+        this.publicState = state;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -95,7 +102,7 @@ public class GameSession {
 
     }
 
-    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState privateState) {
+    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState privateState, GameState publicState) {
 
         this.gameId = gameId;
         this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
@@ -108,6 +115,7 @@ public class GameSession {
         }
 
         setPrivateState(privateState);
+        setPublicState(publicState);
 
     }
 
@@ -131,7 +139,9 @@ public class GameSession {
         }
 
         this.privateState = new GameState();
-        this.privateState.deserialize(sessionData.gameStateData);
+        this.privateState.deserialize(sessionData.gameStateDataPrivate);
+        this.publicState = new GameState();
+        this.publicState.deserialize(sessionData.gameStateDataPublic);
 
     }
 
@@ -145,7 +155,8 @@ public class GameSession {
 
         protected int turnOwnerPid;
         protected int[] playerPids;
-        protected String gameStateData;
+        protected String gameStateDataPrivate;
+        protected String gameStateDataPublic;
 
         public static GameSessionData createUsingGameSession(GameSession session) {
 
@@ -159,7 +170,8 @@ public class GameSession {
                 data.playerPids[playerIndex] = p.getPlayerId();
             }
 
-            data.gameStateData = session.privateState.serialize();
+            data.gameStateDataPrivate = session.privateState.serialize();
+            data.gameStateDataPublic = session.publicState.serialize();
 
             return data;
 

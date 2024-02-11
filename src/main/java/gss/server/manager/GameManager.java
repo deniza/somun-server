@@ -127,7 +127,7 @@ public class GameManager implements ServiceUpdateInterface {
         }
 
         ConnectionManager.get().call(players, "Play", "gameCreated", gameId,
-                ArrayHelper.toIntArray(session.getPlayerIds()), session.getTurnOwner().getPlayerId(), session.getPrivateState().serialize());
+                ArrayHelper.toIntArray(session.getPlayerIds()), session.getTurnOwner().getPlayerId(), session.getPublicState().serialize());
 
     }
 

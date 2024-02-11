@@ -20,8 +20,7 @@ public class SampleGameHandler extends GameHandler {
     @Override
     public void onGameCreated(GameSession session) {
 
-        GameState privateState = new GameState();
-
+        GameState privateState = session.getPrivateState();
         privateState.setData(VAR_NUMBER_TO_FIND, new Random().nextInt(100) + 1);
         session.setPrivateState(privateState);
 
