@@ -12,7 +12,7 @@ public class GameSession {
     protected ArrayList<Player> players;
     protected Player turnOwner;
     protected Player winner;
-    protected GameState state;
+    protected GameState privateState;
 
     public GameSession(int gameId, ArrayList<Player> players) {
         this.gameId = gameId;
@@ -28,8 +28,8 @@ public class GameSession {
         return gameId;
     }
 
-    public GameState getState() {
-        return state;
+    public GameState getPrivateState() {
+        return privateState;
     }
 
     public Player getTurnOwner() {
@@ -44,8 +44,8 @@ public class GameSession {
         this.winner = player;
     }
 
-    public void setState(GameState state) {
-        this.state = state;
+    public void setPrivateState(GameState state) {
+        this.privateState = state;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -95,7 +95,7 @@ public class GameSession {
 
     }
 
-    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState state) {
+    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState privateState) {
 
         this.gameId = gameId;
         this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
@@ -107,7 +107,7 @@ public class GameSession {
             this.players.add(player);
         }
 
-        setState(state);
+        setPrivateState(privateState);
 
     }
 
@@ -130,8 +130,8 @@ public class GameSession {
 
         }
 
-        this.state = new GameState();
-        this.state.deserialize(sessionData.gameStateData);
+        this.privateState = new GameState();
+        this.privateState.deserialize(sessionData.gameStateData);
 
     }
 
@@ -159,7 +159,7 @@ public class GameSession {
                 data.playerPids[playerIndex] = p.getPlayerId();
             }
 
-            data.gameStateData = session.state.serialize();
+            data.gameStateData = session.privateState.serialize();
 
             return data;
 

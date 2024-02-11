@@ -20,18 +20,18 @@ public class SampleGameHandler extends GameHandler {
     @Override
     public void onGameCreated(GameSession session) {
 
-        GameState state = new GameState();
+        GameState privateState = new GameState();
 
-        state.setData(VAR_NUMBER_TO_FIND, new Random().nextInt(100) + 1);
-        session.setState(state);
+        privateState.setData(VAR_NUMBER_TO_FIND, new Random().nextInt(100) + 1);
+        session.setPrivateState(privateState);
 
     }
 
     @Override
     public void onPlayerMakeMove(GameSession session, String jsonData) {
 
-        GameState state = session.getState();
-        int numberToFind = state.getInteger(VAR_NUMBER_TO_FIND);
+        GameState privateState = session.getPrivateState();
+        int numberToFind = privateState.getInteger(VAR_NUMBER_TO_FIND);
 
         Move move = Move.fromJson(jsonData);
         
