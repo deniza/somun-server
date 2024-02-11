@@ -61,6 +61,8 @@ public class GameManager implements ServiceUpdateInterface {
 
         player.setActiveGameId(gameId);
 
+        ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, gameSessions.get(gameId).getTurnOwner().getPlayerId());
+
     }
     public void exitGame(Player player, int gameId) {
 
@@ -73,6 +75,7 @@ public class GameManager implements ServiceUpdateInterface {
         GameSession session = gameSessions.get(gameId);
 
         if (session.checkIfPlayerIsTurnOwner(player) == false) {
+            ConnectionManager.get().call(player, "Play", "makeMoveResponse", 0);
             return;
         }
 
@@ -84,6 +87,8 @@ public class GameManager implements ServiceUpdateInterface {
         else {
             session.iterateTurnOwner();
         }
+
+        ConnectionManager.get().call(player, "Play", "makeMoveResponse", 1);
 
         StorageManager.get().storeGameSession(session);
 

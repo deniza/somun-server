@@ -15,10 +15,9 @@ public class Play extends GssInterface {
 
         if (player.getActiveGameId() == -1) {
             GameManager.get().enterGame(player, gameId);
-            call(con, "Play", "enterGameResponse", new Object[]{1});
         }
         else {
-            call(con, "Play", "enterGameResponse", new Object[]{0});
+            call(con, "Play", "enterGameResponse", 0);
         }
 
     }
@@ -29,10 +28,10 @@ public class Play extends GssInterface {
 
         if (player.getActiveGameId() == gameId) {
             GameManager.get().exitGame(player, gameId);
-            call(con, "Play", "exitGameResponse", new Object[]{1});
+            call(con, "Play", "exitGameResponse", 1);
         }
         else {
-            call(con, "Play", "exitGameResponse", new Object[]{0});
+            call(con, "Play", "exitGameResponse", 0);
         }
 
     }

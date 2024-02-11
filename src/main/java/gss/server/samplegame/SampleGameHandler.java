@@ -61,6 +61,7 @@ public class SampleGameHandler extends GameHandler {
             }
 
             ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), JsonHelper.hashmapToJson(stateMap));
+            ConnectionManager.get().call(session.getPlayers(), "Play", "turnOwnerChanged", session.getGameId(), session.getTurnOwner().getPlayerId());
 
         }
 
