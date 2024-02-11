@@ -18,6 +18,7 @@ public class SimpleClient implements UIListener {
     private String playerName;
     private String playerPassword;
     public static int currentGameId = -1;
+    public static boolean isTurnOwner = false;
     private GssConnection con;
 
     private Auth auth = new Auth();
@@ -65,12 +66,13 @@ public class SimpleClient implements UIListener {
 
         play.addListener(new PlayListener() {
             @Override
-            public void enterGameResponse(int status) {
+            public void enterGameResponse(int status, int turnOwner) {                
                 if (status == 0) {
                     System.out.println("enter game failed");
                 }
                 else {
                     System.out.println("enter game success");
+                    isTurnOwner = (turnOwner == playerId);
                     ClientUI.get().update(UIState.ingame);
                 }
             }
@@ -102,20 +104,27 @@ public class SimpleClient implements UIListener {
             }
             @Override
             public void makeMoveResponse(int status) {
+                System.out.println("make move response: " + status);
             }
             @Override
             public void createRandomGameResponse(int status) {
                 ClientUI.get().update();
             }
             @Override
-            public void gameCreated(int gameId, int[] pids, int turnOwner, String state) {
+            public void gameCreated(int gameId, int[] pids, int turnOwner, String state) {                
                 currentGameId = gameId;
+                isTurnOwner = (turnOwner == playerId);
                 System.out.println("game created: " + gameId + " " + pids + " " + turnOwner + " " + state);
             }
             @Override
             public void gameStateUpdated(int gameId, String state) {
                 System.out.println("game state updated: " + gameId + " " + state);
                 ClientUI.get().update(ClientUI.UIState.ingame);
+            }
+            @Override
+            public void turnOwnerChanged(int gameId, int turnOwner) {
+                System.out.println("turn owner changed: " + gameId + " " + turnOwner);
+                isTurnOwner = (turnOwner == playerId);
             }
         });
 

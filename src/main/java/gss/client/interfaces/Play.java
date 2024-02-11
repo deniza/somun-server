@@ -19,12 +19,12 @@ public class Play extends GssInterface {
         listeners.remove(listener);
     }
 
-    public void enterGameResponse(int status, GssConnection con) {
+    public void enterGameResponse(int status, int turnOwner, GssConnection con) {
 
         GssLogger.info("[Play] enterGameResponse called status: %d", status);
 
         for (PlayListener l : listeners) {
-            l.enterGameResponse(status);
+            l.enterGameResponse(status, turnOwner);
         }
         
     }
@@ -101,8 +101,18 @@ public class Play extends GssInterface {
         
     }
 
+    public void turnOwnerChanged(int gameId, int turnOwner, GssConnection con) {
+
+        GssLogger.info("[Play] turnOwnerChanged called gameId: %d turnOwner: %d", gameId, turnOwner);
+
+        for (PlayListener l : listeners) {
+            l.turnOwnerChanged(gameId, turnOwner);
+        }
+        
+    }
+
     public static interface PlayListener {
-        public void enterGameResponse(int status);
+        public void enterGameResponse(int status, int turnOwner);
         public void exitGameResponse(int status);
         public void resignGameResponse(int status);
         public void listGamesResponse(int[] gameIds);
@@ -110,6 +120,7 @@ public class Play extends GssInterface {
         public void createRandomGameResponse(int status);
         public void gameCreated(int gameId, int[] pids, int turnOwner, String state);
         public void gameStateUpdated(int gameId, String state);
+        public void turnOwnerChanged(int gameId, int turnOwner);
     }
 
 }

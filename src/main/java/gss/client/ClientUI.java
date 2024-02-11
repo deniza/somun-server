@@ -71,7 +71,13 @@ public class ClientUI {
         }
         else if (state == UIState.ingame) {
             if (command.equals("1")) {
-                update(UIState.makingmove);
+                if (SimpleClient.isTurnOwner == false) {
+                    System.out.println("Not your turn");
+                    update();
+                }
+                else {
+                    update(UIState.makingmove);
+                }                
             }
             else if (command.equals("2")) {
                 listener.onExitGameUICommand();
