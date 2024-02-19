@@ -41,6 +41,11 @@ public class PlayerManager {
 
     public Player getPlayer(int playerId) {
 
+        // reserved for unset player
+        if (playerId == 0) {
+            return null;
+        }
+
         Player player = players.get(playerId);
 
         if (player == null) {
