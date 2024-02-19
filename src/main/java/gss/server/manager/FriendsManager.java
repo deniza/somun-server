@@ -3,6 +3,9 @@ package gss.server.manager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FriendsManager {
 
     private static FriendsManager instance;
@@ -14,6 +17,14 @@ public class FriendsManager {
             instance = new FriendsManager();
         }
         return instance;
+    }
+
+    public void getFriends(Player player) {
+
+        ArrayList<Integer> friends = new ArrayList<>(player.getFriends());
+
+        ConnectionManager.get().call(player, "Friends", "friendList", friends);
+
     }
 
     public void requestAddFriend(Player player, int friendId) {

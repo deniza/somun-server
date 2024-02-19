@@ -7,6 +7,14 @@ import gss.server.manager.FriendsManager;
 
 public class Friends extends GssInterface {
 
+    public void requestFriends(GssConnection con) {
+
+        GssLogger.info("[Friends] requestFriends called");
+
+        FriendsManager.get().getFriends(getPlayer(con));
+
+    }
+
     public void requestAddFriend(int playerId, GssConnection con) {
 
         GssLogger.info("[Friends] requestAddFriend called");
