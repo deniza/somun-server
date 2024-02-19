@@ -37,31 +37,49 @@ public class StorageManager {
         return mongo.getAndIncrementNextAvailablePlayerId();
     }
 
-    public synchronized int getAndIncrementNextAvailableGameId() {
+    public int getAndIncrementNextAvailableGameId() {
         return mongo.getAndIncrementNextAvailableGameId();
     }
 
-    public synchronized void storePlayer(Player player) {
+    public void storePlayer(Player player) {
         
         mongo.storePlayer(player);
 
     }
 
-    public synchronized Player loadPlayer(int playerId) {
+    public Player loadPlayer(int playerId) {
 
         return mongo.loadPlayer(playerId);
 
     }
 
-    public synchronized void storeGameSession(GameSession session) {
+    public void storeGameSession(GameSession session) {
 
         mongo.storeGameSession(session);
 
     }    
 
-    public synchronized ArrayList<GameSession> loadGameSessions(ArrayList<Integer> gameIds) {
+    public ArrayList<GameSession> loadGameSessions(ArrayList<Integer> gameIds) {
 
         return mongo.loadGameSessions(gameIds);
+
+    }
+
+    public void storePrivateMessage(int senderId, int receiverId, String message) {
+
+        mongo.storePrivateMessage(senderId, receiverId, message);
+
+    }
+
+    public void markPrivateMessageRead(int playerId, int messageId) {
+
+        mongo.markPrivateMessageRead(playerId, messageId);
+
+    }
+
+    public void deletePrivateMessage(int playerId, int messageId) {
+
+        mongo.deletePrivateMessage(playerId, messageId);
 
     }
 

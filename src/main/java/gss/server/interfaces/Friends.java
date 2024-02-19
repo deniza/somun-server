@@ -4,6 +4,7 @@ import gss.GssLogger;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.FriendsManager;
+import gss.server.manager.MessageManager;
 
 public class Friends extends GssInterface {
 
@@ -44,6 +45,38 @@ public class Friends extends GssInterface {
         GssLogger.info("[Friends] requestRemoveFriend called");
 
         FriendsManager.get().removeFriend(getPlayer(con), playerId);
+
+    }
+
+    public void requestPrivateMessagesList(GssConnection con) {
+
+        GssLogger.info("[Friends] requestPrivateMessagesList called");
+
+        MessageManager.get().sendMessageList(getPlayer(con));
+
+    }
+
+    public void requestSendPrivateMessage(int receiverId, String message, GssConnection con) {
+
+        GssLogger.info("[Friends] requestSendPrivateMessage called");
+
+        MessageManager.get().sendPrivateMessage(getPlayer(con), receiverId, message);
+
+    }
+
+    public void requestReadPrivateMessage(int messageId, GssConnection con) {
+
+        GssLogger.info("[Friends] requestReadPrivateMessage called");
+
+        MessageManager.get().readPrivateMessage(getPlayer(con), messageId);
+
+    }
+
+    public void requestDeletePrivateMessage(int messageId, GssConnection con) {
+
+        GssLogger.info("[Friends] requestDeletePrivateMessage called");
+
+        MessageManager.get().deletePrivateMessage(getPlayer(con), messageId);
 
     }
 

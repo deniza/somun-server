@@ -24,4 +24,9 @@ public interface StorageInterface {
 
     public int getAndIncrementNextAvailablePlayerId();
 
+    public void storePrivateMessage(int senderId, int receiverId, String message);
+
+    public void markPrivateMessageRead(int playerId, int messageId);
+    public void deletePrivateMessage(int playerId, int messageId);
+
 }

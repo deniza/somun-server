@@ -2,6 +2,7 @@ package gss.server.manager;
 
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
+import gss.server.util.ArrayHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class FriendsManager {
 
         ArrayList<Integer> friends = new ArrayList<>(player.getFriends());
 
-        ConnectionManager.get().call(player, "Friends", "friendList", friends);
+        ConnectionManager.get().call(player, "Friends", "friendList", ArrayHelper.toIntArray(friends));
 
     }
 

@@ -1,6 +1,9 @@
 package gss.server.model;
 
+import gss.server.manager.MessageManager;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class Player {
     private HashSet<Integer> friends = new HashSet<>();
     private HashSet<Integer> friendRequestsSent = new HashSet<>();
     private HashSet<Integer> friendRequestsReceived = new HashSet<>();
+    private HashMap<Integer, MessageManager.PrivateMessage> privateMessages = new HashMap<>();
     private boolean online;
     private int activeGameId;
 
@@ -127,5 +131,30 @@ public class Player {
         return friendRequestsSent.contains(playerId);
     }
 
+    public void setPrivateMessages(List<MessageManager.PrivateMessage> messages) {
+        for (MessageManager.PrivateMessage pmsg : messages) {
+            privateMessages.put(pmsg.messageId, pmsg);
+        }
+    }
+
+    public ArrayList<Integer> getPrivateMessages() {
+
+        return new ArrayList<>(privateMessages.keySet());
+
+    }
+
+    public String getMessageContent(int messageId) {
+
+        MessageManager.PrivateMessage message = privateMessages.get(messageId);
+        if (message != null) {
+
+            return message.content;
+
+        }
+        else {
+            return "";
+        }
+
+    }
 
 }

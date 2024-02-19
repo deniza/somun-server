@@ -4,14 +4,20 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.model.Updates;
 import gss.GssLogger;
+import gss.server.manager.MessageManager;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
 import gss.server.model.Player;
 import gss.server.util.Config;
 import gss.server.util.JsonHelper;
+import gss.server.util.Time;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class StorageManagerMongo implements StorageInterface {
@@ -114,6 +120,27 @@ public class StorageManagerMongo implements StorageInterface {
                 player.setFriendRequestsReceived(friendsRecv);
             }
 
+            final List<Document> privateMessages = doc.getList("privateMessages", Document.class);
+            if (privateMessages != null) {
+
+                List<MessageManager.PrivateMessage> pmessages = new LinkedList<>();
+
+                for (Document message : privateMessages) {
+
+                    int msgId = message.getInteger("msgId");
+                    int sender = message.getInteger("sender");
+                    long date = message.getLong("date");
+                    boolean readFlag = message.getInteger("read") == 0 ? false : true;
+                    String content = message.getString("content");
+
+                    MessageManager.PrivateMessage pmsg = new MessageManager.PrivateMessage(msgId, sender, playerId, readFlag, date, content);
+                    pmessages.add(pmsg);
+
+                }
+
+                player.setPrivateMessages(pmessages);
+
+            }
             return player;
 
         }
@@ -168,6 +195,55 @@ public class StorageManagerMongo implements StorageInterface {
         }
 
         return sessions;
+
+    }
+
+    @Override
+    public void storePrivateMessage(int senderId, int receiverId, String message) {
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        int messageId = getAndIncrementConfigValue("nextMessageId");
+
+        Document messageDoc = new Document()
+                .append("msgId", messageId)
+                .append("sender", senderId)
+                .append("date", Time.now())
+                .append("read", 0)
+                .append("content", message);
+
+        collection.findOneAndUpdate(
+                Filters.eq("playerId", receiverId),
+                Updates.combine(Updates.addToSet("privateMessages", messageDoc))
+        );
+
+    }
+
+    @Override
+    public void markPrivateMessageRead(int playerId, int messageId) {
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        collection.updateOne(
+                Filters.and(
+                        Filters.eq("playerId", playerId),
+                        Filters.eq("privateMessages.msgId", messageId)
+                ),
+                Updates.set("privateMessages.$.read", 1) // Update the "read" field to 1
+        );
+
+    }
+
+    @Override
+    public void deletePrivateMessage(int playerId, int messageId) {
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        collection.updateOne(
+                Filters.eq("playerId", playerId),
+                Updates.pull("privateMessages", Filters.eq("msgId", messageId))
+        );
+
 
     }
 
