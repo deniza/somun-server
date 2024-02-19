@@ -108,8 +108,16 @@ public class Player {
         friendRequestsReceived.remove(friendId);
     }
 
+    public void cancelFriendRequest(int friendId) {
+        friendRequestsSent.remove(friendId);
+    }
+
     public void removeFriend(int friendId) {
         friends.remove(friendId);
+    }
+
+    public boolean hasFriend(int friendId) {
+        return friends.contains(friendId);
     }
 
     public boolean isFriendRequestReceived(int playerId) {

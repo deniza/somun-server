@@ -53,17 +53,41 @@ public class FriendsManager {
     }
     public void rejectFriendRequest(Player player, int friendId) {
 
-        player.rejectFriendRequest(friendId);
+        Player requester = PlayerManager.get().getPlayer(friendId);
 
-        StorageManager.get().storePlayer(player);
+        if (requester != null) {
+
+            if (requester.isFriendRequestSent(player.getPlayerId()) && player.isFriendRequestReceived(friendId)) {
+
+                player.rejectFriendRequest(friendId);
+                requester.cancelFriendRequest(player.getPlayerId());
+
+                StorageManager.get().storePlayer(player);
+                StorageManager.get().storePlayer(requester);
+
+            }
+
+        }
 
     }
 
     public void removeFriend(Player player, int friendId) {
 
-        player.removeFriend(friendId);
+        Player friend = PlayerManager.get().getPlayer(friendId);
 
-        StorageManager.get().storePlayer(player);
+        if (friend != null) {
+
+            if (player.hasFriend(friendId)) {
+
+                player.removeFriend(friendId);
+                friend.removeFriend(player.getPlayerId());
+
+                StorageManager.get().storePlayer(player);
+                StorageManager.get().storePlayer(friend);
+
+            }
+
+        }
 
     }
 

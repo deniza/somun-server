@@ -80,8 +80,4 @@ public class Play extends GssInterface {
 
     }
 
-    private Player getPlayer(GssConnection con) {
-        return PlayerManager.get().getPlayer(con);
-    }
-
 }
