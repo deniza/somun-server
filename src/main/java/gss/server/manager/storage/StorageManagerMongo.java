@@ -71,6 +71,12 @@ public class StorageManagerMongo implements StorageInterface {
             .append("password", player.getPassword())
             .append("games", player.getGameIds());
 
+        Document friendsDoc = new Document();
+        friendsDoc.append("sent", player.getFriendRequestsSent());
+        friendsDoc.append("recv", player.getFriendRequestsReceived());
+        friendsDoc.append("accepted", player.getFriends());
+        playerDoc.append("friends", friendsDoc);
+
         collection.findOneAndUpdate(
                 Filters.eq("playerId", player.getPlayerId()),
                 new Document("$set", playerDoc),
@@ -96,6 +102,17 @@ public class StorageManagerMongo implements StorageInterface {
             player.setName(name);
             player.setPassword(password);
             player.setGameIds(new ArrayList(gameIds));
+
+            Document friendsDoc = (Document) doc.get("friends");
+            if (friendsDoc != null) {
+                final List<Integer> friends = friendsDoc.getList("accepted", Integer.class);
+                final List<Integer> friendsSent = friendsDoc.getList("sent", Integer.class);
+                final List<Integer> friendsRecv = friendsDoc.getList("recv", Integer.class);
+
+                player.setFriends(friends);
+                player.setFriendRequestsSent(friendsSent);
+                player.setFriendRequestsReceived(friendsRecv);
+            }
 
             return player;
 
