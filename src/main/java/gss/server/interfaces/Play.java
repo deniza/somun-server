@@ -1,5 +1,6 @@
 package gss.server.interfaces;
 
+import gss.GssLogger;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.GameManager;
@@ -10,6 +11,8 @@ import gss.server.util.ArrayHelper;
 public class Play extends GssInterface {
     
     public void enterGame(int gameId, GssConnection con) {
+
+        GssLogger.info("[Play] enterGame called");
 
         Player player = getPlayer(con);
 
@@ -23,6 +26,8 @@ public class Play extends GssInterface {
     }
 
     public void exitGame(int gameId, GssConnection con) {
+
+        GssLogger.info("[Play] exitGame called");
 
         Player player = getPlayer(con);
 
@@ -38,6 +43,8 @@ public class Play extends GssInterface {
 
     public void resignGame(int gameId, GssConnection con) {
 
+        GssLogger.info("[Play] resignGame called");
+
         //Player player = getPlayer(con);
 
         // resign here
@@ -46,6 +53,8 @@ public class Play extends GssInterface {
 
     public void listGames(GssConnection con) {
 
+        GssLogger.info("[Play] listGames called");
+
         Player player = getPlayer(con);
 
         call(con, "Play", "listGamesResponse", ArrayHelper.toIntArray(player.getGameIds()));
@@ -53,6 +62,8 @@ public class Play extends GssInterface {
     }
 
     public void makeMove(int gameId, String jsonData, GssConnection con) {
+
+        GssLogger.info("[Play] makeMove called");
 
         Player player = getPlayer(con);
 
@@ -63,6 +74,8 @@ public class Play extends GssInterface {
     }
 
     public void createRandomGame(GssConnection con) {
+
+        GssLogger.info("[Play] createRandomGame called");
 
         Player player = getPlayer(con);
 
