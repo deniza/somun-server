@@ -6,6 +6,7 @@ import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import gss.GssLogger;
+import gss.server.manager.GameInvitations;
 import gss.server.manager.MessageManager;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
@@ -26,6 +27,7 @@ public class StorageManagerMongo implements StorageInterface {
     private final String MongoDatabase = Config.get("mongo_database");
     private final String PlayersCollection = "players";
     private final String GamesCollection = "games";
+    private final String InvitationsCollection = "invitations";
     private final String ConfigCollection = "config";
 
     MongoClient client;
@@ -244,6 +246,63 @@ public class StorageManagerMongo implements StorageInterface {
                 Updates.pull("privateMessages", Filters.eq("msgId", messageId))
         );
 
+
+    }
+
+    @Override
+    public ArrayList<GameInvitations.InvitationRequest> loadAllInvitations() {
+
+        MongoCollection<Document> collection = database.getCollection(InvitationsCollection);
+        FindIterable<Document> results = collection.find(Filters.empty());
+
+        ArrayList<GameInvitations.InvitationRequest> invitations = new ArrayList<>();
+        for (Document doc : results) {
+
+            GameInvitations.InvitationRequest req = new GameInvitations.InvitationRequest();
+            req.invitationId = doc.getInteger("invitationId");
+            req.inviter = doc.getInteger("inviter");
+            req.invitee = doc.getInteger("invitee");
+            req.date = doc.getLong("date");
+            req.gametype = doc.getInteger("gametype");
+            req.shouldStartAllOnline = doc.getInteger("shouldStartAllOnline") == 0 ? false : true;
+
+            invitations.add(req);
+
+        }
+
+        return invitations;
+    }
+
+    public int createInvitation(GameInvitations.InvitationRequest inv) {
+
+        MongoCollection<Document> collection = database.getCollection(InvitationsCollection);
+
+        int invitationId = getAndIncrementConfigValue("nextInvitationId");
+
+        Document invDoc = new Document()
+                .append("invitationId", invitationId)
+                .append("inviter", inv.inviter)
+                .append("invitee", inv.invitee)
+                .append("gametype", inv.gametype)
+                .append("shouldStartAllOnline", inv.shouldStartAllOnline?1:0)
+                .append("date", inv.date);
+
+        collection.insertOne(
+                invDoc
+        );
+
+        return invitationId;
+
+    }
+
+    @Override
+    public void deleteInvitation(int invitationId) {
+
+        MongoCollection<Document> collection = database.getCollection(InvitationsCollection);
+
+        collection.deleteOne(
+                Filters.eq("invitationId", invitationId)
+        );
 
     }
 

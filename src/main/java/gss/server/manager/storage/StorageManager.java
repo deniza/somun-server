@@ -1,5 +1,6 @@
 package gss.server.manager.storage;
 
+import gss.server.manager.GameInvitations;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
@@ -80,6 +81,24 @@ public class StorageManager {
     public void deletePrivateMessage(int playerId, int messageId) {
 
         mongo.deletePrivateMessage(playerId, messageId);
+
+    }
+
+    public ArrayList<GameInvitations.InvitationRequest> loadAllInvitations() {
+
+        return mongo.loadAllInvitations();
+
+    }
+
+    public int createInvitation(GameInvitations.InvitationRequest inv) {
+
+        return mongo.createInvitation(inv);
+
+    }
+
+    public void deleteInvitation(int invitationId) {
+
+        mongo.deleteInvitation(invitationId);
 
     }
 

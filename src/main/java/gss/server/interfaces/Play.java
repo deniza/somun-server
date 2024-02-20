@@ -85,6 +85,28 @@ public class Play extends GssInterface {
 
     }
 
+    public void createInvitation(int invitee, int gametype, boolean shouldStartOnline, GssConnection con) {
+
+        GssLogger.info("[Play] createInvitation called");
+
+        GameManager.get().createInvitation(getPlayer(con), invitee, gametype, shouldStartOnline);
+
+    }
+    public void listInvitations(GssConnection con) {
+
+        GssLogger.info("[Play] listInvitations called");
+
+        call(con, "Play", "invitationsList", ArrayHelper.toIntArray(GameManager.get().listInvitations(getPlayer(con))));
+
+    }
+    public void acceptInvitation(int invitationId, GssConnection con) {
+
+        GssLogger.info("[Play] acceptInvitation called");
+
+        GameManager.get().acceptInvitation(getPlayer(con), invitationId);
+
+    }
+
     public void clientDisconnected(GssConnection con) {
 
         Player player = getPlayer(con);

@@ -20,10 +20,13 @@ public class GameManager implements ServiceUpdateInterface {
     private GameHandler gameHandler;
     private final PlayerWaitingList waitingList = new PlayerWaitingList();
     private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();  // gameId, gameSession
+    private final GameInvitations invitations = new GameInvitations();
 
     private GameManager() {
 
         setGameRules(new GameRules());
+
+        invitations.init();
 
     }
 
@@ -91,6 +94,26 @@ public class GameManager implements ServiceUpdateInterface {
         ConnectionManager.get().call(player, "Play", "makeMoveResponse", 1);
 
         StorageManager.get().storeGameSession(session);
+
+    }
+
+    public void createInvitation(Player player, int invitee, int gametype, boolean shouldStartOnline) {
+
+        invitations.createInvitation(player.getPlayerId(), invitee, gametype, shouldStartOnline);
+
+    }
+
+    public ArrayList<Integer> listInvitations(Player player) {
+
+        return invitations.getInvitationList(player.getPlayerId());
+
+    }
+
+    public void acceptInvitation(Player player, int invitationId) {
+
+        // TODO implement
+
+        invitations.removeInvitation(invitationId);
 
     }
 

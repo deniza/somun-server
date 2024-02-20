@@ -1,5 +1,6 @@
 package gss.server.manager.storage;
 
+import gss.server.manager.GameInvitations;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
@@ -28,5 +29,8 @@ public interface StorageInterface {
 
     public void markPrivateMessageRead(int playerId, int messageId);
     public void deletePrivateMessage(int playerId, int messageId);
+    public ArrayList<GameInvitations.InvitationRequest> loadAllInvitations();
+    public int createInvitation(GameInvitations.InvitationRequest inv);
+    public void deleteInvitation(int invitationId);
 
 }
