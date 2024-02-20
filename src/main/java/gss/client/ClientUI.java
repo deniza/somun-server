@@ -179,19 +179,33 @@ public class ClientUI {
     }
 
     public interface UIListener {
+        
         void onExitAppUICommand();
         void onConnectServerUICommand();
         void onCreateNewAccountUICommand();
         void onLoginUICommand();
+        
         void onMakeMoveUICommand(int number);
         void onEnterGameUICommand();
         void onExitGameUICommand();
         void onResignGameUICommand();
         void onListGamesUICommand();
         void onCreateRandomGameUICommand();
+        
         void onCreateInvitationUICommand(int invitee, int gametype, boolean shouldStartOnline);
         void onListInvitationsUICommand();
         void onAcceptInvitationUICommand(int invitationId);
+        
+        void onRequestFriendsUICommand();
+        void onAddFriendUICommand(int playerId);
+        void onAcceptFriendUICommand(int playerId);
+        void onRejectFriendUICommand(int playerId);
+        void onRemoveFriendUICommand(int playerId);
+        void onRequestPrivateMessagesListUICommand();
+        void onSendPrivateMessageUICommand(int playerId, String message);
+        void onReadPrivateMessageUICommand(int messageId);
+        void onDeletePrivateMessageUICommand(int messageId);
+
     }
 
 }

@@ -218,6 +218,51 @@ public class SimpleClient implements UIListener {
     }
 
     @Override
+    public void onRequestFriendsUICommand() {
+        con.invokeMethod("Play_requestFriends");
+    }
+    
+    @Override
+    public void onAddFriendUICommand(int playerId) {
+        con.invokeMethod("Play_requestAddFriend", new Object[]{ playerId });
+    }
+    
+    @Override
+    public void onAcceptFriendUICommand(int playerId) {
+        con.invokeMethod("Play_requestAcceptFriend", new Object[]{ playerId });
+    }
+
+    @Override
+    public void onRejectFriendUICommand(int playerId) {
+        con.invokeMethod("Play_requestRejectFriend", new Object[]{ playerId });
+    }
+    
+    @Override
+    public void onRemoveFriendUICommand(int playerId) {
+        con.invokeMethod("Play_requestRemoveFriend", new Object[]{ playerId });
+    }
+        
+    @Override
+    public void onRequestPrivateMessagesListUICommand() {
+        con.invokeMethod("Play_requestPrivateMessagesList");
+    }
+    
+    @Override
+    public void onSendPrivateMessageUICommand(int playerId, String message) {
+        con.invokeMethod("Play_requestSendPrivateMessage", new Object[]{ playerId, message });
+    }
+    
+    @Override
+    public void onReadPrivateMessageUICommand(int messageId) {
+        con.invokeMethod("Play_requestReadPrivateMessage", new Object[]{ messageId });
+    }
+    
+    @Override
+    public void onDeletePrivateMessageUICommand(int messageId) {
+        con.invokeMethod("Play_requestDeletePrivateMessage", new Object[]{ messageId });
+    }
+
+    @Override
     public void onConnectServerUICommand() {
 
         GssLogger.info("connected");
