@@ -69,6 +69,24 @@ public class GameInvitations {
 
         invitations.remove(invitationId);
 
+        StorageManager.get().deleteInvitation(invitationId);
+
+    }
+
+    public boolean isOnlineGameInvitation(int invitationId) {
+
+        InvitationRequest req = invitations.get(invitationId);
+        if (req != null) {
+            return req.shouldStartAllOnline;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public InvitationRequest getInvitation(int invitationId) {
+        return invitations.get(invitationId);
     }
 
     public ArrayList<Integer> getInvitationList(int invitee) {

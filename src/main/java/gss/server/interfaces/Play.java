@@ -112,6 +112,7 @@ public class Play extends GssInterface {
         Player player = getPlayer(con);
 
         GameManager.get().playerDisconnected(player);
+        PlayerManager.get().playerDisconnected(player);
 
     }
 

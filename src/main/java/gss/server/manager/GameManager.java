@@ -111,9 +111,32 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void acceptInvitation(Player player, int invitationId) {
 
-        // TODO implement
+        if (invitations.isOnlineGameInvitation(invitationId)) {
 
-        invitations.removeInvitation(invitationId);
+            GameInvitations.InvitationRequest invitation = invitations.getInvitation(invitationId);
+
+            Player inviter = PlayerManager.get().getPlayer(invitation.inviter);
+            if (inviter.isOnline()) {
+
+                ArrayList<Player> pairs = new ArrayList<Player>();
+                pairs.add(player);
+                pairs.add(inviter);
+
+                createGameAmongPlayers(pairs);
+
+                invitations.removeInvitation(invitationId);
+
+            }
+            else {
+                //TODO implement
+                // send message to inviter that invitee is not online
+                // register to create game when inviter comes online
+            }
+        }
+        else {
+            //TODO implement
+            // send message to inviter that invitee accepted the invitation
+        }
 
     }
 

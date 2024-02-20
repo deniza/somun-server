@@ -63,4 +63,8 @@ public class PlayerManager {
         return getPlayer(playerId);
     }
 
+    public void playerDisconnected(Player player) {
+        player.setOnline(false);
+    }
+
 }
