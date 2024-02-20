@@ -189,6 +189,9 @@ public class ClientUI {
         void onResignGameUICommand();
         void onListGamesUICommand();
         void onCreateRandomGameUICommand();
+        void onCreateInvitationUICommand(int invitee, int gametype, boolean shouldStartOnline);
+        void onListInvitationsUICommand();
+        void onAcceptInvitationUICommand(int invitationId);
     }
 
 }

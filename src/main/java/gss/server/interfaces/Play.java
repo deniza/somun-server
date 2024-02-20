@@ -85,11 +85,11 @@ public class Play extends GssInterface {
 
     }
 
-    public void createInvitation(int invitee, int gametype, boolean shouldStartOnline, GssConnection con) {
+    public void createInvitation(int invitee, int gametype, byte shouldStartOnline, GssConnection con) {
 
         GssLogger.info("[Play] createInvitation called");
 
-        GameManager.get().createInvitation(getPlayer(con), invitee, gametype, shouldStartOnline);
+        GameManager.get().createInvitation(getPlayer(con), invitee, gametype, shouldStartOnline==1);
 
     }
     public void listInvitations(GssConnection con) {

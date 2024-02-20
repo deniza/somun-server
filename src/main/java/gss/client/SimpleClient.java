@@ -188,6 +188,27 @@ public class SimpleClient implements UIListener {
     }
 
     @Override
+    public void onListInvitationsUICommand() {
+
+        con.invokeMethod("Play_listInvitations", new Object[]{});
+
+    }
+
+    @Override
+    public void onCreateInvitationUICommand(int invitee, int gametype, boolean shouldStartOnline) {
+    
+        con.invokeMethod("Play_createInvitation", new Object[]{ invitee, gametype, shouldStartOnline?1:0 });
+
+    }
+
+    @Override
+    public void onAcceptInvitationUICommand(int invitationId) {
+
+        con.invokeMethod("Play_acceptInvitation", new Object[]{ invitationId });
+
+    }
+
+    @Override
     public void onCreateRandomGameUICommand() {
 
         System.out.println("create random game called");
