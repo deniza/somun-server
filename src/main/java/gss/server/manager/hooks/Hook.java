@@ -1,17 +1,17 @@
 package gss.server.manager.hooks;
 
+import gss.network.GssConnection;
+
 public abstract class Hook {
 
-    public static class AuthHook_loginUsingIdPassword extends Hook {
+    private final GssConnection con;
 
-        public int playerId;
-        public String password;
+    protected Hook(GssConnection con) {
+        this.con = con;
+    }
 
-        public AuthHook_loginUsingIdPassword(int playerId, String password) {
-            this.playerId = playerId;
-            this.password = password;
-        }
-
+    public GssConnection getCon() {
+        return con;
     }
 
 }

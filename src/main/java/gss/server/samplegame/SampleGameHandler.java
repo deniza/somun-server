@@ -5,6 +5,7 @@ import java.util.Random;
 
 import gss.GssLogger;
 import gss.server.manager.ConnectionManager;
+import gss.server.manager.hooks.AuthHook_loginUsingIdPassword;
 import gss.server.manager.hooks.Hook;
 import gss.server.manager.hooks.HookManager;
 import gss.server.model.GameHandler;
@@ -21,8 +22,8 @@ public class SampleGameHandler extends GameHandler {
 
         GssLogger.info("SampleGameHandler started");
 
-        HookManager.get().addHook(Hook.AuthHook_loginUsingIdPassword.class, hook -> {
-            Hook.AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (Hook.AuthHook_loginUsingIdPassword) hook;
+        HookManager.get().addHook(AuthHook_loginUsingIdPassword.class, hook -> {
+            AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (AuthHook_loginUsingIdPassword) hook;
             GssLogger.info("SampleGameHandler hook called: " + hook_loginUsingIdPassword.playerId + " " + hook_loginUsingIdPassword.password);
         });
 
