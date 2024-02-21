@@ -1,13 +1,12 @@
 package gss.server.model;
 
+import gss.server.model.matcher.PlayerMatcher;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
 public class PlayerWaitingList {
         
     private ArrayList<Player> players;
-    private Random rand = new Random();
 
     public PlayerWaitingList() {
         players = new ArrayList<>();
@@ -21,35 +20,13 @@ public class PlayerWaitingList {
         players.remove(player);
     }
 
-    public Player getRandomPlayer() {        
-        int index = rand.nextInt(players.size());
-        return players.get(index);
-    }
+    public ArrayList<ArrayList<Player>> matchPlayers(int playerPerGame, PlayerMatcher matcher) {
 
-    public ArrayList<ArrayList<Player>> matchRandomPlayers(int count) {
-
-        ArrayList<ArrayList<Player>> matched = new ArrayList<>();
-
-        if (players.size() < count) {
-            return matched;
+        if (players.size() < playerPerGame) {
+            return new ArrayList<>();
         }
 
-        Collections.shuffle(players);
-
-        while (players.size() >= count) {
-
-            ArrayList<Player> pairs = new ArrayList<>();
-            for (int i=0;i<count;++i) {
-                Player p = getRandomPlayer();
-                pairs.add(p);
-                removePlayer(p);
-            }
-
-            matched.add(pairs);
-
-        }
-
-        return matched;
+        return matcher.matchPlayers(playerPerGame, players);
 
     }
 }

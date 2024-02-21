@@ -10,7 +10,10 @@ import gss.server.model.GameSession;
 import gss.server.model.Player;
 import gss.server.model.PlayerWaitingList;
 import gss.server.model.ServiceUpdateInterface;
+import gss.server.model.matcher.PlayerMatcher;
+import gss.server.model.matcher.RandomPlayerMatcher;
 import gss.server.util.ArrayHelper;
+import gss.server.util.Time;
 
 public class GameManager implements ServiceUpdateInterface {
     
@@ -21,6 +24,8 @@ public class GameManager implements ServiceUpdateInterface {
     private final HashMap<Integer, PlayerWaitingList> waitingLists = new HashMap<>();  // gametype, waitingList
     private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();  // gameId, gameSession
     private final GameInvitations invitations = new GameInvitations();
+    private PlayerMatcher playerMatcher;
+    private long lastRandomGameCreationTimestamp = 0;
 
     private GameManager() {
 
@@ -29,6 +34,7 @@ public class GameManager implements ServiceUpdateInterface {
         rules.setPlayersPerGame(0, 2);
 
         setGameRules(rules);
+        setPlayerMatcher(new RandomPlayerMatcher());
 
         invitations.init();
 
@@ -39,6 +45,10 @@ public class GameManager implements ServiceUpdateInterface {
             instance = new GameManager();
         }
         return instance;
+    }
+
+    void setPlayerMatcher(PlayerMatcher playerMatcher) {
+        this.playerMatcher = playerMatcher;
     }
 
     public GameHandler getGameHandler() {
@@ -176,7 +186,7 @@ public class GameManager implements ServiceUpdateInterface {
         for (int gametype : waitingLists.keySet()) {
 
             PlayerWaitingList waitingList = waitingLists.get(gametype);
-            ArrayList<ArrayList<Player>> matched = waitingList.matchRandomPlayers(gameRules.getPlayersPerGame(gametype));
+            ArrayList<ArrayList<Player>> matched = waitingList.matchPlayers(gameRules.getPlayersPerGame(gametype), playerMatcher);
 
             for (ArrayList<Player> players : matched) {
                 createGameAmongPlayers(players);
@@ -209,7 +219,11 @@ public class GameManager implements ServiceUpdateInterface {
     @Override
     public void updateService(long deltaTime) {
 
-        createRandomGames();
+        long now = Time.now();
+        if (now - lastRandomGameCreationTimestamp > gameRules.getRandomGameCreationPeriodInSeconds() * 1000) {
+            lastRandomGameCreationTimestamp = now;
+            createRandomGames();
+        }
 
     }
 

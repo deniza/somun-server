@@ -5,8 +5,9 @@ import java.util.HashSet;
 
 public class GameRules {
     
-    private HashMap<Integer, Integer> playersPerGame = new HashMap<>();  // gametype, playerCount
-    private HashSet<Integer> gameTypes = new HashSet<>();
+    private final HashMap<Integer, Integer> playersPerGame = new HashMap<>();  // gametype, playerCount
+    private final HashSet<Integer> gameTypes = new HashSet<>();
+    private int randomGameCreationPeriodInSeconds = 1;
     public int turnDurationInSeconds = 60;
     public int randomMatchingPeriodInSeconds = 60;
 
@@ -27,6 +28,14 @@ public class GameRules {
 
     public boolean isGameTypeValid(int gametype) {
         return gameTypes.contains(gametype);
+    }
+
+    public void setRandomGameCreationPeriodInSeconds(int seconds) {
+        randomGameCreationPeriodInSeconds = seconds;
+    }
+
+    public int getRandomGameCreationPeriodInSeconds() {
+        return randomGameCreationPeriodInSeconds;
     }
 
 }
