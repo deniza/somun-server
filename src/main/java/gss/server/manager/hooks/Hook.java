@@ -7,9 +7,6 @@ public abstract class Hook {
         public int playerId;
         public String password;
 
-        public AuthHook_loginUsingIdPassword() {
-        }
-
         public AuthHook_loginUsingIdPassword(int playerId, String password) {
             this.playerId = playerId;
             this.password = password;
