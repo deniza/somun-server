@@ -73,15 +73,13 @@ public class Play extends GssInterface {
 
     }
 
-    public void createRandomGame(GssConnection con) {
+    public void createRandomGame(int gametype, GssConnection con) {
 
         GssLogger.info("[Play] createRandomGame called");
 
         Player player = getPlayer(con);
 
-        GameManager.get().registerToCreateRandomGame(player);
-
-        call(con, "Play", "createRandomGameResponse", new Object[]{1});
+        GameManager.get().registerToCreateRandomGame(player, gametype);
 
     }
 

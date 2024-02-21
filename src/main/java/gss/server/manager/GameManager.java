@@ -18,13 +18,17 @@ public class GameManager implements ServiceUpdateInterface {
 
     private GameRules gameRules;
     private GameHandler gameHandler;
-    private final PlayerWaitingList waitingList = new PlayerWaitingList();
+    private final HashMap<Integer, PlayerWaitingList> waitingLists = new HashMap<>();  // gametype, waitingList
     private final HashMap<Integer, GameSession> gameSessions = new HashMap<>();  // gameId, gameSession
     private final GameInvitations invitations = new GameInvitations();
 
     private GameManager() {
 
-        setGameRules(new GameRules());
+        GameRules rules = new GameRules();
+        rules.addGameType(0);
+        rules.setPlayersPerGame(0, 2);
+
+        setGameRules(rules);
 
         invitations.init();
 
@@ -49,9 +53,22 @@ public class GameManager implements ServiceUpdateInterface {
         this.gameHandler = gameHandler;
     }
 
-    public void registerToCreateRandomGame(Player player) {
+    public void registerToCreateRandomGame(Player player, int gametype) {
 
-        waitingList.addPlayer(player);
+        if (gameRules.isGameTypeValid(gametype) == false) {
+            ConnectionManager.get().call(player, "Play", "createRandomGameResponse", 0);
+            return;
+        }
+
+        PlayerWaitingList playerWaitingList = waitingLists.get(gametype);
+        if (playerWaitingList == null) {
+            playerWaitingList = new PlayerWaitingList();
+            waitingLists.put(gametype, playerWaitingList);
+        }
+
+        playerWaitingList.addPlayer(player);
+
+        ConnectionManager.get().call(player, "Play", "createRandomGameResponse", 1);
 
     }
 
@@ -146,24 +163,25 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void playerDisconnected(Player player) {
 
-        waitingList.removePlayer(player);
+        for (PlayerWaitingList waitingList : waitingLists.values()) {
+            waitingList.removePlayer(player);
+        }
 
     }
 
     private void createRandomGames() {
 
-        ArrayList<ArrayList<Player>> matchedPlayers = waitingList.matchRandomPlayers(gameRules.playerCount);
+        for (int gametype : waitingLists.keySet()) {
 
-        if (matchedPlayers.size() > 0) {
+            PlayerWaitingList waitingList = waitingLists.get(gametype);
+            ArrayList<ArrayList<Player>> matched = waitingList.matchRandomPlayers(gameRules.getPlayersPerGame(gametype));
 
-            for (ArrayList<Player> pairs : matchedPlayers) {
-
-                createGameAmongPlayers(pairs);
-
+            for (ArrayList<Player> players : matched) {
+                createGameAmongPlayers(players);
             }
-            
+
         }
-        
+
     }
 
     private void createGameAmongPlayers(ArrayList<Player> players) {
