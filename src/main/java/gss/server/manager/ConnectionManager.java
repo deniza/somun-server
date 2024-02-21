@@ -37,7 +37,7 @@ public class ConnectionManager {
         }
     }
 
-    public int getPlayerId(GssConnection con) {
+    public Integer getPlayerId(GssConnection con) {
         return conPidMap.get(con);
     }
 

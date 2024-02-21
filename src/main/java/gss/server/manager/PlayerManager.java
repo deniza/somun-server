@@ -59,7 +59,10 @@ public class PlayerManager {
     }
 
     public Player getPlayer(GssConnection con) {
-        int playerId = ConnectionManager.get().getPlayerId(con);
+        Integer playerId = ConnectionManager.get().getPlayerId(con);
+        if (playerId == null) {
+            return null;
+        }
         return getPlayer(playerId);
     }
 
