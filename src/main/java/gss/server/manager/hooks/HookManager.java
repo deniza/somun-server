@@ -29,16 +29,11 @@ public class HookManager {
 
     public void processHook(Hook hook) {
 
-        if (hook instanceof Hook.AuthHook_loginUsingIdPassword) {
-
-            Hook.AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (Hook.AuthHook_loginUsingIdPassword) hook;
-
-            Consumer<Hook> function = hooks.get(hook_loginUsingIdPassword.getClass());
-            if (function != null) {
-                function.accept(hook_loginUsingIdPassword);
-            }
-
+        Consumer<Hook> function = hooks.get(hook.getClass());
+        if (function != null) {
+            function.accept(hook);
         }
+
     }
 
 }
