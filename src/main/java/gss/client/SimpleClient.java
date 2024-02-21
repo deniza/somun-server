@@ -279,5 +279,11 @@ public class SimpleClient implements UIListener {
 
     }
 
+    public void onRpcCallUICommand(String functionName, String jsonArgs) {
+
+        con.invokeMethod("Rpc_call", new Object[]{ functionName, jsonArgs });
+
+    }
+
     
 }

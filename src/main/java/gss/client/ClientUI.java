@@ -2,7 +2,7 @@ package gss.client;
 
 public class ClientUI {
     
-    public enum UIState {notconnected, connected, loginerr, login, ingame, makingmove}
+    public enum UIState {notconnected, connected, loginerr, login, ingame, makingmove, rpccall}
 
     private static final ClientUI instance = new ClientUI();
     private UIState state = UIState.notconnected;
@@ -66,6 +66,9 @@ public class ClientUI {
                 listener.onEnterGameUICommand();
             }
             else if (command.equals("4")) {
+                update(UIState.rpccall);
+            }
+            else if (command.equals("5")) {
                 executeExitApp();
             }
         }
@@ -91,6 +94,14 @@ public class ClientUI {
         }
         else if (state == UIState.makingmove) {
             listener.onMakeMoveUICommand(Integer.parseInt(command));
+        }
+        else if (state == UIState.rpccall) {
+            String[] parts = command.split(" ");
+            String functionName = parts[0];
+            String jsonArgs = parts[1];
+            listener.onRpcCallUICommand(functionName, jsonArgs);
+
+            update(UIState.login);
         }
 
     }
@@ -126,6 +137,9 @@ public class ClientUI {
         else if (state == UIState.makingmove) {
             displayMakingMove();
         }
+        else if (state == UIState.rpccall) {
+            displayRpcCall();
+        }
 
     }
 
@@ -148,7 +162,8 @@ public class ClientUI {
         print("1) Create New Random Game");
         print("2) List Games");
         print("3) Enter Game " + SimpleClient.currentGameId);
-        print("4) Exit App");
+        print("4) Rpc Call");
+        print("5) Exit App");
 
     }
 
@@ -164,6 +179,12 @@ public class ClientUI {
     private void displayMakingMove() {
 
         print("> Guess the number: ");
+
+    }
+
+    private void displayRpcCall() {
+
+        print("> Enter RPC function name and arguments: ");
 
     }
 
@@ -205,6 +226,8 @@ public class ClientUI {
         void onSendPrivateMessageUICommand(int playerId, String message);
         void onReadPrivateMessageUICommand(int messageId);
         void onDeletePrivateMessageUICommand(int messageId);
+
+        void onRpcCallUICommand(String functionName, String jsonArgs);
 
     }
 
