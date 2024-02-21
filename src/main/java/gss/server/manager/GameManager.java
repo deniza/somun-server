@@ -120,7 +120,9 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void createInvitation(Player player, int invitee, int gametype, boolean shouldStartOnline) {
 
-        invitations.createInvitation(player.getPlayerId(), invitee, gametype, shouldStartOnline);
+        if (gameRules.isGameTypeValid(gametype)) {
+            invitations.createInvitation(player.getPlayerId(), invitee, gametype, shouldStartOnline);
+        }
 
     }
 
