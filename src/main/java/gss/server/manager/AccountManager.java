@@ -50,7 +50,7 @@ public class AccountManager {
         }
         else {
 
-            ConnectionManager.get().call(player, "Account", "changeCredentialsResponse", 0);
+            ConnectionManager.get().call(player, "Account", "changeCredentialsResponse", 0, "Invalid username or password");
 
         }
 

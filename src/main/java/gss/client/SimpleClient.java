@@ -39,7 +39,7 @@ public class SimpleClient implements UIListener {
 
         account.addListener(new AccountListener() {
             @Override
-            public void createGuestAccountResponse(int _playerId, String username, String password) {
+            public void createGuestAccountAccepted(int _playerId, String username, String password) {
                 
                 playerId = _playerId;
                 playerName = username;
@@ -47,7 +47,12 @@ public class SimpleClient implements UIListener {
 
                 con.invokeMethod("Auth_loginUsingIdPassword", new Object[]{ playerId, playerPassword });
 
-            }            
+            }
+            @Override
+            public void createGuestAccountRejected(String reason) {
+                System.out.println("create guest account rejected: " + reason);
+                ClientUI.get().update(UIState.connected);
+            }
         });
 
         auth.addListener(new AuthListener() {

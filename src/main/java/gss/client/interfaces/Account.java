@@ -18,18 +18,29 @@ public class Account extends GssInterface {
         listeners.remove(listener);
     }
 
-    public void createGuestAccountResponse(int playerId, String username, String password, GssConnection con) {
+    public void createGuestAccountAccepted(int playerId, String username, String password, GssConnection con) {
 
-        GssLogger.info("[Account] createGuestAccountResponse called playerId: %d username: %s password: %s", playerId, username, password);
+        GssLogger.info("[Account] createGuestAccountAccepted called playerId: %d username: %s password: %s", playerId, username, password);
 
         for (AccountListener l : listeners) {
-            l.createGuestAccountResponse(playerId, username, password);
+            l.createGuestAccountAccepted(playerId, username, password);
+        }
+
+    }
+
+    public void createGuestAccountRejected(String reason, GssConnection con) {
+
+        GssLogger.info("[Account] createGuestAccountRejected called reason: %s", reason);
+
+        for (AccountListener l : listeners) {
+            l.createGuestAccountRejected(reason);
         }
 
     }
 
     public static interface AccountListener {
-        public void createGuestAccountResponse(int playerId, String username, String password);
+        public void createGuestAccountAccepted(int playerId, String username, String password);
+        public void createGuestAccountRejected(String reason);
     }
 
 }

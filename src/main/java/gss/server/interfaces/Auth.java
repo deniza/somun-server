@@ -17,6 +17,10 @@ public class Auth extends GssInterface {
         AuthHook_loginUsingIdPassword hook = new AuthHook_loginUsingIdPassword(playerId, password, con);
         HookManager.get().processHook(hook);
 
+        if (hook.isCancelled()) {
+            return;
+        }
+
         if (AuthenticationManager.get().authenticate(hook.playerId, hook.password) == true) {
 
             ConnectionManager.get().register(hook.playerId, con);

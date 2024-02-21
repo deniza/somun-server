@@ -1,13 +1,12 @@
 package gss.server.samplegame;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 import gss.GssLogger;
 import gss.server.manager.ConnectionManager;
-import gss.server.manager.hooks.AuthHook_loginUsingIdPassword;
-import gss.server.manager.hooks.Hook;
-import gss.server.manager.hooks.HookManager;
+import gss.server.manager.hooks.*;
 import gss.server.model.GameHandler;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
@@ -17,14 +16,30 @@ public class SampleGameHandler extends GameHandler {
 
     private final String VAR_NUMBER_TO_FIND = "numberToFind";
 
+    private final HashSet<String> forbiddenUsernames = new HashSet<>();
+
     @Override
     public void start() {
 
         GssLogger.info("SampleGameHandler started");
 
+        // add some forbidden usernames for testing
+        forbiddenUsernames.add("admin");
+        forbiddenUsernames.add("root");
+        forbiddenUsernames.add("moderator");
+
         HookManager.get().addHook(AuthHook_loginUsingIdPassword.class, hook -> {
             AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (AuthHook_loginUsingIdPassword) hook;
             GssLogger.info("SampleGameHandler hook called: " + hook_loginUsingIdPassword.playerId + " " + hook_loginUsingIdPassword.password);
+        });
+
+        HookManager.get().addHook(AccountHook_changeCredentials.class, hook -> {
+            AccountHook_changeCredentials hook_changeCredentials = (AccountHook_changeCredentials) hook;
+
+            if (forbiddenUsernames.contains(hook_changeCredentials.username)) {
+                hook_changeCredentials.cancel("Username is forbidden");
+            }
+
         });
 
     }
