@@ -5,6 +5,7 @@ import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AuthenticationManager;
 import gss.server.manager.ConnectionManager;
+import gss.server.manager.HookManager;
 
 public class Auth extends GssInterface {
 
@@ -12,9 +13,12 @@ public class Auth extends GssInterface {
         
         GssLogger.info("[Auth] loginUsingIdPassword called playerId: %d password: %s", playerId, password);
 
-        if (AuthenticationManager.get().authenticate(playerId, password) == true) {
+        HookManager.AuthHook_loginUsingIdPassword hook = new HookManager.AuthHook_loginUsingIdPassword(playerId, password);
+        HookManager.get().processHook(hook);
 
-            ConnectionManager.get().register(playerId, con);
+        if (AuthenticationManager.get().authenticate(hook.playerId, hook.password) == true) {
+
+            ConnectionManager.get().register(hook.playerId, con);
 
             call(con, "Auth", "loginResponse", 1);
 
