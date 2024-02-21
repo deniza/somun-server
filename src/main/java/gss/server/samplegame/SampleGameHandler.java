@@ -72,4 +72,14 @@ public class SampleGameHandler extends GameHandler {
         super.onGameFinished(session);
     }
 
+    @Override
+    public void onRpcCall(String functionName, String jsonData) {
+
+        super.onRpcCall(functionName, jsonData);
+
+        if (functionName.equals("testFunction")) {
+            System.out.println("testFunction called with data: " + jsonData);
+        }
+
+    }
 }

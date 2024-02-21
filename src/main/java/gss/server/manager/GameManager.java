@@ -37,6 +37,10 @@ public class GameManager implements ServiceUpdateInterface {
         return instance;
     }
 
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
     public void setGameRules(GameRules rules) {
         this.gameRules = rules;
     }

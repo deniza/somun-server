@@ -21,6 +21,9 @@ public abstract class GameHandler {
     public void onPlayerMakeMove(GameSession session, String jsonData) {
     }
 
+    public void onRpcCall(String functionName, String jsonData) {
+    }
+
     public final void setGameFinished() {
         isGameFinished = true;
     }
