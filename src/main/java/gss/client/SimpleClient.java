@@ -218,7 +218,7 @@ public class SimpleClient implements UIListener {
 
         System.out.println("create random game called");
 
-        con.invokeMethod("Play_createRandomGame");
+        con.invokeMethod("Play_createRandomGame", new Object[]{ 0 });
 
     }
 
