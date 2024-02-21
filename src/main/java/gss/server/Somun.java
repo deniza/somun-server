@@ -26,6 +26,7 @@ public class Somun {
         config.addInterface(new gss.server.interfaces.Auth());
         config.addInterface(new gss.server.interfaces.Account());
         config.addInterface(new gss.server.interfaces.Play());
+        config.addInterface(new gss.server.interfaces.Rpc());
 
         Gss.enableDebugFunctionCalls(true);
         Gss.startServer(config);
