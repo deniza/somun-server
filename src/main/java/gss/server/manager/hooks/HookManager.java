@@ -1,6 +1,4 @@
-package gss.server.manager;
-
-import gss.GssLogger;
+package gss.server.manager.hooks;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -31,9 +29,9 @@ public class HookManager {
 
     public void processHook(Hook hook) {
 
-        if (hook instanceof AuthHook_loginUsingIdPassword) {
+        if (hook instanceof Hook.AuthHook_loginUsingIdPassword) {
 
-            AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (AuthHook_loginUsingIdPassword) hook;
+            Hook.AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (Hook.AuthHook_loginUsingIdPassword) hook;
 
             Consumer<Hook> function = hooks.get(hook_loginUsingIdPassword.getClass());
             if (function != null) {
@@ -41,24 +39,6 @@ public class HookManager {
             }
 
         }
-    }
-
-    public static abstract class Hook {
-    }
-
-    public static class AuthHook_loginUsingIdPassword extends Hook {
-
-        public int playerId;
-        public String password;
-
-        public AuthHook_loginUsingIdPassword() {
-        }
-
-        public AuthHook_loginUsingIdPassword(int playerId, String password) {
-            this.playerId = playerId;
-            this.password = password;
-        }
-
     }
 
 }
