@@ -1,10 +1,7 @@
 package gss.server.manager.storage;
 
 import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.*;
 import gss.GssLogger;
 import gss.server.manager.GameInvitations;
 import gss.server.manager.MessageManager;
@@ -17,9 +14,7 @@ import gss.server.util.Time;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class StorageManagerMongo implements StorageInterface {
 
@@ -30,8 +25,10 @@ public class StorageManagerMongo implements StorageInterface {
     private final String InvitationsCollection = "invitations";
     private final String ConfigCollection = "config";
 
-    MongoClient client;
-    MongoDatabase database;
+    private MongoClient client;
+    private MongoDatabase database;
+
+    private final HashSet<String> collectionNames = new HashSet<>();
 
     @Override
     public void initialize() {
@@ -39,6 +36,11 @@ public class StorageManagerMongo implements StorageInterface {
         try {
             client = MongoClients.create(MongoUri);
             database = client.getDatabase(MongoDatabase);
+
+            for (String collName : database.listCollectionNames()) {
+                collectionNames.add(collName);
+            }
+
         }
         catch (Exception e) {
             return;
@@ -337,6 +339,55 @@ public class StorageManagerMongo implements StorageInterface {
         );
 
         return doc.getInteger(configKey);
+
+    }
+
+    public void storeDataObject(int ownerId, String collection, String key, String valueJson) {
+
+        if (collectionNames.contains(collection) == false) {
+
+            database.createCollection(collection);
+            collectionNames.add(collection);
+
+            MongoCollection<Document> coll = database.getCollection(collection);
+
+            coll.createIndex(new Document("ownerId", 1), new IndexOptions().unique(true));
+
+        }
+
+        MongoCollection<Document> coll = database.getCollection(collection);
+
+        coll.findOneAndUpdate(
+                Filters.and(
+                    Filters.eq("ownerId", ownerId), Filters.eq("key", key)
+                ),
+                new Document("$set", new Document("value", Document.parse(valueJson))),
+                new FindOneAndUpdateOptions().upsert(true)
+        );
+
+    }
+
+    public String loadDataObject(int ownerId, String collection, String key) {
+
+        if (collectionNames.contains(collection) == false) {
+            database.createCollection(collection);
+            collectionNames.add(collection);
+        }
+
+        MongoCollection<Document> coll = database.getCollection(collection);
+        Document doc = coll.find(
+                Filters.and(
+                        Filters.eq("ownerId", ownerId), Filters.eq("key", key)
+                )
+            ).first();
+
+        if (doc != null) {
+            Document valueDoc = (Document) doc.get("value");
+            return valueDoc.toJson();
+        }
+        else {
+            return null;
+        }
 
     }
 

@@ -32,5 +32,7 @@ public interface StorageInterface {
     public ArrayList<GameInvitations.InvitationRequest> loadAllInvitations();
     public int createInvitation(GameInvitations.InvitationRequest inv);
     public void deleteInvitation(int invitationId);
+    public void storeDataObject(int ownerId, String collection, String key, String value);
+    public String loadDataObject(int ownerId, String collection, String key);
 
 }

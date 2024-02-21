@@ -102,4 +102,16 @@ public class StorageManager {
 
     }
 
+    public void storeDataObject(int ownerId, String collection, String key, String value) {
+
+        mongo.storeDataObject(ownerId, collection, key, value);
+
+    }
+
+    public String loadDataObject(int ownerId, String collection, String key) {
+
+        return mongo.loadDataObject(ownerId, collection, key);
+
+    }
+
 }
