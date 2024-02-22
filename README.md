@@ -1,6 +1,8 @@
-# SOMUN: Open-Source Server for Online Games
+# SOMUN: Online Games Server
 
-## Description
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+
+<img src="https://he2apps.com/somun/somun-logo-icon-small.png" alt="image" width="64" height="auto" style="float: left; margin: 20px;">
 
 SOMUN is a modular, open-source server software system written in Java, designed for developing and deploying online games. It provides core functionalities like network communication, user management, matchmaking, data storage, and gameplay mechanics. SOMUN aims to offer developers a flexible and efficient platform to build their online games without reinventing the wheel.
 
