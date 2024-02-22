@@ -26,7 +26,7 @@ SOMUN is a modular, open-source server software system written in Java, designed
     git clone https://github.com/deniza/somun-server.git
     ```
 3. **Configure MongoDB connection:**
-   Update the configuration file (e.g., application.properties) with your MongoDB connection details.
+   Update the configuration file (e.g., server.conf) with your MongoDB connection details.
 4. **Build the project:**
     ```bash
     mvn clean install
