@@ -46,4 +46,14 @@ public class Account extends GssInterface {
 
     }
 
+    public void setNotificationToken(String token, int deviceType, GssConnection con) {
+
+        GssLogger.info("[Account] setNotificationToken called token: %s deviceType: %d", token, deviceType);
+
+        Player player = getPlayer(con);
+        player.setDeviceType(Player.DeviceType.values()[deviceType]);
+        player.setMessagingToken(token);
+
+    }
+
 }
