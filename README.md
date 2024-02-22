@@ -36,7 +36,7 @@ SOMUN is a modular, open-source server software system written in Java, designed
 
 ## Usage
 
-A sample game client written in Java is included in the server distribution to showcase basic usage. You can find it in the `samples/guess-the-number` directory. This game demonstrates turn-based multiplayer features and can be used as a starting point for building your own games.
+A sample game client written in Java is included in the server distribution to showcase basic usage. You can find it in the `server/samplegame` directory. This game demonstrates turn-based multiplayer features and can be used as a starting point for building your own games.
 
 ## Contributing
 
