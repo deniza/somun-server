@@ -82,6 +82,29 @@ public class FirebaseMessagingManager {
 
     }
 
+    public void sendMessage(String token, String messageText) {
+
+        Message message = buildFirebaseMessage(messageText, token);
+
+        ApiFuture<String> response = FirebaseMessaging.getInstance().sendAsync(message, FirebaseEnableDryRun);
+        totalSentNotifications++;
+
+        try {
+            String messageId = response.get();
+            successCount++;
+            GssLogger.info("[FirebaseManager] Msg Send Completed. Message ID: " + messageId);
+        }
+        catch (InterruptedException e) {
+            Logger.getLogger(FirebaseMessagingManager.class.getName()).log(Level.SEVERE, null, e);
+            errorCount++;
+        }
+        catch (ExecutionException e) {
+            Logger.getLogger(FirebaseMessagingManager.class.getName()).log(Level.SEVERE, null, e);
+            errorCount++;
+        }
+
+    }
+
     public void sendMessageBatch(String messageText, List<String> tokens) {
 
         LinkedList<Message> messages = new LinkedList();

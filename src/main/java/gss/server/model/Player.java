@@ -9,6 +9,12 @@ import java.util.List;
 
 public class Player {
 
+    public enum DeviceType {
+        NotDefined,
+        IOS,
+        ANDROID
+    }
+
     private final int playerId;
     private String name;
     private String password;
@@ -18,14 +24,20 @@ public class Player {
     private HashSet<Integer> friendRequestsReceived = new HashSet<>();
     private HashMap<Integer, MessageManager.PrivateMessage> privateMessages = new HashMap<>();
     private boolean online;
+    private String messagingToken; // push notification token
+    private DeviceType deviceType;
     private int activeGameId;
 
     public Player(int playerId) {
+
         this.playerId = playerId;
         setName("");
         setPassword("");
         setOnline(false);
         setActiveGameId(-1);
+
+        setMessagingToken("");
+        setDeviceType(DeviceType.NotDefined);
     }
 
     public int getPlayerId() {
@@ -58,6 +70,22 @@ public class Player {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setMessagingToken(String token) {
+        messagingToken = token;
+    }
+
+    public String getMessagingToken() {
+        return messagingToken;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public DeviceType getDeviceType() {
+        return deviceType;
     }
 
     public boolean isOnline() {

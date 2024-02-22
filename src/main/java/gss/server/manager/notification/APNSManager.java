@@ -83,10 +83,10 @@ public class APNSManager {
         GssLogger.info("[REPORT] Error: " + errorCount);
 
     }
-    public void sendMessage(String apnsToken, String message) {
+    public void sendMessage(String apnsToken, String messageText) {
 
         ApnsPayloadBuilder payloadBuilder = new SimpleApnsPayloadBuilder();
-        payloadBuilder.setAlertBody(message);
+        payloadBuilder.setAlertBody(messageText);
         payloadBuilder.setSound(ApnsSound);
 
         final String payload = payloadBuilder.build();
