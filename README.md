@@ -49,7 +49,7 @@ SOMUN welcomes all forms of contributions from the community. This includes:
 * **New sample games:** Create and contribute new sample games to showcase different functionalities and inspire developers.
 * **Documentation improvements:** Enhance existing documentation or contribute new documentation for modules, features, and usage examples.
 
-Please refer to the CONTRIBUTING.md file for detailed guidelines and contribution processes.
+Please refer to the [CONTRIBUTING.md](docs/CONTRIBUTING.md) file for detailed guidelines and contribution processes.
 
 ## License
 

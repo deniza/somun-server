@@ -57,7 +57,7 @@ SOMUN is licensed under the MIT license. Please ensure your contributions respec
 
 **Additional Resources:**
 
-* GitHub repository: https//github.com/deniza/somun-server
+* GitHub repository: https://github.com/deniza/somun-server
 * Project website: (under construction)
 * Community forum: (soon to be available)
 
