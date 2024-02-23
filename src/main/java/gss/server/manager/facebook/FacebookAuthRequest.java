@@ -11,7 +11,7 @@ import gss.server.util.Time;
  *
  * @author deniz
  */
-public class ValidationRequest {
+public class FacebookAuthRequest {
 
     public static final int RESULT_VALID = 0;
     public static final int RESULT_NOTVALID = 1;
@@ -24,7 +24,7 @@ public class ValidationRequest {
     private int result;
     private long creationTime;
     
-    public ValidationRequest(int pid, String accessToken, GssConnection con) {
+    public FacebookAuthRequest(int pid, String accessToken, GssConnection con) {
         this.pid = pid;
         this.accessToken = accessToken;
         this.con = con;

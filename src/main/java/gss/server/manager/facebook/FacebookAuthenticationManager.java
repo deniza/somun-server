@@ -24,61 +24,57 @@ import gss.server.util.Time;
  *
  * @author deniz
  */
-public class FacebookValidationManager implements ServiceUpdateInterface {
+public class FacebookAuthenticationManager implements ServiceUpdateInterface {
 
-    private static FacebookValidationManager instance;
+    private static FacebookAuthenticationManager instance;
 
     private static final int workerThreadCount = Config.getInt("facebook_thread_count");
     
-    private final LinkedList<ValidationRequest> validationRequests = new LinkedList<ValidationRequest>();
+    private final LinkedList<FacebookAuthRequest> authRequests = new LinkedList<FacebookAuthRequest>();
     private ExecutorService execService;    
     
-    private FacebookValidationManager() {
+    private FacebookAuthenticationManager() {
         
         execService = Executors.newFixedThreadPool(workerThreadCount);
         
     }
 
-    public static FacebookValidationManager get() {
+    public static FacebookAuthenticationManager get() {
         if (instance == null) {
-            instance = new FacebookValidationManager();
+            instance = new FacebookAuthenticationManager();
         }
         return instance;
     }
         
-    public synchronized void addValidationRequest(String accessToken, GssConnection con) {
+    public synchronized void addAuthRequest(String accessToken, GssConnection con) {
         
-        ValidationRequest vData = new ValidationRequest(0, accessToken, con);
+        FacebookAuthRequest vData = new FacebookAuthRequest(0, accessToken, con);
         execService.execute(new ValidationWorker(vData));
         
     }
     
-    public ValidationRequest getValidationResponse() {        
-        synchronized (validationRequests) {
-            return validationRequests.poll();
+    public FacebookAuthRequest getAuthResponse() {
+        synchronized (authRequests) {
+            return authRequests.poll();
         }
     }
     
-    public int getValidationQueueLength() {
-        return validationRequests.size();
-    }
+    private synchronized void processAuthRequests() {
 
-    private synchronized void processValidationRequests() {
-
-        ValidationRequest vData = getValidationResponse();
+        FacebookAuthRequest vData = getAuthResponse();
         if (vData != null) {
 
             if (vData.isConnectionStillActive() == false) {
-                GssLogger.info("FacebookValidationManager: client disconnected before facebook response");
+                GssLogger.info("FacebookAuthenticationManager: client disconnected before facebook response");
             }
             else {
 
                 if (vData.isResultValid()) {
-                    GssLogger.info("FacebookValidationManager: validation success - " + vData.toString());
+                    GssLogger.info("FacebookAuthenticationManager: validation success - " + vData.toString());
                     vData.getConnection().invokeMethod("Auth_facebookLoginResponse", new Object[] {1, vData.getPid(), vData.getFbuid(), vData.getName(), vData.getFullName()});
                 }
                 else {
-                    GssLogger.info("FacebookValidationManager: validation failed - " + vData.toString());
+                    GssLogger.info("FacebookAuthenticationManager: validation failed - " + vData.toString());
                     vData.getConnection().invokeMethod("Auth_facebookLoginResponse", new Object[] {0, vData.getPid(), "", "", ""});
                 }
 
@@ -91,15 +87,15 @@ public class FacebookValidationManager implements ServiceUpdateInterface {
     @Override
     public void updateService(long deltaTime) {
 
-        processValidationRequests();
+        processAuthRequests();
 
     }
 
     private class ValidationWorker implements Runnable {
         
-        private ValidationRequest vData;
+        private FacebookAuthRequest vData;
         
-        public ValidationWorker(ValidationRequest vData) {
+        public ValidationWorker(FacebookAuthRequest vData) {
             this.vData = vData;
         }
         
@@ -108,7 +104,7 @@ public class FacebookValidationManager implements ServiceUpdateInterface {
 
             if (vData.isConnectionStillActive() == false) {
                 
-                GssLogger.info("FacebookValidationManager: client disconnected before facebook request");
+                GssLogger.info("FacebookAuthenticationManager: client disconnected before facebook request");
                 return;
                 
             }
@@ -116,7 +112,7 @@ public class FacebookValidationManager implements ServiceUpdateInterface {
             long cTime = vData.getCreationTime();
             long t1 = Time.now();
             
-            GssLogger.info("FacebookValidationManager: request will be executed - wait time = " + (t1 - cTime));
+            GssLogger.info("FacebookAuthenticationManager: request will be executed - wait time = " + (t1 - cTime));
             
             try {
             
@@ -140,31 +136,31 @@ public class FacebookValidationManager implements ServiceUpdateInterface {
                     vData.setFbuid(fbuidOfMe);
                     vData.setName(name);
                     vData.setFullName(fullName);
-                    vData.setResult(ValidationRequest.RESULT_VALID);
+                    vData.setResult(FacebookAuthRequest.RESULT_VALID);
                 }
                 else {
-                    vData.setResult(ValidationRequest.RESULT_NOTVALID);
+                    vData.setResult(FacebookAuthRequest.RESULT_NOTVALID);
                 }
                 
                 if (vData.getFbuid().equals("")) {
-                    vData.setResult(ValidationRequest.RESULT_NOTVALID);
+                    vData.setResult(FacebookAuthRequest.RESULT_NOTVALID);
                 }                    
                                 
             }
             catch (FacebookException ex) {
 
-                GssLogger.error("FacebookValidationManager: facebook exception: " + ex.getMessage());
+                GssLogger.error("FacebookAuthenticationManager: facebook exception: " + ex.getMessage());
                 
-                vData.setResult(ValidationRequest.RESULT_NOTVALID);
+                vData.setResult(FacebookAuthRequest.RESULT_NOTVALID);
                 
             }
             
-            synchronized (validationRequests) {
-                validationRequests.add(vData);
+            synchronized (authRequests) {
+                authRequests.add(vData);
             }
             
-            GssLogger.info("FacebookValidationManager: request executed - process time = " + (Time.now() - t1));
-            GssLogger.info("FacebookValidationManager: " + vData.toString());
+            GssLogger.info("FacebookAuthenticationManager: request executed - process time = " + (Time.now() - t1));
+            GssLogger.info("FacebookAuthenticationManager: " + vData.toString());
         }
         
     }
