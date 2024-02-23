@@ -25,8 +25,13 @@ public class Account extends GssInterface {
         }
 
         Player player = AccountManager.get().createGuestAccount();
+        if (player == null) {
+            call(con, "Account", "createGuestAccountRejected", "Error creating guest account");
+        }
+        else  {
+            call(con, "Account", "createGuestAccountAccepted", player.getPlayerId(), player.getName(), player.getPassword());
+        }
 
-        call(con, "Account", "createGuestAccountAccepted", player.getPlayerId(), player.getName(), player.getPassword());
     }
 
     public void changeCredentials(String username, String password, GssConnection con) {

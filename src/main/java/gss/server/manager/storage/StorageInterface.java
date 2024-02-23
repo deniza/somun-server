@@ -8,8 +8,15 @@ import java.util.ArrayList;
 
 public interface StorageInterface {
 
+    public enum CreatePlayerResult {
+        SUCCESS,
+        USERNAME_ALREADY_EXISTS,
+        ERROR
+    };
+
     public void initialize();
     public void shutdown();
+    public CreatePlayerResult createPlayer(Player player);
 
     public void storePlayer(Player player);
 
@@ -21,9 +28,7 @@ public interface StorageInterface {
 
     public ArrayList<GameSession> loadGameSessions(ArrayList<Integer> gameIds);
 
-    public int getAndIncrementNextAvailableGameId();
-
-    public int getAndIncrementNextAvailablePlayerId();
+    public int getAndIncrementConfigValue(String configKey);
 
     public void storePrivateMessage(int senderId, int receiverId, String message);
 

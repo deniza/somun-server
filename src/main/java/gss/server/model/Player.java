@@ -15,7 +15,7 @@ public class Player {
         ANDROID
     }
 
-    private final int playerId;
+    private int playerId;
     private String name;
     private String password;
     private ArrayList<Integer> gameIds = new ArrayList<>();
@@ -38,6 +38,14 @@ public class Player {
 
         setMessagingToken("");
         setDeviceType(DeviceType.NotDefined);
+    }
+
+    public Player() {
+        this(0);
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 
     public int getPlayerId() {

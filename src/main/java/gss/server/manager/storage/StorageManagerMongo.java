@@ -58,19 +58,6 @@ public class StorageManagerMongo implements StorageInterface {
     }
 
     @Override
-    public int getAndIncrementNextAvailableGameId() {
-
-        return getAndIncrementConfigValue("nextGameId");
-
-    }
-    @Override
-    public int getAndIncrementNextAvailablePlayerId() {
-
-        return getAndIncrementConfigValue("nextPlayerId");
-
-    }
-
-    @Override
     public void storePlayer(Player player) {
 
         MongoCollection<Document> collection = database.getCollection(PlayersCollection);
@@ -92,6 +79,24 @@ public class StorageManagerMongo implements StorageInterface {
                 new Document("$set", playerDoc),
                 new FindOneAndUpdateOptions().upsert(true)
         );
+
+    }
+    @Override
+    public synchronized CreatePlayerResult createPlayer(Player player) {
+
+        int playerId = getAndIncrementConfigValue("nextPlayerId");
+        player.setPlayerId(playerId);
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        Document doc = collection.find(Filters.eq("name", player.getName())).first();
+        if (doc != null) {
+            return CreatePlayerResult.USERNAME_ALREADY_EXISTS;
+        }
+        else {
+            storePlayer(player);
+            return CreatePlayerResult.SUCCESS;
+        }
 
     }
 
@@ -328,7 +333,8 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
-    private synchronized int getAndIncrementConfigValue(String configKey) {
+    @Override
+    public int getAndIncrementConfigValue(String configKey) {
 
         MongoCollection<Document> config = database.getCollection(ConfigCollection);
 

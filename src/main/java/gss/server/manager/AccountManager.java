@@ -1,5 +1,6 @@
 package gss.server.manager;
 
+import gss.server.manager.storage.StorageInterface;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 import gss.server.util.CredentialUtils;
@@ -22,15 +23,24 @@ public class AccountManager {
     }
 
     public Player createGuestAccount() {
-        
-        int playerId = PlayerManager.get().createPlayer();
 
-        Player player = PlayerManager.get().getPlayer(playerId);
-        player.setName(guestAccountNamePrefix + playerId);
-        //player.setPassword(PasswordGenerator.generatePassword(16));
-        player.setPassword(PasswordGenerator.generateDebugPassword());
+        Player player = new Player();
+        player.setName(guestAccountNamePrefix + StorageManager.get().getAndIncrementConfigValue("nextGuestAccountPostfixId"));
+        player.setPassword(PasswordGenerator.generatePassword(16));
 
-        StorageManager.get().storePlayer(player);
+        StorageInterface.CreatePlayerResult result;
+        while ((result = StorageManager.get().createPlayer(player)) != StorageInterface.CreatePlayerResult.SUCCESS) {
+
+            if (result == StorageInterface.CreatePlayerResult.USERNAME_ALREADY_EXISTS) {
+                player.setName(guestAccountNamePrefix + StorageManager.get().getAndIncrementConfigValue("nextGuestAccountPostfixId"));
+            }
+            else if (result == StorageInterface.CreatePlayerResult.ERROR) {
+                return null;
+            }
+
+        }
+
+        PlayerManager.get().addPlayer(player);
 
         return player;
 

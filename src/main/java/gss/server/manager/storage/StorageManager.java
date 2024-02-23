@@ -7,7 +7,7 @@ import gss.server.model.Player;
 import java.util.ArrayList;
 
 public class StorageManager {
-    
+
     private static StorageManager instance;
 
     private final StorageManagerMongo mongo = new StorageManagerMongo();
@@ -34,17 +34,23 @@ public class StorageManager {
         return instance;
     }
 
-    public int getNextAvailablePlayerId() {
-        return mongo.getAndIncrementNextAvailablePlayerId();
+    public int getAndIncrementNextAvailableGameId() {
+        return mongo.getAndIncrementConfigValue("nextGameId");
     }
 
-    public int getAndIncrementNextAvailableGameId() {
-        return mongo.getAndIncrementNextAvailableGameId();
+    public int getAndIncrementConfigValue(String configKey) {
+        return mongo.getAndIncrementConfigValue(configKey);
     }
 
     public void storePlayer(Player player) {
         
         mongo.storePlayer(player);
+
+    }
+
+    public synchronized StorageInterface.CreatePlayerResult createPlayer(Player player) {
+
+        return mongo.createPlayer(player);
 
     }
 

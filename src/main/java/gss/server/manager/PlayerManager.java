@@ -22,17 +22,6 @@ public class PlayerManager {
         return instance;
     }
 
-    public synchronized int createPlayer() {
-        
-        int playerId = StorageManager.get().getNextAvailablePlayerId();
-        Player player = new Player(playerId);
-
-        players.put(player.getPlayerId(), player);
-
-        return playerId;
-
-    }
-
     public synchronized void addPlayer(Player player) {
 
         players.put(player.getPlayerId(), player);
