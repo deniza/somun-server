@@ -112,7 +112,7 @@ public class StorageManagerMongo implements StorageInterface {
 
             final String name = doc.getString("name");
             final String password = doc.getString("password");
-            final String fbuid = doc.getString("fbuid");
+            final String fbuid = doc.getOrDefault("fbuid", "").toString();
             final List<Integer> gameIds = doc.getList("games", Integer.class);
 
             Player player = new Player(playerId);
