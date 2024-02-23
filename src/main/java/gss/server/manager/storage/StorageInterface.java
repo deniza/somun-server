@@ -22,6 +22,8 @@ public interface StorageInterface {
 
     public Player loadPlayer(int playerId);
 
+    public Player loadPlayerByFbuid(String fbuid);
+
     public void storeGameSession(GameSession session);
 
     public GameSession loadGameSession(int gameId);

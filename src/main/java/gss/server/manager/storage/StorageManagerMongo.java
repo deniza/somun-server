@@ -110,55 +110,80 @@ public class StorageManagerMongo implements StorageInterface {
 
         if (doc != null) {
 
-            final String name = doc.getString("name");
-            final String password = doc.getString("password");
-            final String fbuid = doc.getOrDefault("fbuid", "").toString();
-            final List<Integer> gameIds = doc.getList("games", Integer.class);
-
-            Player player = new Player(playerId);
-            player.setName(name);
-            player.setPassword(password);
-            player.setFbuid(fbuid);
-            player.setGameIds(new ArrayList(gameIds));
-
-            Document friendsDoc = (Document) doc.get("friends");
-            if (friendsDoc != null) {
-                final List<Integer> friends = friendsDoc.getList("accepted", Integer.class);
-                final List<Integer> friendsSent = friendsDoc.getList("sent", Integer.class);
-                final List<Integer> friendsRecv = friendsDoc.getList("recv", Integer.class);
-
-                player.setFriends(friends);
-                player.setFriendRequestsSent(friendsSent);
-                player.setFriendRequestsReceived(friendsRecv);
-            }
-
-            final List<Document> privateMessages = doc.getList("privateMessages", Document.class);
-            if (privateMessages != null) {
-
-                List<MessageManager.PrivateMessage> pmessages = new LinkedList<>();
-
-                for (Document message : privateMessages) {
-
-                    int msgId = message.getInteger("msgId");
-                    int sender = message.getInteger("sender");
-                    long date = message.getLong("date");
-                    boolean readFlag = message.getInteger("read") == 0 ? false : true;
-                    String content = message.getString("content");
-
-                    MessageManager.PrivateMessage pmsg = new MessageManager.PrivateMessage(msgId, sender, playerId, readFlag, date, content);
-                    pmessages.add(pmsg);
-
-                }
-
-                player.setPrivateMessages(pmessages);
-
-            }
-            return player;
+            return createPlayerFromDocument(doc);
 
         }
         else {
             return null;
         }
+
+    }
+
+    @Override
+    public Player loadPlayerByFbuid(String fbuid) {
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        Document doc = collection.find(Filters.eq("fbuid", fbuid)).first();
+
+        if (doc != null) {
+
+            return createPlayerFromDocument(doc);
+
+        }
+        else {
+            return null;
+        }
+
+    }
+
+    private Player createPlayerFromDocument(Document doc) {
+
+        final int playerId = doc.getInteger("playerId");
+        final String name = doc.getString("name");
+        final String password = doc.getString("password");
+        final String fbuid = doc.getOrDefault("fbuid", "").toString();
+        final List<Integer> gameIds = doc.getList("games", Integer.class);
+
+        Player player = new Player(playerId);
+        player.setName(name);
+        player.setPassword(password);
+        player.setFbuid(fbuid);
+        player.setGameIds(new ArrayList(gameIds));
+
+        Document friendsDoc = (Document) doc.get("friends");
+        if (friendsDoc != null) {
+            final List<Integer> friends = friendsDoc.getList("accepted", Integer.class);
+            final List<Integer> friendsSent = friendsDoc.getList("sent", Integer.class);
+            final List<Integer> friendsRecv = friendsDoc.getList("recv", Integer.class);
+
+            player.setFriends(friends);
+            player.setFriendRequestsSent(friendsSent);
+            player.setFriendRequestsReceived(friendsRecv);
+        }
+
+        final List<Document> privateMessages = doc.getList("privateMessages", Document.class);
+        if (privateMessages != null) {
+
+            List<MessageManager.PrivateMessage> pmessages = new LinkedList<>();
+
+            for (Document message : privateMessages) {
+
+                int msgId = message.getInteger("msgId");
+                int sender = message.getInteger("sender");
+                long date = message.getLong("date");
+                boolean readFlag = message.getInteger("read") == 0 ? false : true;
+                String content = message.getString("content");
+
+                MessageManager.PrivateMessage pmsg = new MessageManager.PrivateMessage(msgId, sender, playerId, readFlag, date, content);
+                pmessages.add(pmsg);
+
+            }
+
+            player.setPrivateMessages(pmessages);
+
+        }
+        return player;
 
     }
 

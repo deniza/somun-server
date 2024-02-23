@@ -60,6 +60,12 @@ public class StorageManager {
 
     }
 
+    public Player loadPlayerByFbuid(String fbuid) {
+
+        return mongo.loadPlayerByFbuid(fbuid);
+
+    }
+
     public void storeGameSession(GameSession session) {
 
         mongo.storeGameSession(session);
