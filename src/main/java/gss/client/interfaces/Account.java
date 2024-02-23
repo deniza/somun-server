@@ -38,9 +38,31 @@ public class Account extends GssInterface {
 
     }
 
+    public void createAccountAccepted(int playerId, String username, String password, GssConnection con) {
+
+        GssLogger.info("[Account] createAccountAccepted called playerId: %d username: %s password: %s", playerId, username, password);
+
+        for (AccountListener l : listeners) {
+            l.createAccountAccepted(playerId, username, password);
+        }
+
+    }
+
+    public void createAccountRejected(String reason, GssConnection con) {
+
+        GssLogger.info("[Account] createAccountRejected called reason: %s", reason);
+
+        for (AccountListener l : listeners) {
+            l.createAccountRejected(reason);
+        }
+
+    }
+
     public static interface AccountListener {
         public void createGuestAccountAccepted(int playerId, String username, String password);
         public void createGuestAccountRejected(String reason);
+        public void createAccountAccepted(int playerId, String username, String password);
+        public void createAccountRejected(String reason);
     }
 
 }

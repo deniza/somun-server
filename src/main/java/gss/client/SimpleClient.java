@@ -14,8 +14,8 @@ import gss.server.samplegame.Move;
 
 public class SimpleClient implements UIListener {
     
-    private int playerId;
-    private String playerName;
+    public static int playerId;
+    public static String playerName;
     private String playerPassword;
     public static int currentGameId = -1;
     public static boolean isTurnOwner = false;
@@ -51,6 +51,21 @@ public class SimpleClient implements UIListener {
             @Override
             public void createGuestAccountRejected(String reason) {
                 System.out.println("create guest account rejected: " + reason);
+                ClientUI.get().update(UIState.connected);
+            }
+            @Override
+            public void createAccountAccepted(int _playerId, String username, String password) {
+                
+                playerId = _playerId;
+                playerName = username;
+                playerPassword = password;
+
+                con.invokeMethod("Auth_loginUsingIdPassword", new Object[]{ playerId, playerPassword });
+
+            }
+            @Override
+            public void createAccountRejected(String reason) {
+                System.out.println("create account rejected: " + reason);
                 ClientUI.get().update(UIState.connected);
             }
         });
@@ -145,9 +160,16 @@ public class SimpleClient implements UIListener {
     }
 
     @Override
-    public void onCreateNewAccountUICommand() {
+    public void onCreateNewGuestAccountUICommand() {
 
-        con.invokeMethod("Account_createGuestAccount");        
+        con.invokeMethod("Account_createGuestAccount");
+
+    }
+
+    @Override
+    public void onCreateNewAccountUICommand(String username, String password) {
+
+        con.invokeMethod("Account_createAccount", new Object[]{ username, password });
 
     }
 

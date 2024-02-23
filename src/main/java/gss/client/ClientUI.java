@@ -2,7 +2,7 @@ package gss.client;
 
 public class ClientUI {
     
-    public enum UIState {notconnected, connected, loginerr, login, ingame, makingmove, rpccall}
+    public enum UIState {notconnected, connected, loginerr, login, ingame, makingmove, rpccall, createnewaccount}
 
     private static final ClientUI instance = new ClientUI();
     private UIState state = UIState.notconnected;
@@ -46,12 +46,15 @@ public class ClientUI {
         }
         else if (state == UIState.connected) {
             if (command.equals("1")) {
-                listener.onCreateNewAccountUICommand();
+                listener.onCreateNewGuestAccountUICommand();
             }
             else if (command.equals("2")) {
-                listener.onLoginUICommand();
+                update(UIState.createnewaccount);
             }
             else if (command.equals("3")) {
+                listener.onLoginUICommand();
+            }
+            else if (command.equals("4")) {
                 executeExitApp();
             }
         }
@@ -103,6 +106,12 @@ public class ClientUI {
 
             update(UIState.login);
         }
+        else if (state == UIState.createnewaccount) {
+            String[] parts = command.split(" ");
+            String username = parts[0];
+            String password = parts[1];
+            listener.onCreateNewAccountUICommand(username, password);
+        }
 
     }
 
@@ -117,7 +126,13 @@ public class ClientUI {
 
     private synchronized void display() {
 
-        print("[ ** CLIENT MENU ** (" + state + ")]");
+        String header = "[ ** CLIENT MENU ** (" + state + ")]";
+        
+        if (state == UIState.login) {
+            header += " [PlayerId: " + SimpleClient.playerId + ", Name: " + SimpleClient.playerName + "]";
+        }
+
+        print(header);
 
         if (state == UIState.notconnected) {
             displayNotConnected();
@@ -140,6 +155,9 @@ public class ClientUI {
         else if (state == UIState.rpccall) {
             displayRpcCall();
         }
+        else if (state == UIState.createnewaccount) {
+            displayCreateNewAccount();
+        }
 
     }
 
@@ -151,9 +169,10 @@ public class ClientUI {
     }
     private void displayConnected() {
     
-        print("1) Create New Account");
-        print("2) Login Existing Account");        
-        print("3) Exit App");
+        print("1) Create New Guest Account");
+        print("2) Create New Account");
+        print("3) Login Existing Account");
+        print("4) Exit App");
 
     }
 
@@ -188,6 +207,12 @@ public class ClientUI {
 
     }
 
+    private void displayCreateNewAccount() {
+
+        print("> Enter username and password: ");
+
+    }
+
     private void executeExitApp() {
 
         isRunning = false;
@@ -203,7 +228,8 @@ public class ClientUI {
         
         void onExitAppUICommand();
         void onConnectServerUICommand();
-        void onCreateNewAccountUICommand();
+        void onCreateNewGuestAccountUICommand();
+        void onCreateNewAccountUICommand(String username, String password);
         void onLoginUICommand();
         
         void onMakeMoveUICommand(int number);
