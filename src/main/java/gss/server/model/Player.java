@@ -18,6 +18,7 @@ public class Player {
     private int playerId;
     private String name;
     private String password;
+    private String fbuid;
     private ArrayList<Integer> gameIds = new ArrayList<>();
     private HashSet<Integer> friends = new HashSet<>();
     private HashSet<Integer> friendRequestsSent = new HashSet<>();
@@ -33,6 +34,7 @@ public class Player {
         this.playerId = playerId;
         setName("");
         setPassword("");
+        setFbuid("");
         setOnline(false);
         setActiveGameId(-1);
 
@@ -52,6 +54,12 @@ public class Player {
         return playerId;
     }
 
+    public void setFbuid(String fbuid) {
+        this.fbuid = fbuid;
+    }
+    public String getFbuid() {
+        return fbuid;
+    }
     public ArrayList<Integer> getGameIds() {
         return gameIds;
     }
