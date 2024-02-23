@@ -1,5 +1,7 @@
 package gss.server.manager;
 
+import gss.network.GssConnection;
+import gss.server.manager.facebook.FacebookValidationManager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 
@@ -38,6 +40,13 @@ public class AuthenticationManager {
                 return false;
             }
         }
+
+    }
+
+    public void authenticateFacebook(String accessToken, GssConnection con) {
+
+        FacebookValidationManager.get().addValidationRequest(accessToken, con);
+
 
     }
 

@@ -35,6 +35,14 @@ public class Auth extends GssInterface {
         }
     }
 
+    public void loginUsingFacebook(String accessToken, GssConnection con) {
+
+        GssLogger.info("[Auth] loginUsingFacebook called accessToken: %s", accessToken);
+
+        AuthenticationManager.get().authenticateFacebook(accessToken, con);
+
+    }
+
     @Override
     public void clientDisconnected(GssConnection con) {
         

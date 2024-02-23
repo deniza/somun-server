@@ -71,7 +71,7 @@ public class ValidationRequest {
         return result == RESULT_VALID;
     }
     
-    public GssConnection getConnectionBase() {
+    public GssConnection getConnection() {
         return con;
     }
     
