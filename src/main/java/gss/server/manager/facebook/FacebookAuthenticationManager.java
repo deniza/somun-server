@@ -16,8 +16,14 @@ import java.util.concurrent.Executors;
 
 import gss.GssLogger;
 import gss.network.GssConnection;
+import gss.server.manager.GameManager;
+import gss.server.manager.PlayerManager;
+import gss.server.manager.storage.StorageInterface;
+import gss.server.manager.storage.StorageManager;
+import gss.server.model.Player;
 import gss.server.model.ServiceUpdateInterface;
 import gss.server.util.Config;
+import gss.server.util.PasswordGenerator;
 import gss.server.util.Time;
 
 /**
@@ -71,7 +77,48 @@ public class FacebookAuthenticationManager implements ServiceUpdateInterface {
 
                 if (vData.isResultValid()) {
                     GssLogger.info("FacebookAuthenticationManager: validation success - " + vData.toString());
-                    vData.getConnection().invokeMethod("Auth_facebookLoginResponse", new Object[] {1, vData.getPid(), vData.getFbuid(), vData.getName(), vData.getFullName()});
+
+                    Player player = StorageManager.get().loadPlayerByFbuid(vData.getFbuid());
+                    if (player != null) {
+
+                        player.setOnline(true);
+
+                        PlayerManager.get().addPlayer(player);
+                        GameManager.get().loadPlayerGameSessions(player);
+
+                        vData.getConnection().invokeMethod("Auth_facebookLoginResponse", new Object[] {1, vData.getPid(), vData.getFbuid(), vData.getName(), vData.getFullName()});
+
+                    }
+                    else {
+
+                        // player account not found, create a new one
+                        player = new Player();
+                        player.setPlayerId(vData.getPid());
+                        player.setFbuid(vData.getFbuid());
+                        player.setName(vData.getName() + "_" + Math.min(100, 10000));
+                        player.setPassword(PasswordGenerator.generatePassword(16));
+
+                        StorageInterface.CreatePlayerResult result = StorageManager.get().createPlayer(player);
+                        if (result == StorageInterface.CreatePlayerResult.SUCCESS) {
+
+                            PlayerManager.get().addPlayer(player);
+
+                            vData.getConnection().invokeMethod("Account_createAccountAccepted", new Object[] {player.getPlayerId(), player.getName(), player.getPassword()});
+
+                        }
+                        else if (result == StorageInterface.CreatePlayerResult.USERNAME_ALREADY_EXISTS) {
+
+                            vData.getConnection().invokeMethod("Account_createAccountRejected", new Object[] {"Username already exists"});
+
+                        }
+                        else if (result == StorageInterface.CreatePlayerResult.ERROR) {
+
+                            vData.getConnection().invokeMethod("Account_createAccountRejected", new Object[] {"Error creating account"});
+
+                        }
+
+                    }
+
                 }
                 else {
                     GssLogger.info("FacebookAuthenticationManager: validation failed - " + vData.toString());
