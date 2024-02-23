@@ -34,6 +34,14 @@ public class Account extends GssInterface {
 
     }
 
+    public void createAccount(String username, String password, GssConnection con) {
+
+        GssLogger.info("[Account] createAccount called");
+
+        AccountManager.get().createAccount(username, password, con);
+
+    }
+
     public void changeCredentials(String username, String password, GssConnection con) {
 
         GssLogger.info("[Account] changeCredentials called");
