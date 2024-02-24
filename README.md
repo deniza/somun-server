@@ -23,20 +23,27 @@ SOMUN is a modular, open-source server software system written in Java, designed
 
 1. **Prerequisites:**
     * Java 8 or higher
+    * Maven 3.6 or higher ([https://maven.apache.org/](https://maven.apache.org/))
     * MongoDB database instance ([https://www.mongodb.com/](https://www.mongodb.com/))
 2. **Clone the repository:**
     ```bash
     git clone https://github.com/deniza/somun-server.git
     ```
-3. **Configure MongoDB connection:**
-   Update the configuration file (e.g., server.conf) with your MongoDB connection details.
-4. **Build the project:**
+3. **Build the project:**
     ```bash
-    mvn clean install
+    ./build.sh
     ```
-5. **Run the server:**
+4. **Configure MongoDB connection:**
+   Update the configuration file server.conf with your MongoDB connection details.
+
+5. **Initialize the database:**
+    ```
+    ./somun.sh setup
+    ```
+   
+6. **Start the server:**
     ```bash
-    java -jar target/Somun-1.0.jar
+    ./somun.sh run
     ```
 
 ## Usage
