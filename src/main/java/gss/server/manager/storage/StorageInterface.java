@@ -16,6 +16,7 @@ public interface StorageInterface {
 
     public void initialize();
     public void shutdown();
+    public void setup();
     public CreatePlayerResult createPlayer(Player player);
 
     public void storePlayer(Player player);

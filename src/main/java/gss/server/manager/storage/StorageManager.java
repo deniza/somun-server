@@ -21,6 +21,12 @@ public class StorageManager {
 
     }
 
+    public void setup() {
+
+        mongo.setup();
+
+    }
+
     public void shutdown() {
 
         mongo.shutdown();

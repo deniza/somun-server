@@ -58,6 +58,64 @@ public class StorageManagerMongo implements StorageInterface {
     }
 
     @Override
+    public void setup() {
+
+        // iterate thtough all databases and check if the database already exists
+        for (String dbName : client.listDatabaseNames()) {
+            if (dbName.equals(MongoDatabase)) {
+
+                System.out.print("Database " + MongoDatabase + " already exists. All data will be deleted. Are you sure? (y/N) ");
+                Scanner scanner = new Scanner(System.in);
+                String input = scanner.nextLine();
+                if (input.equals("y")) {
+                    client.getDatabase(dbName).drop();
+                }
+                else {
+                    GssLogger.info("Setup cancelled");
+                    return;
+                }
+
+            }
+        }
+
+        MongoCollection<Document> config = database.getCollection(ConfigCollection);
+        Document doc = new Document()
+                .append("nextPlayerId", 1)
+                .append("nextGameId", 1)
+                .append("nextMessageId", 1)
+                .append("nextInvitationId", 1)
+                .append("nextGuestAccountPostfixId",1);
+        config.insertOne(doc);
+        GssLogger.info("config collection created with default values");
+
+        database.createCollection(PlayersCollection);
+        GssLogger.info("players collection created");
+
+        database.createCollection(GamesCollection);
+        GssLogger.info("games collection created");
+
+        database.createCollection(InvitationsCollection);
+        GssLogger.info("invitations collection created");
+
+        // create indexes
+        MongoCollection<Document> players = database.getCollection(PlayersCollection);
+        players.createIndex(new Document("playerId", 1), new IndexOptions().unique(true));
+        players.createIndex(new Document("name", 1), new IndexOptions().unique(true));
+        players.createIndex(new Document("fbuid", 1), new IndexOptions().unique(true));
+
+        MongoCollection<Document> games = database.getCollection(GamesCollection);
+        games.createIndex(new Document("gameId", 1), new IndexOptions().unique(true));
+
+        MongoCollection<Document> invitations = database.getCollection(InvitationsCollection);
+        invitations.createIndex(new Document("invitationId", 1), new IndexOptions().unique(true));
+
+        GssLogger.info("Indexes created");
+
+        GssLogger.info("Setup completed");
+
+    }
+
+    @Override
     public void storePlayer(Player player) {
 
         MongoCollection<Document> collection = database.getCollection(PlayersCollection);
