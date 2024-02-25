@@ -66,6 +66,32 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void leaveGroup(Player player, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group != null) {
+
+            if (group.getOwnerId() == player.getPlayerId()) {
+                ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "owner cannot leave group");
+                return;
+            }
+
+            group.removeMember(player.getPlayerId());
+            player.removeGroup(groupId);
+
+            StorageManager.get().storeGroup(group);
+            StorageManager.get().storePlayer(player);
+
+            ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 1, "left group");
+
+        }
+        else {
+            ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "group not found");
+        }
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }

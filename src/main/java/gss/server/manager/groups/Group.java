@@ -121,6 +121,7 @@ public class Group {
 
     public void removeMember(int playerId) {
         members.removeIf(member -> member.getPlayerId() == playerId);
+        admins.removeIf(admin -> admin.getPlayerId() == playerId);
     }
 
 }

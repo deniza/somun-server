@@ -31,4 +31,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void leaveGroup(int groupId, GssConnection con) {
+
+        GssLogger.info("[Groups] leaveGroup called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().leaveGroup(player, groupId);
+
+    }
+
 }
