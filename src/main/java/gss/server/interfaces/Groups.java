@@ -41,4 +41,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void acceptJoinRequest(int groupId, int requesterId, GssConnection con) {
+
+        GssLogger.info("[Groups] acceptJoinRequest called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().acceptJoinRequest(player, groupId, requesterId);
+
+    }
+
 }

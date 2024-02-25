@@ -69,6 +69,14 @@ public class Group {
         return ownerId;
     }
 
+    public boolean isOwner(int playerId) {
+        return ownerId == playerId;
+    }
+
+    public boolean isAdmin(int playerId) {
+        return admins.stream().anyMatch(admin -> admin.getPlayerId() == playerId);
+    }
+
     public ArrayList<GroupMember> getMembers() {
         return members;
     }
@@ -87,6 +95,14 @@ public class Group {
 
     public void addJoinRequest(int playerId) {
         joinRequests.add(playerId);
+    }
+
+    public boolean hasJoinRequest(int playerId) {
+        return joinRequests.contains(playerId);
+    }
+
+    public void removeJoinRequest(int playerId) {
+        joinRequests.remove(playerId);
     }
 
     public void addMember(int playerId) {

@@ -92,6 +92,44 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void acceptJoinRequest(Player player, int groupId, int requesterId) {
+
+        Group group = groups.get(groupId);
+
+        if (group != null) {
+
+            if (group.isOwner(player.getPlayerId()) || group.isAdmin(player.getPlayerId())) {
+
+                if (group.hasJoinRequest(requesterId)) {
+
+                    group.removeJoinRequest(requesterId);
+                    group.addMember(requesterId);
+
+                    Player member = StorageManager.get().loadPlayer(requesterId);
+                    member.addGroup(groupId);
+
+                    StorageManager.get().storeGroup(group);
+                    StorageManager.get().storePlayer(member);
+
+                    ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 1, "player added to group");
+
+                }
+                else {
+                    ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "player not found in join requests");
+                }
+
+            }
+            else {
+                ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "not owner of group");
+            }
+
+        }
+        else {
+            ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "group not found");
+        }
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
