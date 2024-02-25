@@ -510,7 +510,8 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("ownerId", group.getOwnerId())
                 .append("members", new ArrayList<>())
                 .append("admins", new ArrayList<>())
-                .append("invitations", new ArrayList<>());
+                .append("invitations", new ArrayList<>())
+                .append("joinRequests", group.getJoinRequests());
 
         group.getMembers().forEach(member -> {
             Document memberDoc = new Document()
@@ -575,8 +576,10 @@ public class StorageManagerMongo implements StorageInterface {
         final List<Document> members = groupDoc.getList("members", Document.class);
         final List<Document> admins = groupDoc.getList("admins", Document.class);
         final List<Document> invitations = groupDoc.getList("invitations", Document.class);
+        final List<Integer> joinRequests = groupDoc.getList("joinRequests", Integer.class);
 
         Group group = new Group(groupId, name, Group.GroupType.valueOf(type), ownerId);
+        joinRequests.forEach(playerId -> group.addJoinRequest(playerId));
 
         for (Document member : members) {
             int playerId = member.getInteger("playerId");

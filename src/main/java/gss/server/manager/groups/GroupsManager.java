@@ -1,5 +1,6 @@
 package gss.server.manager.groups;
 
+import gss.server.manager.ConnectionManager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 import gss.server.model.ServiceUpdateInterface;
@@ -37,6 +38,31 @@ public class GroupsManager implements ServiceUpdateInterface {
 
         StorageManager.get().storeGroup(group);
         StorageManager.get().storePlayer(player);
+
+    }
+
+    public void joinGroup(Player player, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group != null) {
+
+            if (group.isAllowedToJoin()) {
+
+                group.addJoinRequest(player.getPlayerId());
+                StorageManager.get().storeGroup(group);
+
+                ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 1, "request saved");
+
+            }
+            else {
+                ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 0, "group not allowed to join");
+            }
+
+        }
+        else {
+            ConnectionManager.get().call(player,"Groups","joinGroupResponse", 0, "group not found");
+        }
 
     }
 

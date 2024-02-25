@@ -21,4 +21,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void joinGroup(int groupId, GssConnection con) {
+
+        GssLogger.info("[Groups] joinGroup called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().joinGroup(player, groupId);
+
+    }
+
 }

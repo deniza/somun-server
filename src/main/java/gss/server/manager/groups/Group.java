@@ -1,11 +1,13 @@
 package gss.server.manager.groups;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Group {
 
     public enum GroupType {
-        PUBLIC, PRIVATE
+        PUBLIC,   // anyone can request to join
+        PRIVATE   // only invited players can join
     };
 
     private int groupId;
@@ -21,6 +23,8 @@ public class Group {
 
     private final ArrayList<GroupInvitation> invitations;
 
+    private final HashSet<Integer> joinRequests;  // playerId
+
     public Group(int groupId, String name, GroupType type, int ownerId) {
         this.groupId = groupId;
         this.name = name;
@@ -29,6 +33,7 @@ public class Group {
         this.members = new ArrayList<>();
         this.admins = new ArrayList<>();
         this.invitations = new ArrayList<>();
+        this.joinRequests = new HashSet<>();
     }
 
     public int getGroupId() {
@@ -56,6 +61,10 @@ public class Group {
         return type;
     }
 
+    public boolean isAllowedToJoin() {
+        return type == GroupType.PUBLIC;
+    }
+
     public int getOwnerId() {
         return ownerId;
     }
@@ -70,6 +79,14 @@ public class Group {
 
     public ArrayList<GroupInvitation> getInvitations() {
         return invitations;
+    }
+
+    public HashSet<Integer> getJoinRequests() {
+        return joinRequests;
+    }
+
+    public void addJoinRequest(int playerId) {
+        joinRequests.add(playerId);
     }
 
     public void addMember(int playerId) {
