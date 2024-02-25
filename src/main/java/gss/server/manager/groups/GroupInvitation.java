@@ -6,7 +6,7 @@ public class GroupInvitation {
     private int playerId;
     private int inviterId;
 
-    public GroupInvitation(int groupId, int playerId, int inviterId) {
+    public GroupInvitation(int groupId, int inviterId, int playerId) {
         this.groupId = groupId;
         this.playerId = playerId;
         this.inviterId = inviterId;

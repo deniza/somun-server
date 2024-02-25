@@ -1,10 +1,12 @@
 package gss.server.manager.storage;
 
 import gss.server.manager.GameInvitations;
+import gss.server.manager.groups.Group;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface StorageInterface {
 
@@ -42,5 +44,8 @@ public interface StorageInterface {
     public void deleteInvitation(int invitationId);
     public void storeDataObject(int ownerId, String collection, String key, String value);
     public String loadDataObject(int ownerId, String collection, String key);
+    public void storeGroup(Group group);
+    public Group loadGroup(int groupId);
+    public HashMap<Integer, Group> loadAllGroups();
 
 }

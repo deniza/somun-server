@@ -5,6 +5,8 @@ import com.mongodb.client.model.*;
 import gss.GssLogger;
 import gss.server.manager.GameInvitations;
 import gss.server.manager.MessageManager;
+import gss.server.manager.groups.Group;
+import gss.server.manager.groups.GroupMember;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
 import gss.server.model.Player;
@@ -23,6 +25,7 @@ public class StorageManagerMongo implements StorageInterface {
     private final String PlayersCollection = "players";
     private final String GamesCollection = "games";
     private final String InvitationsCollection = "invitations";
+    private final String GroupsCollection = "groups";
     private final String ConfigCollection = "config";
 
     private MongoClient client;
@@ -84,6 +87,8 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("nextGameId", 1)
                 .append("nextMessageId", 1)
                 .append("nextInvitationId", 1)
+                .append("nextGroupId", 1)
+                .append("nextGroupInvitationId", 1)
                 .append("nextGuestAccountPostfixId",1);
         config.insertOne(doc);
         GssLogger.info("config collection created with default values");
@@ -97,6 +102,9 @@ public class StorageManagerMongo implements StorageInterface {
         database.createCollection(InvitationsCollection);
         GssLogger.info("invitations collection created");
 
+        database.createCollection(GroupsCollection);
+        GssLogger.info("groups collection created");
+
         // create indexes
         MongoCollection<Document> players = database.getCollection(PlayersCollection);
         players.createIndex(new Document("playerId", 1), new IndexOptions().unique(true));
@@ -109,8 +117,10 @@ public class StorageManagerMongo implements StorageInterface {
         MongoCollection<Document> invitations = database.getCollection(InvitationsCollection);
         invitations.createIndex(new Document("invitationId", 1), new IndexOptions().unique(true));
 
-        GssLogger.info("Indexes created");
+        MongoCollection<Document> groups = database.getCollection(GroupsCollection);
+        groups.createIndex(new Document("groupId", 1), new IndexOptions().unique(true));
 
+        GssLogger.info("Indexes created");
         GssLogger.info("Setup completed");
 
     }
@@ -434,6 +444,7 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
+    @Override
     public void storeDataObject(int ownerId, String collection, String key, String valueJson) {
 
         if (collectionNames.contains(collection) == false) {
@@ -459,6 +470,7 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
+    @Override
     public String loadDataObject(int ownerId, String collection, String key) {
 
         if (collectionNames.contains(collection) == false) {
@@ -483,5 +495,85 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
+    @Override
+    public void storeGroup(Group group) {
+
+        MongoCollection<Document> collection = database.getCollection(GroupsCollection);
+
+        Document groupDoc = new Document()
+                .append("groupId", group.getGroupId())
+                .append("name", group.getName())
+                .append("type", group.getType().toString())
+                .append("ownerId", group.getOwnerId())
+                .append("members", group.getMembers())
+                .append("admins", group.getAdmins())
+                .append("invitations", group.getInvitations());
+
+        collection.findOneAndUpdate(
+                Filters.eq("groupId", group.getGroupId()),
+                new Document("$set", groupDoc),
+                new FindOneAndUpdateOptions().upsert(true)
+        );
+
+    }
+
+    @Override
+    public Group loadGroup(int groupId) {
+
+        MongoCollection<Document> collection = database.getCollection(GroupsCollection);
+        Document groupDoc = collection.find(Filters.eq("groupId", groupId)).first();
+
+        return createGroupFromDocument(groupDoc);
+
+    }
+
+    @Override
+    public HashMap<Integer, Group> loadAllGroups() {
+
+        MongoCollection<Document> collection = database.getCollection(GroupsCollection);
+        FindIterable<Document> results = collection.find(Filters.empty());
+
+        HashMap<Integer, Group> groups = new HashMap<>();
+        for (Document groupDoc : results) {
+            Group group = createGroupFromDocument(groupDoc);
+            groups.put(group.getGroupId(), group);
+        }
+
+        return groups;
+
+    }
+
+    private Group createGroupFromDocument(Document groupDoc) {
+
+        final Integer groupId = groupDoc.getInteger("groupId");
+        final String name = groupDoc.getString("name");
+        final String type = groupDoc.getString("type");
+        final Integer ownerId = groupDoc.getInteger("ownerId");
+        final List<Document> members = groupDoc.getList("members", Document.class);
+        final List<Document> admins = groupDoc.getList("admins", Document.class);
+        final List<Document> invitations = groupDoc.getList("invitations", Document.class);
+
+        Group group = new Group(groupId, name, Group.GroupType.valueOf(type), ownerId);
+
+        for (Document member : members) {
+            int playerId = member.getInteger("playerId");
+            String role = member.getString("role");
+            group.addMember(playerId, GroupMember.GroupMemberRole.valueOf(role));
+        }
+
+        for (Document admin : admins) {
+            int playerId = admin.getInteger("playerId");
+            group.addAdmin(playerId);
+        }
+
+        for (Document inv : invitations) {
+            int inviter = inv.getInteger("inviter");
+            int invitee = inv.getInteger("invitee");
+            group.invite(inviter, invitee);
+        }
+
+        return group;
+
+    }
 
 }

@@ -12,4 +12,22 @@ public class GroupMember {
     private int playerId;
     private GroupMemberRole role;
 
+    public GroupMember(int groupId, int playerId, GroupMemberRole role) {
+        this.groupId = groupId;
+        this.playerId = playerId;
+        this.role = role;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public GroupMemberRole getRole() {
+        return role;
+    }
+
 }

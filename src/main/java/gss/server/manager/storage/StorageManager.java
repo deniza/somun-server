@@ -1,10 +1,12 @@
 package gss.server.manager.storage;
 
 import gss.server.manager.GameInvitations;
+import gss.server.manager.groups.Group;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StorageManager {
 
@@ -41,7 +43,7 @@ public class StorageManager {
     }
 
     public int getAndIncrementNextAvailableGameId() {
-        return mongo.getAndIncrementConfigValue("nextGameId");
+        return getAndIncrementConfigValue("nextGameId");
     }
 
     public int getAndIncrementConfigValue(String configKey) {
@@ -129,6 +131,24 @@ public class StorageManager {
     public String loadDataObject(int ownerId, String collection, String key) {
 
         return mongo.loadDataObject(ownerId, collection, key);
+
+    }
+
+    public HashMap<Integer, Group> loadAllGroups() {
+
+        return mongo.loadAllGroups();
+
+    }
+
+    public void storeGroup(Group group) {
+
+        mongo.storeGroup(group);
+
+    }
+
+    public Group loadGroup(int groupId) {
+
+        return mongo.loadGroup(groupId);
 
     }
 
