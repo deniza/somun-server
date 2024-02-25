@@ -109,7 +109,7 @@ public class StorageManagerMongo implements StorageInterface {
         MongoCollection<Document> players = database.getCollection(PlayersCollection);
         players.createIndex(new Document("playerId", 1), new IndexOptions().unique(true));
         players.createIndex(new Document("name", 1), new IndexOptions().unique(true));
-        players.createIndex(new Document("fbuid", 1), new IndexOptions().unique(true));
+        players.createIndex(new Document("fbuid", 1), new IndexOptions().unique(false));
 
         MongoCollection<Document> games = database.getCollection(GamesCollection);
         games.createIndex(new Document("gameId", 1), new IndexOptions().unique(true));
