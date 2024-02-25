@@ -29,7 +29,7 @@ public class GroupsManager implements ServiceUpdateInterface {
 
         int groupId = StorageManager.get().getAndIncrementConfigValue("nextGroupId");
 
-        Group group = new Group(groups.size(), name, type, player.getPlayerId());
+        Group group = new Group(groupId, name, type, player.getPlayerId());
         group.setOwner(player.getPlayerId());
 
         groups.put(group.getGroupId(), group);
