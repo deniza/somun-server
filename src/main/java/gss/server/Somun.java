@@ -30,6 +30,7 @@ public class Somun {
         config.addInterface(new gss.server.interfaces.Account());
         config.addInterface(new gss.server.interfaces.Play());
         config.addInterface(new gss.server.interfaces.Rpc());
+        config.addInterface(new gss.server.interfaces.Groups());
 
         Gss.enableDebugFunctionCalls(true);
         Gss.startServer(config);
