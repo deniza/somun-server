@@ -6,6 +6,7 @@ import gss.network.GssConfig;
 import gss.server.manager.GameManager;
 import gss.server.manager.ServiceUpdateScheduler;
 import gss.server.manager.facebook.FacebookAuthenticationManager;
+import gss.server.manager.groups.GroupsManager;
 import gss.server.manager.notification.NotificationManager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.GameHandler;
@@ -36,6 +37,7 @@ public class Somun {
         ServiceUpdateScheduler.get().register(GameManager.get());
         ServiceUpdateScheduler.get().register(NotificationManager.get());
         ServiceUpdateScheduler.get().register(FacebookAuthenticationManager.get());
+        ServiceUpdateScheduler.get().register(GroupsManager.get());
         ServiceUpdateScheduler.get().start();
 
         GameManager.get().setGameHandler(gameHandler);
