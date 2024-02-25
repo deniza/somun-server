@@ -135,7 +135,8 @@ public class StorageManagerMongo implements StorageInterface {
             .append("fbuid", player.getFbuid())
             .append("name", player.getName())
             .append("password", player.getPassword())
-            .append("games", player.getGameIds());
+            .append("games", player.getGameIds())
+            .append("groups", player.getGroups());
 
         Document friendsDoc = new Document();
         friendsDoc.append("sent", player.getFriendRequestsSent());
@@ -212,12 +213,14 @@ public class StorageManagerMongo implements StorageInterface {
         final String password = doc.getString("password");
         final String fbuid = doc.getOrDefault("fbuid", "").toString();
         final List<Integer> gameIds = doc.getList("games", Integer.class);
+        final List<Integer> groupIds = doc.getList("groups", Integer.class);
 
         Player player = new Player(playerId);
         player.setName(name);
         player.setPassword(password);
         player.setFbuid(fbuid);
         player.setGameIds(new ArrayList(gameIds));
+        player.setGroups(groupIds);
 
         Document friendsDoc = (Document) doc.get("friends");
         if (friendsDoc != null) {

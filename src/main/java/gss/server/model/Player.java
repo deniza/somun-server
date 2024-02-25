@@ -24,6 +24,7 @@ public class Player {
     private HashSet<Integer> friendRequestsSent = new HashSet<>();
     private HashSet<Integer> friendRequestsReceived = new HashSet<>();
     private HashMap<Integer, MessageManager.PrivateMessage> privateMessages = new HashMap<>();
+    private HashSet<Integer> groups = new HashSet<>();
     private boolean online;
     private String messagingToken; // push notification token
     private DeviceType deviceType;
@@ -199,6 +200,22 @@ public class Player {
             return "";
         }
 
+    }
+
+    public void addGroup(int groupId) {
+        groups.add(groupId);
+    }
+
+    public void removeGroup(int groupId) {
+        groups.remove(groupId);
+    }
+
+    public HashSet<Integer> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Integer> groups) {
+        this.groups.addAll(groups);
     }
 
 }

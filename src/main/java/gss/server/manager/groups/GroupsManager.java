@@ -33,8 +33,10 @@ public class GroupsManager implements ServiceUpdateInterface {
         group.setOwner(player.getPlayerId());
 
         groups.put(group.getGroupId(), group);
+        player.addGroup(group.getGroupId());
 
         StorageManager.get().storeGroup(group);
+        StorageManager.get().storePlayer(player);
 
     }
 
