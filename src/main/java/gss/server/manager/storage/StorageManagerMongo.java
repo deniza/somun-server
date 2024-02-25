@@ -505,9 +505,29 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("name", group.getName())
                 .append("type", group.getType().toString())
                 .append("ownerId", group.getOwnerId())
-                .append("members", group.getMembers())
-                .append("admins", group.getAdmins())
-                .append("invitations", group.getInvitations());
+                .append("members", new ArrayList<>())
+                .append("admins", new ArrayList<>())
+                .append("invitations", new ArrayList<>());
+
+        group.getMembers().forEach(member -> {
+            Document memberDoc = new Document()
+                    .append("playerId", member.getPlayerId())
+                    .append("role", member.getRole().toString());
+            groupDoc.getList("members", Document.class).add(memberDoc);
+        });
+
+        group.getAdmins().forEach(admin -> {
+            Document adminDoc = new Document()
+                    .append("playerId", admin);
+            groupDoc.getList("admins", Document.class).add(adminDoc);
+        });
+
+        group.getInvitations().forEach(inv -> {
+            Document invDoc = new Document()
+                    .append("inviterId", inv.getInviterId())
+                    .append("playerId", inv.getPlayerId());
+            groupDoc.getList("invitations", Document.class).add(invDoc);
+        });
 
         collection.findOneAndUpdate(
                 Filters.eq("groupId", group.getGroupId()),
@@ -567,9 +587,9 @@ public class StorageManagerMongo implements StorageInterface {
         }
 
         for (Document inv : invitations) {
-            int inviter = inv.getInteger("inviter");
-            int invitee = inv.getInteger("invitee");
-            group.invite(inviter, invitee);
+            int inviterId = inv.getInteger("inviterId");
+            int playerId = inv.getInteger("playerId");
+            group.invite(inviterId, playerId);
         }
 
         return group;
