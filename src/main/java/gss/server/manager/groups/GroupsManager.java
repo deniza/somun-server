@@ -284,6 +284,19 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void requestGroupInfo(Player player, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "groupInfo", 0, 0, "", "", 0, 0, 0);
+            return;
+        }
+
+        ConnectionManager.get().call(player, "Groups", "groupInfo", 1, group.getGroupId(), group.getName(), group.getDescription(), group.getType().ordinal(), group.getOwnerId(), group.getMembers().size());
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
