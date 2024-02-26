@@ -94,6 +94,20 @@ public class Group {
         return members.stream().anyMatch(member -> member.getPlayerId() == playerId);
     }
 
+    public void changeMemberRole(int playerId, GroupMember.GroupMemberRole newRole) {
+
+        members.stream().filter(member -> member.getPlayerId() == playerId).forEach(member -> {
+            if (newRole == GroupMember.GroupMemberRole.ADMIN) {
+                admins.add(new GroupMember(groupId, playerId, GroupMember.GroupMemberRole.ADMIN));
+            }
+            else if (newRole == GroupMember.GroupMemberRole.MEMBER) {
+                admins.removeIf(admin -> admin.getPlayerId() == playerId);
+            }
+            member.setRole(newRole);
+        });
+
+    }
+
     public ArrayList<GroupMember> getMembers() {
         return members;
     }

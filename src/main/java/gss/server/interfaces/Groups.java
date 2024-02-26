@@ -131,4 +131,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void changeGroupMemberRole(int groupId, int playerId, int role, GssConnection con) {
+
+        GssLogger.info("[Groups] changeGroupMemberRole called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().changeGroupMemberRole(player, groupId, playerId, role);
+
+    }
+
 }

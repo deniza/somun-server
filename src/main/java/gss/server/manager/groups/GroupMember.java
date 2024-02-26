@@ -30,4 +30,8 @@ public class GroupMember {
         return role;
     }
 
+    public void setRole(GroupMemberRole role) {
+        this.role = role;
+    }
+
 }

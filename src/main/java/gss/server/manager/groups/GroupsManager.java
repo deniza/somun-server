@@ -337,6 +337,40 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void changeGroupMemberRole(Player player, int groupId, int memberId, int role) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "changeGroupMemberRole", 0, "group not found");
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "changeGroupMemberRole", 2, "restricted to process");
+            return;
+        }
+
+        if (group.isOwner(memberId)) {
+            ConnectionManager.get().call(player, "Groups", "changeGroupMemberRole", 3, "owner role cannot be changed");
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(memberId)) {
+            // only owner can change admin role
+            ConnectionManager.get().call(player, "Groups", "changeGroupMemberRole", 4, "restricted to process");
+            return;
+        }
+
+        GroupMember.GroupMemberRole newRole = GroupMember.GroupMemberRole.values()[role];
+        group.changeMemberRole(memberId, newRole);
+
+        StorageManager.get().storeGroup(group);
+
+        ConnectionManager.get().call(player, "Groups", "changeGroupMemberRole", 1, "role changed");
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
