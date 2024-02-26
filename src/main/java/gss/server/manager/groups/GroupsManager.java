@@ -4,7 +4,6 @@ import gss.server.manager.ConnectionManager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 import gss.server.model.ServiceUpdateInterface;
-import gss.server.util.ArrayHelper;
 
 import java.util.HashMap;
 
@@ -315,6 +314,26 @@ public class GroupsManager implements ServiceUpdateInterface {
         int[] memberIds = group.getMembers().stream().mapToInt(GroupMember::getPlayerId).toArray();
 
         ConnectionManager.get().call(player, "Groups", "groupMembers", 1, memberIds);
+
+    }
+
+    public void requestGroupJoinRequests(Player player, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "groupJoinRequests", 0, 0);
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "groupJoinRequests", 2, 0);
+            return;
+        }
+
+        int[] joinRequestIds = group.getJoinRequests().stream().mapToInt(Integer::intValue).toArray();
+
+        ConnectionManager.get().call(player, "Groups", "groupJoinRequests", 1, joinRequestIds);
 
     }
 

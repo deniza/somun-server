@@ -121,4 +121,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void requestGroupJoinRequests(int groupId, GssConnection con) {
+
+        GssLogger.info("[Groups] requestGroupJoinRequests called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().requestGroupJoinRequests(player, groupId);
+
+    }
+
 }
