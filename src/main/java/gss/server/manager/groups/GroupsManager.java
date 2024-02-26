@@ -297,6 +297,27 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void requestGroupMembers(Player player, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "groupMembers", 0, 0);
+            return;
+        }
+
+        if (group.isMember(player.getPlayerId()) == false) {
+            // only members can request members
+            ConnectionManager.get().call(player, "Groups", "groupMembers", 2, 0);
+            return;
+        }
+
+        int[] memberIds = group.getMembers().stream().mapToInt(GroupMember::getPlayerId).toArray();
+
+        ConnectionManager.get().call(player, "Groups", "groupMembers", 1, memberIds);
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }

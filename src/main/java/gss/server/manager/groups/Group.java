@@ -90,6 +90,10 @@ public class Group {
         return admins.stream().anyMatch(admin -> admin.getPlayerId() == playerId);
     }
 
+    public boolean isMember(int playerId) {
+        return members.stream().anyMatch(member -> member.getPlayerId() == playerId);
+    }
+
     public ArrayList<GroupMember> getMembers() {
         return members;
     }
