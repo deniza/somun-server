@@ -74,8 +74,30 @@ public class GroupsManager implements ServiceUpdateInterface {
         }
 
         if (group.getOwnerId() == player.getPlayerId()) {
-            ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "owner cannot leave group");
+
+            // promote a new owner from admins
+            if (group.promoteAdminToOwner()) {
+                // new owner found
+                StorageManager.get().storeGroup(group);
+                ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 1, "left group");
+            }
+            else {
+                // no new owner found, delete group
+                for (GroupMember groupMember : group.getMembers()) {
+                    Player member = StorageManager.get().loadPlayer(groupMember.getPlayerId());
+                    member.removeGroup(groupId);
+                    StorageManager.get().storePlayer(member);
+                }
+
+                groups.remove(groupId);
+                StorageManager.get().deleteGroup(groupId);
+
+                ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 2, "group deleted");
+
+            }
+
             return;
+
         }
 
         group.removeMember(player.getPlayerId());

@@ -139,6 +139,16 @@ public class Group {
         addMember(playerId);
     }
 
+    public boolean promoteAdminToOwner() {
+        for (GroupMember admin : admins) {
+            setOwner(admin.getPlayerId());
+            removeAdmin(admin.getPlayerId());
+            return true;
+        }
+        // no admin to promote
+        return false;
+    }
+
     public void removeAdmin(int playerId) {
         admins.removeIf(admin -> admin.getPlayerId() == playerId);
     }

@@ -152,4 +152,10 @@ public class StorageManager {
 
     }
 
+    public void deleteGroup(int groupId) {
+
+        mongo.deleteGroup(groupId);
+
+    }
+
 }

@@ -605,4 +605,14 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
+    @Override
+    public void deleteGroup(int groupId) {
+
+        MongoCollection<Document> collection = database.getCollection(GroupsCollection);
+        collection.deleteOne(
+                Filters.eq("groupId", groupId)
+        );
+
+    }
+
 }

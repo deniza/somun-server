@@ -47,5 +47,6 @@ public interface StorageInterface {
     public void storeGroup(Group group);
     public Group loadGroup(int groupId);
     public HashMap<Integer, Group> loadAllGroups();
+    public void deleteGroup(int groupId);
 
 }
