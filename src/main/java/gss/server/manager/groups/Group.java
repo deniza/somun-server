@@ -14,6 +14,8 @@ public class Group {
 
     private String name;
 
+    private String description;
+
     private GroupType type;
 
     private int ownerId;
@@ -26,14 +28,17 @@ public class Group {
     private final HashSet<Integer> joinRequests;  // playerId
 
     public Group(int groupId, String name, GroupType type, int ownerId) {
+
         this.groupId = groupId;
-        this.name = name;
-        this.type = type;
-        this.ownerId = ownerId;
         this.members = new ArrayList<>();
         this.admins = new ArrayList<>();
         this.invitations = new ArrayList<>();
         this.joinRequests = new HashSet<>();
+
+        setName(name);
+        setType(type);
+        setOwner(ownerId);
+        setDescription("");
     }
 
     public int getGroupId() {
@@ -49,12 +54,20 @@ public class Group {
         this.name = name;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setType(GroupType type) {
         this.type = type;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public GroupType getType() {
