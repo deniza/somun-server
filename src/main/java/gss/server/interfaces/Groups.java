@@ -141,4 +141,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void changeGroupDescription(int groupId, String description, GssConnection con) {
+
+        GssLogger.info("[Groups] changeGroupDescription called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().changeGroupDescription(player, groupId, description);
+
+    }
+
 }

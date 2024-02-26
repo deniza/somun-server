@@ -371,6 +371,21 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void changeGroupDescription(Player player, int groupId, String description) {
+        Group group = groups.get(groupId);
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "changeGroupDescription", 0, "group not found");
+            return;
+        }
+        if (group.isOwner(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "changeGroupDescription", 2, "restricted to process");
+            return;
+        }
+        group.setDescription(description);
+        StorageManager.get().storeGroup(group);
+        ConnectionManager.get().call(player, "Groups", "changeGroupDescription", 1, "description changed");
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
