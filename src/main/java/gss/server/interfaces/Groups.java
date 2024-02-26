@@ -71,4 +71,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void kickFromGroup(int groupId, int playerId, GssConnection con) {
+
+        GssLogger.info("[Groups] kickFromGroup called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().kickFromGroup(player, playerId, groupId);
+
+    }
+
 }

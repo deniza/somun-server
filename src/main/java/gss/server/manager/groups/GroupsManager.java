@@ -194,6 +194,43 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void kickFromGroup(Player player, int groupId, int memberToKickId) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "kickFromGroup", 0, "group not found");
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "kickFromGroup", 2, "restricted to process");
+            return;
+        }
+
+        if (group.isOwner(memberToKickId)) {
+            ConnectionManager.get().call(player, "Groups", "kickFromGroup", 3, "owner cannot be kicked");
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(memberToKickId)) {
+            // only owner can kick admin
+            ConnectionManager.get().call(player, "Groups", "kickFromGroup", 4, "restricted to process");
+            return;
+        }
+
+        group.removeMember(memberToKickId);
+
+        Player member = StorageManager.get().loadPlayer(memberToKickId);
+        member.removeGroup(groupId);
+
+        StorageManager.get().storeGroup(group);
+        StorageManager.get().storePlayer(member);
+
+        ConnectionManager.get().call(player, "Groups", "kickFromGroup", 1, "member kicked");
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
