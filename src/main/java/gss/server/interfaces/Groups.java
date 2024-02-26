@@ -61,4 +61,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void processGroupInvitation(int groupId, int accepted, GssConnection con) {
+
+        GssLogger.info("[Groups] processGroupInvitation called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().processGroupInvitation(player, groupId, accepted == 1);
+
+    }
+
 }

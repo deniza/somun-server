@@ -25,6 +25,7 @@ public class Player {
     private HashSet<Integer> friendRequestsReceived = new HashSet<>();
     private HashMap<Integer, MessageManager.PrivateMessage> privateMessages = new HashMap<>();
     private HashSet<Integer> groups = new HashSet<>();
+    private HashSet<Integer> groupInvitations = new HashSet<>();
     private boolean online;
     private String messagingToken; // push notification token
     private DeviceType deviceType;
@@ -216,6 +217,26 @@ public class Player {
 
     public void setGroups(List<Integer> groups) {
         this.groups.addAll(groups);
+    }
+
+    public void addGroupInvitation(int groupId) {
+        groupInvitations.add(groupId);
+    }
+
+    public void removeGroupInvitation(int groupId) {
+        groupInvitations.remove(groupId);
+    }
+
+    public HashSet<Integer> getGroupInvitations() {
+        return groupInvitations;
+    }
+
+    public void setGroupInvitations(List<Integer> groupInvitations) {
+        this.groupInvitations.addAll(groupInvitations);
+    }
+
+    public boolean hasGroupInvitation(int groupId) {
+        return groupInvitations.contains(groupId);
     }
 
 }

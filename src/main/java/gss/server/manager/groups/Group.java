@@ -121,6 +121,14 @@ public class Group {
         invitations.add(new GroupInvitation(groupId, playerId, inviterId));
     }
 
+    public void removeInvitation(int playerId) {
+        invitations.removeIf(invitation -> invitation.getPlayerId() == playerId);
+    }
+
+    public boolean hasInvitation(int playerId) {
+        return invitations.stream().anyMatch(invitation -> invitation.getPlayerId() == playerId);
+    }
+
     public void promoteToAdmin(int playerId) {
         removeMember(playerId);
         addAdmin(playerId);

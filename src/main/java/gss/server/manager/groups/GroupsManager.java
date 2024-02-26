@@ -139,6 +139,59 @@ public class GroupsManager implements ServiceUpdateInterface {
             return;
         }
 
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "inviteToJoinGroupResponse", 2, "restricted to process");
+            return;
+        }
+
+        Player invitee = StorageManager.get().loadPlayer(inviteeId);
+        if (invitee == null) {
+            ConnectionManager.get().call(player, "Groups", "inviteToJoinGroupResponse", 3, "invitee not found");
+            return;
+        }
+
+        group.invite(player.getPlayerId(), inviteeId);
+        invitee.addGroupInvitation(groupId);
+
+        StorageManager.get().storeGroup(group);
+        StorageManager.get().storePlayer(invitee);
+
+        ConnectionManager.get().call(player, "Groups", "inviteToJoinGroupResponse", 1, "invite sent");
+
+    }
+
+    public void processGroupInvitation(Player player, int groupId, boolean accepted) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "processGroupInvitationResponse", 0, "group not found");
+            return;
+        }
+
+        if (player.hasGroupInvitation(groupId) == false) {
+            ConnectionManager.get().call(player, "Groups", "processGroupInvitationResponse", 2, "no invitation found");
+            return;
+        }
+
+        if (accepted) {
+
+            group.addMember(player.getPlayerId());
+            player.addGroup(groupId);
+
+            group.removeInvitation(player.getPlayerId());
+            player.removeGroupInvitation(groupId);
+
+            StorageManager.get().storeGroup(group);
+            StorageManager.get().storePlayer(player);
+
+            ConnectionManager.get().call(player, "Groups", "processGroupInvitationResponse", 1, "invitation accepted");
+
+        }
+        else {
+            ConnectionManager.get().call(player, "Groups", "processGroupInvitationResponse", 3, "invitation rejected");
+        }
+
     }
 
     @Override
