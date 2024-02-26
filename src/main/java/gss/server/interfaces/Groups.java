@@ -81,4 +81,14 @@ public class Groups extends GssInterface {
 
     }
 
+    public void setGroupType(int groupId, int groupType, GssConnection con) {
+
+        GssLogger.info("[Groups] setGroupType called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().setGroupType(player, groupId, groupType);
+
+    }
+
 }

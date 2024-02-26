@@ -253,6 +253,28 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
+    public void setGroupType(Player player, int groupId, int groupType) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "setGroupType", 0, "group not found");
+            return;
+        }
+
+        if (group.isOwner(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "setGroupType", 2, "restricted to process");
+            return;
+        }
+
+        group.setType(Group.GroupType.values()[groupType]);
+
+        StorageManager.get().storeGroup(group);
+
+        ConnectionManager.get().call(player, "Groups", "setGroupType", 1, "group type set");
+
+    }
+
     @Override
     public void updateService(long deltaTime) {
     }
