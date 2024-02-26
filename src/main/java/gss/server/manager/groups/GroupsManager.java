@@ -41,27 +41,25 @@ public class GroupsManager implements ServiceUpdateInterface {
 
     }
 
-    public void joinGroup(Player player, int groupId) {
+    public void requestJoinGroup(Player player, int groupId) {
 
         Group group = groups.get(groupId);
 
-        if (group != null) {
+        if (group == null) {
+            ConnectionManager.get().call(player,"Groups","joinGroupResponse", 0, "group not found");
+            return;
+        }
 
-            if (group.isAllowedToJoin()) {
+        if (group.isAllowedToJoin()) {
 
-                group.addJoinRequest(player.getPlayerId());
-                StorageManager.get().storeGroup(group);
+            group.addJoinRequest(player.getPlayerId());
+            StorageManager.get().storeGroup(group);
 
-                ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 1, "request saved");
-
-            }
-            else {
-                ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 0, "group not allowed to join");
-            }
+            ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 1, "request saved");
 
         }
         else {
-            ConnectionManager.get().call(player,"Groups","joinGroupResponse", 0, "group not found");
+            ConnectionManager.get().call(player, "Groups", "joinGroupResponse", 0, "group not allowed to join");
         }
 
     }
@@ -70,62 +68,75 @@ public class GroupsManager implements ServiceUpdateInterface {
 
         Group group = groups.get(groupId);
 
-        if (group != null) {
-
-            if (group.getOwnerId() == player.getPlayerId()) {
-                ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "owner cannot leave group");
-                return;
-            }
-
-            group.removeMember(player.getPlayerId());
-            player.removeGroup(groupId);
-
-            StorageManager.get().storeGroup(group);
-            StorageManager.get().storePlayer(player);
-
-            ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 1, "left group");
-
-        }
-        else {
+        if (group == null) {
             ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "group not found");
+            return;
         }
+
+        if (group.getOwnerId() == player.getPlayerId()) {
+            ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 0, "owner cannot leave group");
+            return;
+        }
+
+        group.removeMember(player.getPlayerId());
+        player.removeGroup(groupId);
+
+        StorageManager.get().storeGroup(group);
+        StorageManager.get().storePlayer(player);
+
+        ConnectionManager.get().call(player, "Groups", "leaveGroupResponse", 1, "left group");
 
     }
 
-    public void acceptJoinRequest(Player player, int groupId, int requesterId) {
+    public void processJoinRequest(Player player, int groupId, int requesterId, boolean accepted) {
 
         Group group = groups.get(groupId);
 
-        if (group != null) {
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "processJoinRequestResponse", 0, "group not found");
+            return;
+        }
 
-            if (group.isOwner(player.getPlayerId()) || group.isAdmin(player.getPlayerId())) {
+        if (group.isOwner(player.getPlayerId()) == false && group.isAdmin(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "processJoinRequestResponse", 0, "restricted to process");
+            return;
+        }
 
-                if (group.hasJoinRequest(requesterId)) {
+        if (group.hasJoinRequest(requesterId) == false) {
+            ConnectionManager.get().call(player, "Groups", "processJoinRequestResponse", 0, "player not found in join requests");
+            return;
+        }
 
-                    group.removeJoinRequest(requesterId);
-                    group.addMember(requesterId);
+        group.removeJoinRequest(requesterId);
 
-                    Player member = StorageManager.get().loadPlayer(requesterId);
-                    member.addGroup(groupId);
+        if (accepted) {
+            group.addMember(requesterId);
 
-                    StorageManager.get().storeGroup(group);
-                    StorageManager.get().storePlayer(member);
+            Player member = StorageManager.get().loadPlayer(requesterId);
+            member.addGroup(groupId);
 
-                    ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 1, "player added to group");
+            StorageManager.get().storePlayer(member);
 
-                }
-                else {
-                    ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "player not found in join requests");
-                }
-
-            }
-            else {
-                ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "not owner of group");
-            }
+            ConnectionManager.get().call(player, "Groups", "processJoinRequestResponse", 1, "player added to group");
 
         }
         else {
-            ConnectionManager.get().call(player, "Groups", "acceptJoinRequestResponse", 0, "group not found");
+
+            ConnectionManager.get().call(player, "Groups", "processJoinRequestResponse", 1, "request rejected");
+
+        }
+
+        StorageManager.get().storeGroup(group);
+
+    }
+
+    public void inviteToJoinGroup(Player player, int inviteeId, int groupId) {
+
+        Group group = groups.get(groupId);
+
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "inviteToJoinGroupResponse", 0, "group not found");
+            return;
         }
 
     }

@@ -21,13 +21,13 @@ public class Groups extends GssInterface {
 
     }
 
-    public void joinGroup(int groupId, GssConnection con) {
+    public void requestJoinGroup(int groupId, GssConnection con) {
 
-        GssLogger.info("[Groups] joinGroup called");
+        GssLogger.info("[Groups] requestJoinGroup called");
 
         Player player = getPlayer(con);
 
-        GroupsManager.get().joinGroup(player, groupId);
+        GroupsManager.get().requestJoinGroup(player, groupId);
 
     }
 
@@ -41,13 +41,23 @@ public class Groups extends GssInterface {
 
     }
 
-    public void acceptJoinRequest(int groupId, int requesterId, GssConnection con) {
+    public void processJoinRequest(int groupId, int requesterId, int accepted, GssConnection con) {
 
-        GssLogger.info("[Groups] acceptJoinRequest called");
+        GssLogger.info("[Groups] processJoinRequest called");
 
         Player player = getPlayer(con);
 
-        GroupsManager.get().acceptJoinRequest(player, groupId, requesterId);
+        GroupsManager.get().processJoinRequest(player, groupId, requesterId, accepted == 1);
+
+    }
+
+    public void inviteToJoinGroup(int groupId, int inviteeId, GssConnection con) {
+
+        GssLogger.info("[Groups] inviteToJoinGroup called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().inviteToJoinGroup(player, inviteeId, groupId);
 
     }
 
