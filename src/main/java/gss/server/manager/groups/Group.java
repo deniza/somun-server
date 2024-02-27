@@ -1,5 +1,7 @@
 package gss.server.manager.groups;
 
+import gss.server.util.Time;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -27,6 +29,8 @@ public class Group {
 
     private final HashSet<Integer> joinRequests;  // playerId
 
+    private final ArrayList<GroupMessage> messages;
+
     public Group(int groupId, String name, GroupType type, int ownerId) {
 
         this.groupId = groupId;
@@ -34,6 +38,7 @@ public class Group {
         this.admins = new ArrayList<>();
         this.invitations = new ArrayList<>();
         this.joinRequests = new HashSet<>();
+        this.messages = new ArrayList<>();
 
         setName(name);
         setType(type);
@@ -187,6 +192,33 @@ public class Group {
     public void removeMember(int playerId) {
         members.removeIf(member -> member.getPlayerId() == playerId);
         admins.removeIf(admin -> admin.getPlayerId() == playerId);
+    }
+
+    public GroupMessage addMessage(int senderId, String message) {
+        GroupMessage groupMessage = new GroupMessage(0, groupId, senderId, message, Time.now());
+        messages.add(groupMessage);
+        return groupMessage;
+    }
+
+    public ArrayList<GroupMessage> getMessages() {
+        return messages;
+    }
+
+    public ArrayList<GroupMessage> getMessages(int page, int pageSize) {
+        int start = page * pageSize;
+        int end = start + pageSize;
+        if (end > messages.size()) {
+            end = messages.size();
+        }
+        return new ArrayList<>(messages.subList(start, end));
+    }
+
+    public int getMessagesCount() {
+        return messages.size();
+    }
+
+    public void clearMessages() {
+        messages.clear();
     }
 
 }

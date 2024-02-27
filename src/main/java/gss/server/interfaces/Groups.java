@@ -166,4 +166,37 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
+    public void sendGroupMessage(int groupId, String message, GssConnection con) {
+
+        GssLogger.info("[Groups] sendGroupMessage called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().sendGroupMessage(player, groupId, message);
+
+    }
+
+    @GssCallable
+    public void requestGroupMessages(int groupId, int startId, int count, GssConnection con) {
+
+        GssLogger.info("[Groups] requestGroupMessages called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().requestGroupMessages(player, groupId, startId, count);
+
+    }
+
+    @GssCallable
+    public void requestGroupMessagesPaginated(int groupId, int page, int pageSize, GssConnection con) {
+
+        GssLogger.info("[Groups] requestGroupMessagesPaginated called");
+
+        Player player = getPlayer(con);
+
+        GroupsManager.get().requestGroupMessagesPaginated(player, groupId, page, pageSize);
+
+    }
+
 }

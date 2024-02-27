@@ -4,7 +4,9 @@ import gss.server.manager.ConnectionManager;
 import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 import gss.server.model.ServiceUpdateInterface;
+import gss.server.util.Time;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GroupsManager implements ServiceUpdateInterface {
@@ -384,6 +386,68 @@ public class GroupsManager implements ServiceUpdateInterface {
         group.setDescription(description);
         StorageManager.get().storeGroup(group);
         ConnectionManager.get().call(player, "Groups", "changeGroupDescription", 1, "description changed");
+    }
+
+    public void sendGroupMessage(Player player, int groupId, String message) {
+        Group group = groups.get(groupId);
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "sendGroupMessage", 0, "group not found");
+            return;
+        }
+        if (group.isMember(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "sendGroupMessage", 2, "restricted to process");
+            return;
+        }
+
+        int msgId = StorageManager.get().storeGroupMessage(group.getGroupId(), player.getPlayerId(), message);
+
+        GroupMessage groupMessage = group.addMessage(player.getPlayerId(), message);
+        groupMessage.setMessageId(msgId);
+
+        ConnectionManager.get().call(player, "Groups", "sendGroupMessage", 1, "message sent");
+    }
+
+    public void requestGroupMessages(Player player, int groupId, int startId, int count) {
+        Group group = groups.get(groupId);
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "groupMessages", 0, 0);
+            return;
+        }
+        if (group.isMember(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "groupMessages", 2, 0);
+            return;
+        }
+        GroupMessage[] messages = group.getMessages().stream().filter(message -> message.getMessageId() >= startId).limit(count).toArray(GroupMessage[]::new);
+        ConnectionManager.get().call(player, "Groups", "groupMessages", 1, messages);
+    }
+
+    public void requestGroupMessagesPaginated(Player player, int groupId, int page, int pageSize) {
+        Group group = groups.get(groupId);
+        if (group == null) {
+            ConnectionManager.get().call(player, "Groups", "groupMessagesPaginated", 0, 0);
+            return;
+        }
+        if (group.isMember(player.getPlayerId()) == false) {
+            ConnectionManager.get().call(player, "Groups", "groupMessagesPaginated", 2, 0);
+            return;
+        }
+
+        ArrayList<GroupMessage> groupMessages = StorageManager.get().loadGroupMessages(groupId, page, pageSize);
+        int[] msgIds = new int[groupMessages.size()];
+        int[] senderIds = new int[groupMessages.size()];
+        String[] messages = new String[groupMessages.size()];
+        long[] timestamps = new long[groupMessages.size()];
+
+        for (int i = 0; i < groupMessages.size(); i++) {
+            GroupMessage groupMessage = groupMessages.get(i);
+            msgIds[i] = groupMessage.getMessageId();
+            senderIds[i] = groupMessage.getSenderId();
+            messages[i] = groupMessage.getMessage();
+            timestamps[i] = groupMessage.getTimestamp();
+        }
+
+        ConnectionManager.get().call(player, "Groups", "groupMessagesPaginated", 1, msgIds, senderIds, messages, timestamps);
+
     }
 
     @Override

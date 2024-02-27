@@ -2,6 +2,7 @@ package gss.server.manager.storage;
 
 import gss.server.manager.GameInvitations;
 import gss.server.manager.groups.Group;
+import gss.server.manager.groups.GroupMessage;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
@@ -48,5 +49,7 @@ public interface StorageInterface {
     public Group loadGroup(int groupId);
     public HashMap<Integer, Group> loadAllGroups();
     public void deleteGroup(int groupId);
+    public int storeGroupMessage(int groupId, int senderId, String message);
+    public ArrayList<GroupMessage> loadGroupMessages(int groupId, int page, int pageSize);
 
 }

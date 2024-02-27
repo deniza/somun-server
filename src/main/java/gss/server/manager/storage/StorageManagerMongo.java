@@ -7,6 +7,7 @@ import gss.server.manager.GameInvitations;
 import gss.server.manager.MessageManager;
 import gss.server.manager.groups.Group;
 import gss.server.manager.groups.GroupMember;
+import gss.server.manager.groups.GroupMessage;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
 import gss.server.model.Player;
@@ -26,6 +27,7 @@ public class StorageManagerMongo implements StorageInterface {
     private final String GamesCollection = "games";
     private final String InvitationsCollection = "invitations";
     private final String GroupsCollection = "groups";
+    private final String GroupMessagesCollection = "group_messages";
     private final String ConfigCollection = "config";
 
     private MongoClient client;
@@ -86,6 +88,7 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("nextPlayerId", 1)
                 .append("nextGameId", 1)
                 .append("nextMessageId", 1)
+                .append("nextGroupMessageId", 1)
                 .append("nextInvitationId", 1)
                 .append("nextGroupId", 1)
                 .append("nextGroupInvitationId", 1)
@@ -105,6 +108,9 @@ public class StorageManagerMongo implements StorageInterface {
         database.createCollection(GroupsCollection);
         GssLogger.info("groups collection created");
 
+        database.createCollection(GroupMessagesCollection);
+        GssLogger.info("group_messages collection created");
+
         // create indexes
         MongoCollection<Document> players = database.getCollection(PlayersCollection);
         players.createIndex(new Document("playerId", 1), new IndexOptions().unique(true));
@@ -119,6 +125,10 @@ public class StorageManagerMongo implements StorageInterface {
 
         MongoCollection<Document> groups = database.getCollection(GroupsCollection);
         groups.createIndex(new Document("groupId", 1), new IndexOptions().unique(true));
+
+        MongoCollection<Document> groupMessages = database.getCollection(GroupMessagesCollection);
+        groupMessages.createIndex(new Document("groupId", 1), new IndexOptions().unique(false));
+        groupMessages.createIndex(new Document("timestamp", 1), new IndexOptions().unique(false));
 
         GssLogger.info("Indexes created");
         GssLogger.info("Setup completed");
@@ -616,6 +626,55 @@ public class StorageManagerMongo implements StorageInterface {
         collection.deleteOne(
                 Filters.eq("groupId", groupId)
         );
+
+    }
+
+    @Override
+    public int storeGroupMessage(int groupId, int senderId, String message) {
+
+        MongoCollection<Document> collection = database.getCollection(GroupMessagesCollection);
+
+        int messageId = getAndIncrementConfigValue("nextGroupMessageId");
+
+        Document messageDoc = new Document()
+                .append("messageId", messageId)
+                .append("groupId", groupId)
+                .append("senderId", senderId)
+                .append("message", message)
+                .append("timestamp", Time.now());
+
+        collection.insertOne(
+                messageDoc
+        );
+
+        return messageId;
+
+    }
+
+    @Override
+    public ArrayList<GroupMessage> loadGroupMessages(int groupId, int page, int pageSize) {
+
+        MongoCollection<Document> collection = database.getCollection(GroupMessagesCollection);
+        FindIterable<Document> results = collection.find(
+                Filters.eq("groupId", groupId)
+        ).sort(Sorts.descending("timestamp")).skip(page * pageSize).limit(pageSize);
+
+        ArrayList<GroupMessage> messages = new ArrayList<>();
+        for (Document doc : results) {
+
+            GroupMessage msg = new GroupMessage(
+                    doc.getInteger("messageId"),
+                    doc.getInteger("groupId"),
+                    doc.getInteger("senderId"),
+                    doc.getString("message"),
+                    doc.getLong("timestamp")
+            );
+
+            messages.add(msg);
+
+        }
+
+        return messages;
 
     }
 

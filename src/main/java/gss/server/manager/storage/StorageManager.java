@@ -2,6 +2,7 @@ package gss.server.manager.storage;
 
 import gss.server.manager.GameInvitations;
 import gss.server.manager.groups.Group;
+import gss.server.manager.groups.GroupMessage;
 import gss.server.model.GameSession;
 import gss.server.model.Player;
 
@@ -155,6 +156,18 @@ public class StorageManager {
     public void deleteGroup(int groupId) {
 
         mongo.deleteGroup(groupId);
+
+    }
+
+    public int storeGroupMessage(int groupId, int senderId, String message) {
+
+        return mongo.storeGroupMessage(groupId, senderId, message);
+
+    }
+
+    public ArrayList<GroupMessage> loadGroupMessages(int groupId, int page, int pageSize) {
+
+        return mongo.loadGroupMessages(groupId, page, pageSize);
 
     }
 
