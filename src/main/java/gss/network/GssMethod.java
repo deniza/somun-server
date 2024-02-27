@@ -72,17 +72,20 @@ public class GssMethod {
                 }
             }
 
-            method = interfaceModule.getClass().getMethod(methodName, classTypes);
+            //method = interfaceModule.getClass().getMethod(methodName, classTypes);
+            method = interfaceModule.getMethod(methodName);
             return this;
         }
         catch (IOException ex) {
             logError("[GssException] IOException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);
         }
+        /*
         catch (NoSuchMethodException ex) {
             logError("[GssException] NoSuchMethodException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);
         }
+         */
         catch (SecurityException ex) {
             logError("[GssException] SecurityException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);
@@ -499,9 +502,35 @@ public class GssMethod {
         }
                 
         try {
-            Object[] params2 = Arrays.copyOf(params, params.length + 1);
-            params2[params.length] = connection;
-            method.invoke(interfaceModule, params2);
+            Object[] paramsWithGssConnection = Arrays.copyOf(params, params.length + 1);
+            paramsWithGssConnection[params.length] = connection;
+
+            int methodParamCount = method.getParameterCount() - 1;  // last parameter is GssConnection
+            if (params.length >= methodParamCount) {
+
+                if (params.length != methodParamCount && Gss.isAcceptCallsWithUnmatchingParameterCountEnabled()) {
+
+                    Object[] paramsCut = Arrays.copyOf(params, methodParamCount + 1);
+                    paramsCut[methodParamCount] = connection;
+
+                    method.invoke(interfaceModule, paramsCut);
+
+                }
+                else {
+                    if (params.length == methodParamCount) {
+                        method.invoke(interfaceModule, paramsWithGssConnection);
+                    }
+                    else {
+                        logError("Error: parameter count mismatch in method: " + method.getName());
+                    }
+                }
+
+            }
+            else {
+                logError("Error: parameter count mismatch in method: " + method.getName());
+            }
+
+            //method.invoke(interfaceModule, params2);
         }
         catch (IllegalAccessException ex) {
             logError("[GssException] IllegalAccessException while invoking method: "+method.getName());

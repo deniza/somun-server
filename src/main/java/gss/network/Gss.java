@@ -20,6 +20,8 @@ public class Gss {
     
     private static NioSocketAcceptor serverAcceptor;
     private static GssConnection clientConnection;
+
+    private static boolean acceptCallsWithUnmatchingParameterCount = false;  // if true, calls with unmatching parameter count will be accepted
     
     public static void startServer(GssConfig config) {
       
@@ -76,7 +78,15 @@ public class Gss {
     public static boolean isDebugFunctionCallsEnabled() {
         return debugFunctionCalls;
     }
-    
+
+    public static void acceptCallsWithUnmatchingParameterCount(boolean accept) {
+        acceptCallsWithUnmatchingParameterCount = accept;
+    }
+
+    public static boolean isAcceptCallsWithUnmatchingParameterCountEnabled() {
+        return acceptCallsWithUnmatchingParameterCount;
+    }
+
     public static void shutdownServer() {
         serverAcceptor.unbind();
         serverAcceptor.dispose(true);  
