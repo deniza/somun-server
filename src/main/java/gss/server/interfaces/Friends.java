@@ -1,6 +1,7 @@
 package gss.server.interfaces;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.FriendsManager;
@@ -8,6 +9,7 @@ import gss.server.manager.MessageManager;
 
 public class Friends extends GssInterface {
 
+    @GssCallable
     public void requestFriends(GssConnection con) {
 
         GssLogger.info("[Friends] requestFriends called");
@@ -16,6 +18,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestAddFriend(int playerId, GssConnection con) {
 
         GssLogger.info("[Friends] requestAddFriend called");
@@ -24,6 +27,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestAcceptFriend(int playerId, GssConnection con) {
 
         GssLogger.info("[Friends] requestAcceptFriend called");
@@ -32,6 +36,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestRejectFriend(int playerId, GssConnection con) {
 
         GssLogger.info("[Friends] requestRejectFriend called");
@@ -40,6 +45,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestRemoveFriend(int playerId, GssConnection con) {
 
         GssLogger.info("[Friends] requestRemoveFriend called");
@@ -48,6 +54,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestPrivateMessagesList(GssConnection con) {
 
         GssLogger.info("[Friends] requestPrivateMessagesList called");
@@ -56,6 +63,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestSendPrivateMessage(int receiverId, String message, GssConnection con) {
 
         GssLogger.info("[Friends] requestSendPrivateMessage called");
@@ -64,6 +72,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestReadPrivateMessage(int messageId, GssConnection con) {
 
         GssLogger.info("[Friends] requestReadPrivateMessage called");
@@ -72,6 +81,7 @@ public class Friends extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestDeletePrivateMessage(int messageId, GssConnection con) {
 
         GssLogger.info("[Friends] requestDeletePrivateMessage called");

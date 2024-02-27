@@ -1,6 +1,7 @@
 package gss.server.interfaces;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AccountManager;
@@ -12,6 +13,7 @@ import gss.server.model.Player;
 
 public class Account extends GssInterface {
 
+    @GssCallable
     public void createGuestAccount(GssConnection con) {
         
         GssLogger.info("[Account] createGuestAccount called");
@@ -34,6 +36,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void createAccount(String username, String password, GssConnection con) {
 
         GssLogger.info("[Account] createAccount called");
@@ -42,6 +45,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void changeCredentials(String username, String password, GssConnection con) {
 
         GssLogger.info("[Account] changeCredentials called");
@@ -59,6 +63,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void setNotificationToken(String token, int deviceType, GssConnection con) {
 
         GssLogger.info("[Account] setNotificationToken called token: %s deviceType: %d", token, deviceType);

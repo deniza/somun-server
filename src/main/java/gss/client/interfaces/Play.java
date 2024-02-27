@@ -3,6 +3,7 @@ package gss.client.interfaces;
 import java.util.LinkedList;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.util.StringUtils;
@@ -19,6 +20,7 @@ public class Play extends GssInterface {
         listeners.remove(listener);
     }
 
+    @GssCallable
     public void enterGameResponse(int status, int turnOwner, GssConnection con) {
 
         GssLogger.info("[Play] enterGameResponse called status: %d", status);
@@ -29,6 +31,7 @@ public class Play extends GssInterface {
         
     }
 
+    @GssCallable
     public void exitGameResponse(int status, GssConnection con) {
 
         GssLogger.info("[Play] exitGameResponse called status: %d", status);
@@ -39,6 +42,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void resignGameResponse(int status, GssConnection con) {
 
         GssLogger.info("[Play] resignGameResponse called status: %d", status);
@@ -49,6 +53,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void listGamesResponse(int[] gameIds, GssConnection con) {        
 
         String ids = StringUtils.convertToDelimitedString(gameIds);
@@ -61,6 +66,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void makeMoveResponse(int status, GssConnection con) {
 
         GssLogger.info("[Play] makeMoveResponse called status: %d", status);
@@ -71,6 +77,7 @@ public class Play extends GssInterface {
         
     }
 
+    @GssCallable
     public void createRandomGameResponse(int status, GssConnection con) {
 
         GssLogger.info("[Play] createRandomGameResponse called status: %d", status);
@@ -81,6 +88,7 @@ public class Play extends GssInterface {
         
     }
 
+    @GssCallable
     public void gameCreated(int gameId, int[] pids, int turnOwner, String state, GssConnection con) {
 
         GssLogger.info("[Play] gameCreated called state: %s", state);
@@ -91,6 +99,7 @@ public class Play extends GssInterface {
         
     }
 
+    @GssCallable
     public void gameStateUpdated(int gameId, String state, GssConnection con) {
 
         GssLogger.info("[Play] gameStateUpdated called gameId: %d state: %s", gameId, state);
@@ -101,6 +110,7 @@ public class Play extends GssInterface {
         
     }
 
+    @GssCallable
     public void turnOwnerChanged(int gameId, int turnOwner, GssConnection con) {
 
         GssLogger.info("[Play] turnOwnerChanged called gameId: %d turnOwner: %d", gameId, turnOwner);

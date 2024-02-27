@@ -1,6 +1,7 @@
 package gss.server.interfaces;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AuthenticationManager;
@@ -10,6 +11,7 @@ import gss.server.manager.hooks.HookManager;
 
 public class Auth extends GssInterface {
 
+    @GssCallable
     public void loginUsingIdPassword(int playerId, String password, GssConnection con) {
         
         GssLogger.info("[Auth] loginUsingIdPassword called playerId: %d password: %s", playerId, password);
@@ -35,6 +37,7 @@ public class Auth extends GssInterface {
         }
     }
 
+    @GssCallable
     public void loginUsingFacebook(String accessToken, GssConnection con) {
 
         GssLogger.info("[Auth] loginUsingFacebook called accessToken: %s", accessToken);

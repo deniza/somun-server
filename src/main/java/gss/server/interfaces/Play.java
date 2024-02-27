@@ -1,6 +1,7 @@
 package gss.server.interfaces;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.GameManager;
@@ -9,7 +10,8 @@ import gss.server.model.Player;
 import gss.server.util.ArrayHelper;
 
 public class Play extends GssInterface {
-    
+
+    @GssCallable
     public void enterGame(int gameId, GssConnection con) {
 
         GssLogger.info("[Play] enterGame called");
@@ -25,6 +27,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void exitGame(int gameId, GssConnection con) {
 
         GssLogger.info("[Play] exitGame called");
@@ -41,6 +44,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void resignGame(int gameId, GssConnection con) {
 
         GssLogger.info("[Play] resignGame called");
@@ -51,6 +55,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void listGames(GssConnection con) {
 
         GssLogger.info("[Play] listGames called");
@@ -61,6 +66,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void makeMove(int gameId, String jsonData, GssConnection con) {
 
         GssLogger.info("[Play] makeMove called");
@@ -73,6 +79,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void createRandomGame(int gametype, GssConnection con) {
 
         GssLogger.info("[Play] createRandomGame called");
@@ -83,6 +90,7 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
     public void createInvitation(int invitee, int gametype, byte shouldStartOnline, GssConnection con) {
 
         GssLogger.info("[Play] createInvitation called");
@@ -90,6 +98,7 @@ public class Play extends GssInterface {
         GameManager.get().createInvitation(getPlayer(con), invitee, gametype, shouldStartOnline==1);
 
     }
+    @GssCallable
     public void listInvitations(GssConnection con) {
 
         GssLogger.info("[Play] listInvitations called");
@@ -97,6 +106,7 @@ public class Play extends GssInterface {
         call(con, "Play", "invitationsList", ArrayHelper.toIntArray(GameManager.get().listInvitations(getPlayer(con))));
 
     }
+    @GssCallable
     public void acceptInvitation(int invitationId, GssConnection con) {
 
         GssLogger.info("[Play] acceptInvitation called");
@@ -105,6 +115,7 @@ public class Play extends GssInterface {
 
     }
 
+    @Override
     public void clientDisconnected(GssConnection con) {
 
         Player player = getPlayer(con);

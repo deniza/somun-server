@@ -72,20 +72,21 @@ public class GssMethod {
                 }
             }
 
-            //method = interfaceModule.getClass().getMethod(methodName, classTypes);
-            method = interfaceModule.getMethod(methodName);
+            method = interfaceModule.getCallableMethod(methodName);
+            if (method == null) {
+                throw new NoSuchMethodException("[GssException] method not found: " + methodName);
+            }
+
             return this;
         }
         catch (IOException ex) {
             logError("[GssException] IOException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);
         }
-        /*
         catch (NoSuchMethodException ex) {
             logError("[GssException] NoSuchMethodException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);
         }
-         */
         catch (SecurityException ex) {
             logError("[GssException] SecurityException while deserializing method: "+methodcallstr);
             ex.printStackTrace(System.out);

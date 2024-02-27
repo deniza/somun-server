@@ -1,6 +1,7 @@
 package gss.server.interfaces;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.groups.Group;
@@ -9,6 +10,7 @@ import gss.server.model.Player;
 
 public class Groups extends GssInterface {
 
+    @GssCallable
     public void createGroup(String groupName, GssConnection con) {
 
         GssLogger.info("[Groups] createGroup called");
@@ -21,6 +23,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestJoinGroup(int groupId, GssConnection con) {
 
         GssLogger.info("[Groups] requestJoinGroup called");
@@ -31,6 +34,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void leaveGroup(int groupId, GssConnection con) {
 
         GssLogger.info("[Groups] leaveGroup called");
@@ -41,6 +45,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void processJoinRequest(int groupId, int requesterId, int accepted, GssConnection con) {
 
         GssLogger.info("[Groups] processJoinRequest called");
@@ -51,6 +56,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void inviteToJoinGroup(int groupId, int inviteeId, GssConnection con) {
 
         GssLogger.info("[Groups] inviteToJoinGroup called");
@@ -61,6 +67,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void processGroupInvitation(int groupId, int accepted, GssConnection con) {
 
         GssLogger.info("[Groups] processGroupInvitation called");
@@ -71,6 +78,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void kickFromGroup(int groupId, int playerId, GssConnection con) {
 
         GssLogger.info("[Groups] kickFromGroup called");
@@ -81,6 +89,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void setGroupType(int groupId, int groupType, GssConnection con) {
 
         GssLogger.info("[Groups] setGroupType called");
@@ -91,6 +100,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestGroupList(int startId, int count, GssConnection con) {
 
         GssLogger.info("[Groups] requestGroupList called");
@@ -101,6 +111,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestGroupInfo(int groupId, GssConnection con) {
 
         GssLogger.info("[Groups] requestGroupInfo called");
@@ -111,6 +122,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestGroupMembers(int groupId, GssConnection con) {
 
         GssLogger.info("[Groups] requestGroupMembers called");
@@ -121,6 +133,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void requestGroupJoinRequests(int groupId, GssConnection con) {
 
         GssLogger.info("[Groups] requestGroupJoinRequests called");
@@ -131,6 +144,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void changeGroupMemberRole(int groupId, int playerId, int role, GssConnection con) {
 
         GssLogger.info("[Groups] changeGroupMemberRole called");
@@ -141,6 +155,7 @@ public class Groups extends GssInterface {
 
     }
 
+    @GssCallable
     public void changeGroupDescription(int groupId, String description, GssConnection con) {
 
         GssLogger.info("[Groups] changeGroupDescription called");

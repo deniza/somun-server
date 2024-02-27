@@ -3,6 +3,7 @@ package gss.client.interfaces;
 import java.util.LinkedList;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 
@@ -18,6 +19,7 @@ public class Auth extends GssInterface {
         listeners.remove(listener);
     }
     
+    @GssCallable
     public void loginResponse(int status, GssConnection con) {
 
         GssLogger.info("[Auth] loginResponse called status: %d", status);

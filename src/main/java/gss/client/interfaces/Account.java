@@ -3,6 +3,7 @@ package gss.client.interfaces;
 import java.util.LinkedList;
 
 import gss.GssLogger;
+import gss.network.GssCallable;
 import gss.network.GssConnection;
 import gss.network.GssInterface;
 
@@ -18,6 +19,7 @@ public class Account extends GssInterface {
         listeners.remove(listener);
     }
 
+    @GssCallable
     public void createGuestAccountAccepted(int playerId, String username, String password, GssConnection con) {
 
         GssLogger.info("[Account] createGuestAccountAccepted called playerId: %d username: %s password: %s", playerId, username, password);
@@ -28,6 +30,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void createGuestAccountRejected(String reason, GssConnection con) {
 
         GssLogger.info("[Account] createGuestAccountRejected called reason: %s", reason);
@@ -38,6 +41,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void createAccountAccepted(int playerId, String username, String password, GssConnection con) {
 
         GssLogger.info("[Account] createAccountAccepted called playerId: %d username: %s password: %s", playerId, username, password);
@@ -48,6 +52,7 @@ public class Account extends GssInterface {
 
     }
 
+    @GssCallable
     public void createAccountRejected(String reason, GssConnection con) {
 
         GssLogger.info("[Account] createAccountRejected called reason: %s", reason);
