@@ -299,7 +299,12 @@ public class SimpleClient implements UIListener {
         config.addInterface(account);
         config.addInterface(auth);    
         config.addInterface(play);
-
+        
+        /*
+         * Let the client accept calls with unmatching parameter count
+         */
+        Gss.acceptCallsWithUnmatchingParameterCount(true);
+        
         con = Gss.startClient(config);
 
         ClientUI.get().update(UIState.connected);
