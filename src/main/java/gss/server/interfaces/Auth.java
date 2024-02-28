@@ -6,8 +6,10 @@ import gss.network.GssConnection;
 import gss.network.GssInterface;
 import gss.server.manager.AuthenticationManager;
 import gss.server.manager.ConnectionManager;
+import gss.server.manager.PlayerManager;
 import gss.server.manager.hooks.AuthHook_loginUsingIdPassword;
 import gss.server.manager.hooks.HookManager;
+import gss.server.model.Player;
 
 public class Auth extends GssInterface {
 
@@ -27,12 +29,14 @@ public class Auth extends GssInterface {
 
             ConnectionManager.get().register(hook.playerId, con);
 
-            call(con, "Auth", "loginResponse", 1);
+            Player player = PlayerManager.get().getPlayer(hook.playerId);
+
+            call(con, "Auth", "loginResponse", 1, player.getName());
 
         }
         else {
 
-            call(con, "Auth", "loginResponse", 0);
+            call(con, "Auth", "loginResponse", 0, "");
 
         }
     }
