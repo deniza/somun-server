@@ -20,18 +20,18 @@ public class Auth extends GssInterface {
     }
     
     @GssCallable
-    public void loginResponse(int status, GssConnection con) {
+    public void loginResponse(int status, String playerName, GssConnection con) {
 
-        GssLogger.info("[Auth] loginResponse called status: %d", status);
+        GssLogger.info("[Auth] loginResponse called status: %d, name: %s", status, playerName);
 
         for (AuthListener l : listeners) {
-            l.loginResponse(status);
+            l.loginResponse(status, playerName);
         }
         
     }    
 
     public static interface AuthListener {
-        public void loginResponse(int status);
+        public void loginResponse(int status, String playerName);
     }
 
 }

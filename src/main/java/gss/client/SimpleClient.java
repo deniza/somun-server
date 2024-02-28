@@ -72,13 +72,14 @@ public class SimpleClient implements UIListener {
 
         auth.addListener(new AuthListener() {
             @Override
-            public void loginResponse(int status) {
+            public void loginResponse(int status, String _playerName) {
                 if (status == 0) {
                     System.out.println("login failed");
                     ClientUI.get().update(UIState.loginerr);
                 }
                 else {
                     System.out.println("login success");
+                    playerName = _playerName;
                     ClientUI.get().update(UIState.login);
                 }
             }            
