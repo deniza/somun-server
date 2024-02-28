@@ -173,6 +173,10 @@ public class GameManager implements ServiceUpdateInterface {
 
     }
 
+    public void rejectInvitation(Player player, int invitationId) {
+        invitations.removeInvitation(invitationId);
+    }
+
     public void playerDisconnected(Player player) {
 
         for (PlayerWaitingList waitingList : waitingLists.values()) {

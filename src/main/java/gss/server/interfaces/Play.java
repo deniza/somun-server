@@ -115,6 +115,15 @@ public class Play extends GssInterface {
 
     }
 
+    @GssCallable
+    public void rejectInvitation(int invitationId, GssConnection con) {
+
+        GssLogger.info("[Play] rejectInvitation called");
+
+        GameManager.get().rejectInvitation(getPlayer(con), invitationId);
+
+    }
+
     @Override
     public void clientDisconnected(GssConnection con) {
 
