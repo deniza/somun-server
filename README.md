@@ -50,6 +50,12 @@ SOMUN is a modular, open-source server software system written in Java, designed
 
 A sample game client written in Java is included in the server distribution to showcase basic usage. You can find it in the `server/samplegame` directory. This game demonstrates turn-based multiplayer features and can be used as a starting point for building your own games.
 
+## Client Libraries
+
+SOMUN provides following client libraries for different platforms:
+* somun-solar2d for Solar2d game engine: [somun-solar2d](https://github.com/deniza/somun-solar2d)
+* somun-flutter for Flutter: [somun-flutter](https://github.com/deniza/somun-flutter)
+
 ## Contributing
 
 SOMUN welcomes all forms of contributions from the community. This includes:
