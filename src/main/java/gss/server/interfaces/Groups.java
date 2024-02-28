@@ -24,9 +24,9 @@ public class Groups extends GssInterface {
     }
 
     @GssCallable
-    public void requestJoinGroup(int groupId, GssConnection con) {
+    public void joinGroup(int groupId, GssConnection con) {
 
-        GssLogger.info("[Groups] requestJoinGroup called");
+        GssLogger.info("[Groups] joinGroup called");
 
         Player player = getPlayer(con);
 
