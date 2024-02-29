@@ -12,6 +12,7 @@ public class GameSession {
     protected ArrayList<Player> players;
     protected Player turnOwner;
     protected Player winner;
+    protected boolean completed = false;
     protected GameState privateState = new GameState();
     protected GameState publicState = new GameState();
 
@@ -40,6 +41,10 @@ public class GameSession {
         return turnOwner;
     }
 
+    public void setTurnOwner(Player player) {
+        this.turnOwner = player;
+    }
+
     public Player getWinner() {
         return winner;
     }
@@ -53,6 +58,15 @@ public class GameSession {
     }
     public void setPublicState(GameState state) {
         this.publicState = state;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+        setTurnOwner(null);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -102,11 +116,20 @@ public class GameSession {
 
     }
 
-    public void deserialize(int gameId, int turnOwnerId, int winnerId, ArrayList<Integer> playerIds, GameState privateState, GameState publicState) {
+    public void deserialize(int gameId, int turnOwnerId, boolean isCompleted, int winnerId, ArrayList<Integer> playerIds, GameState privateState, GameState publicState) {
 
         this.gameId = gameId;
-        this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
-        this.winner = PlayerManager.get().getPlayer(winnerId);
+        this.completed = isCompleted;
+
+        if (isCompleted) {
+            if (winnerId > 0) {
+                this.winner = PlayerManager.get().getPlayer(winnerId);
+            }
+        }
+
+        if (turnOwnerId > 0) {
+            this.turnOwner = PlayerManager.get().getPlayer(turnOwnerId);
+        }
 
         this.players = new ArrayList<>(playerIds.size());
         for (Integer pid : playerIds) {
@@ -157,6 +180,10 @@ public class GameSession {
         protected int[] playerPids;
         protected String gameStateDataPrivate;
         protected String gameStateDataPublic;
+        protected boolean completed;
+
+        private GameSessionData() {
+        }
 
         public static GameSessionData createUsingGameSession(GameSession session) {
 
@@ -164,6 +191,7 @@ public class GameSession {
 
             data.turnOwnerPid = session.turnOwner.getPlayerId();
             data.playerPids = new int[session.players.size()];
+            data.completed = session.isCompleted();
 
             int playerIndex = 0;
             for (Player p : session.players) {
@@ -181,9 +209,6 @@ public class GameSession {
             GameSessionData gameSessionData = JsonHelper.fromJson(sessionDataJson, GameSessionData.class);
             return gameSessionData;
 
-        }
-
-        private GameSessionData() {
         }
 
         public String serialize() {

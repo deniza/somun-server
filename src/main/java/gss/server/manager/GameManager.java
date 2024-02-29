@@ -104,9 +104,15 @@ public class GameManager implements ServiceUpdateInterface {
         }
         else {
             player.setActiveGameId(gameId);
-            ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, gameSession.getTurnOwner().getPlayerId());
-        }
 
+            if (gameSession.isCompleted()) {
+                ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, 1, 0, gameSession.getWinner().getPlayerId(), gameSession.getPublicState().serialize());
+            }
+            else {
+                ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, 0, gameSession.getTurnOwner().getPlayerId(), 0, gameSession.getPublicState().serialize());
+            }
+
+        }
 
     }
     public void exitGame(Player player, int gameId) {
@@ -119,24 +125,24 @@ public class GameManager implements ServiceUpdateInterface {
 
         GameSession session = gameSessions.get(gameId);
 
-        if (session.checkIfPlayerIsTurnOwner(player) == false) {
+        if (session.checkIfPlayerIsTurnOwner(player) == false || session.isCompleted()) {
             ConnectionManager.get().call(player, "Play", "makeMoveResponse", 0);
             return;
         }
 
+        ConnectionManager.get().call(player, "Play", "makeMoveResponse", 1);
+
         gameHandler.onPlayerMakeMove(session, jsonData);
 
-        if (gameHandler.isGameFinished()) {
-
+        if (session.isCompleted()) {
+            ConnectionManager.get().call(session.getPlayers(), "Play", "gameFinished",
+                    session.getGameId(), session.getWinner().getPlayerId(), session.getPublicState().serialize());
         }
         else {
             session.iterateTurnOwner();
+            ConnectionManager.get().call(session.getPlayers(), "Play", "turnOwnerChanged", session.getGameId(), session.getTurnOwner().getPlayerId());
+            ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), session.getPublicState().serialize());
         }
-
-        ConnectionManager.get().call(player, "Play", "makeMoveResponse", 1);
-
-        ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), session.getPublicState().serialize());
-        ConnectionManager.get().call(session.getPlayers(), "Play", "turnOwnerChanged", session.getGameId(), session.getTurnOwner().getPlayerId());
 
         StorageManager.get().storeGameSession(session);
 

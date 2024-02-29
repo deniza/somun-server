@@ -2,8 +2,6 @@ package gss.server.model;
 
 public abstract class GameHandler {
 
-    private boolean isGameFinished = false;
-
     public void start() {
     }
 
@@ -22,14 +20,6 @@ public abstract class GameHandler {
     }
 
     public void onRpcCall(String functionName, String jsonData) {
-    }
-
-    public final void setGameFinished() {
-        isGameFinished = true;
-    }
-
-    public final boolean isGameFinished() {
-        return isGameFinished;
     }
 
 }

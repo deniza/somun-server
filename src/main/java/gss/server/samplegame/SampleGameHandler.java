@@ -65,14 +65,12 @@ public class SampleGameHandler extends GameHandler {
 
             // player wins!
 
-            setGameFinished();
             session.setWinner(session.getTurnOwner());
+            session.setCompleted(true);
 
-            HashMap<String, Object> stateMap = new HashMap<>();
-            stateMap.put("numberToFind", numberToFind);
-            stateMap.put("winner", session.getTurnOwner().getPlayerId());
-
-            ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), JsonHelper.hashmapToJson(stateMap));
+            GameState publicState = session.getPublicState();
+            publicState.setData("numberToFind", numberToFind);
+            publicState.setData("winner", session.getWinner().getPlayerId());
 
         }
         else {
