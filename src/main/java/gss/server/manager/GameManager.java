@@ -13,6 +13,7 @@ import gss.server.model.ServiceUpdateInterface;
 import gss.server.model.matcher.PlayerMatcher;
 import gss.server.model.matcher.RandomPlayerMatcher;
 import gss.server.util.ArrayHelper;
+import gss.server.util.JsonHelper;
 import gss.server.util.Time;
 
 public class GameManager implements ServiceUpdateInterface {
@@ -133,6 +134,9 @@ public class GameManager implements ServiceUpdateInterface {
         }
 
         ConnectionManager.get().call(player, "Play", "makeMoveResponse", 1);
+
+        ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), session.getPublicState().serialize());
+        ConnectionManager.get().call(session.getPlayers(), "Play", "turnOwnerChanged", session.getGameId(), session.getTurnOwner().getPlayerId());
 
         StorageManager.get().storeGameSession(session);
 

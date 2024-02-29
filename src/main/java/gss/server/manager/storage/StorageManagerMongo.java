@@ -280,7 +280,8 @@ public class StorageManagerMongo implements StorageInterface {
                 .append("gameId", session.getGameId())
                 .append("turnowner", session.getTurnOwner().getPlayerId())
                 .append("players", session.getPlayerIds())
-                .append("privstate", session.getPrivateState().getDataMap());
+                .append("privstate", session.getPrivateState().getDataMap())
+                .append("pubstate", session.getPublicState().getDataMap());
 
         if (session.getWinner() != null) {
             gameDoc.append("winner", session.getWinner().getPlayerId());

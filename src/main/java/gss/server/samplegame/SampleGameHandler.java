@@ -77,18 +77,9 @@ public class SampleGameHandler extends GameHandler {
         }
         else {
 
-            // keep continue the game
-
-            HashMap<String, Object> stateMap = new HashMap<>();
-            if (move.number > numberToFind) {
-                stateMap.put("target", "smaller");
-            }
-            else {
-                stateMap.put("target", "bigger");
-            }
-
-            ConnectionManager.get().call(session.getPlayers(), "Play", "gameStateUpdated", session.getGameId(), JsonHelper.hashmapToJson(stateMap));
-            ConnectionManager.get().call(session.getPlayers(), "Play", "turnOwnerChanged", session.getGameId(), session.getTurnOwner().getPlayerId());
+            // update public state and continue the game
+            GameState publicState = session.getPublicState();
+            publicState.setData("target", move.number > numberToFind ? -1 : 1);
 
         }
 
