@@ -13,7 +13,9 @@ public class PlayerWaitingList {
     }
 
     public void addPlayer(Player player) {
-        players.add(player);
+        if (players.contains(player) == false) {
+            players.add(player);
+        }
     }
 
     public void removePlayer(Player player) {
