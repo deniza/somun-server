@@ -70,13 +70,17 @@ public class GameManager implements ServiceUpdateInterface {
             return;
         }
 
-        PlayerWaitingList playerWaitingList = waitingLists.get(gametype);
-        if (playerWaitingList == null) {
-            playerWaitingList = new PlayerWaitingList();
-            waitingLists.put(gametype, playerWaitingList);
-        }
+        synchronized (waitingLists) {
 
-        playerWaitingList.addPlayer(player);
+            PlayerWaitingList playerWaitingList = waitingLists.get(gametype);
+            if (playerWaitingList == null) {
+                playerWaitingList = new PlayerWaitingList();
+                waitingLists.put(gametype, playerWaitingList);
+            }
+
+            playerWaitingList.addPlayer(player);
+
+        }
 
         ConnectionManager.get().call(player, "Play", "createRandomGameResponse", 1);
 
@@ -179,21 +183,27 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void playerDisconnected(Player player) {
 
-        for (PlayerWaitingList waitingList : waitingLists.values()) {
-            waitingList.removePlayer(player);
+        synchronized (waitingLists) {
+            for (PlayerWaitingList waitingList : waitingLists.values()) {
+                waitingList.removePlayer(player);
+            }
         }
 
     }
 
     private void createRandomGames() {
 
-        for (int gametype : waitingLists.keySet()) {
+        synchronized (waitingLists) {
 
-            PlayerWaitingList waitingList = waitingLists.get(gametype);
-            ArrayList<ArrayList<Player>> matched = waitingList.matchPlayers(gameRules.getPlayersPerGame(gametype), playerMatcher);
+            for (int gametype : waitingLists.keySet()) {
 
-            for (ArrayList<Player> players : matched) {
-                createGameAmongPlayers(players);
+                PlayerWaitingList waitingList = waitingLists.get(gametype);
+                ArrayList<ArrayList<Player>> matched = waitingList.matchPlayers(gameRules.getPlayersPerGame(gametype), playerMatcher);
+
+                for (ArrayList<Player> players : matched) {
+                    createGameAmongPlayers(players);
+                }
+
             }
 
         }
