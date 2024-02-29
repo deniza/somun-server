@@ -97,9 +97,15 @@ public class GameManager implements ServiceUpdateInterface {
 
     public void enterGame(Player player, int gameId) {
 
-        player.setActiveGameId(gameId);
+        GameSession gameSession = gameSessions.get(gameId);
+        if (gameSession == null) {
+            ConnectionManager.get().call(player, "Play", "enterGameResponse", 0);
+        }
+        else {
+            player.setActiveGameId(gameId);
+            ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, gameSession.getTurnOwner().getPlayerId());
+        }
 
-        ConnectionManager.get().call(player, "Play", "enterGameResponse", 1, gameSessions.get(gameId).getTurnOwner().getPlayerId());
 
     }
     public void exitGame(Player player, int gameId) {
