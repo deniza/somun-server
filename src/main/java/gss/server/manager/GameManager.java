@@ -195,6 +195,8 @@ public class GameManager implements ServiceUpdateInterface {
             }
         }
 
+        player.setActiveGameId(-1);
+
     }
 
     private void createRandomGames() {
