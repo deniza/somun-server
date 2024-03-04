@@ -217,6 +217,24 @@ public class StorageManagerMongo implements StorageInterface {
 
     }
 
+    @Override
+    public Player loadPlayerByUsernamePassword(String name, String password) {
+
+        MongoCollection<Document> collection = database.getCollection(PlayersCollection);
+
+        Document doc = collection.find(Filters.and(Filters.eq("name", name), Filters.eq("password", password))).first();
+
+        if (doc != null) {
+
+            return createPlayerFromDocument(doc);
+
+        }
+        else {
+            return null;
+        }
+
+    }
+
     private Player createPlayerFromDocument(Document doc) {
 
         final int playerId = doc.getInteger("playerId");

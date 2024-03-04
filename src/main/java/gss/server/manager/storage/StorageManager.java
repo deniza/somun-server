@@ -69,6 +69,12 @@ public class StorageManager {
 
     }
 
+    public Player loadPlayerByUsernamePassword(String name, String password) {
+
+        return mongo.loadPlayerByUsernamePassword(name, password);
+
+    }
+
     public Player loadPlayerByFbuid(String fbuid) {
 
         return mongo.loadPlayerByFbuid(fbuid);

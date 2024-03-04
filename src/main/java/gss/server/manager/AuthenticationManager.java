@@ -2,6 +2,7 @@ package gss.server.manager;
 
 import gss.network.GssConnection;
 import gss.server.manager.facebook.FacebookAuthenticationManager;
+import gss.server.manager.storage.StorageManager;
 import gss.server.model.Player;
 
 public class AuthenticationManager {
@@ -42,10 +43,29 @@ public class AuthenticationManager {
 
     }
 
+    public Player authenticateUsernamePassword(String username, String password) {
+
+        Player player = StorageManager.get().loadPlayerByUsernamePassword(username, password);
+
+        if (player == null) {
+            return null;
+        }
+        else {
+
+            player.setOnline(true);
+
+            PlayerManager.get().addPlayer(player);
+            GameManager.get().loadPlayerGameSessions(player);
+
+            return player;
+
+        }
+
+    }
+
     public void authenticateFacebook(String accessToken, GssConnection con) {
 
         FacebookAuthenticationManager.get().addAuthRequest(accessToken, con);
-
 
     }
 

@@ -42,6 +42,28 @@ public class Auth extends GssInterface {
     }
 
     @GssCallable
+    public void loginUsingUsernamePassword(String username, String password, GssConnection con) {
+
+        GssLogger.info("[Auth] loginUsingUsernamePassword called username: %s password: %s", username, password);
+
+        Player player = AuthenticationManager.get().authenticateUsernamePassword(username, password);
+
+        if (player != null) {
+
+            ConnectionManager.get().register(player.getPlayerId(), con);
+
+            call(con, "Auth", "loginResponse", 1, player.getName());
+
+        }
+        else {
+
+            call(con, "Auth", "loginResponse", 0, "");
+
+        }
+
+    }
+
+    @GssCallable
     public void loginUsingFacebook(String accessToken, GssConnection con) {
 
         GssLogger.info("[Auth] loginUsingFacebook called accessToken: %s", accessToken);
