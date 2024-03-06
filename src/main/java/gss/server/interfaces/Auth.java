@@ -52,7 +52,7 @@ public class Auth extends GssInterface {
 
             ConnectionManager.get().register(player.getPlayerId(), con);
 
-            call(con, "Auth", "loginResponse", 1, player.getName());
+            call(con, "Auth", "loginResponse", 1, player.getPlayerId());
 
         }
         else {
