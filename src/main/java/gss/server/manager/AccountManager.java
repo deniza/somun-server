@@ -9,16 +9,25 @@ import gss.server.util.PasswordGenerator;
 
 public class AccountManager {
     
-    private static AccountManager instance;
+    private static volatile AccountManager instance;
 
     private final String guestAccountNamePrefix = "guest_";
 
-    private AccountManager() {        
+    private AccountManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
     }
 
     public static AccountManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new AccountManager();
+            synchronized (AccountManager.class) {
+                if (instance == null) {
+                    instance = new AccountManager();
+                }
+            }
         }
         return instance;
     }
