@@ -18,7 +18,7 @@ import gss.server.util.Time;
 
 public class GameManager implements ServiceUpdateInterface {
     
-    private static GameManager instance;
+    private static volatile GameManager instance;
 
     private GameRules gameRules;
     private GameHandler gameHandler;
@@ -29,6 +29,11 @@ public class GameManager implements ServiceUpdateInterface {
     private long lastRandomGameCreationTimestamp = 0;
 
     private GameManager() {
+
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
 
         GameRules rules = new GameRules();
         rules.addGameType(0);
@@ -42,8 +47,13 @@ public class GameManager implements ServiceUpdateInterface {
     }
 
     public static GameManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new GameManager();
+            synchronized (GameManager.class) {
+                if (instance == null) {
+                    instance = new GameManager();
+                }
+            }
         }
         return instance;
     }

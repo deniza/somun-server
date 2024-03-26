@@ -6,13 +6,23 @@ import gss.server.util.ArrayHelper;
 
 public class MessageManager {
 
-    private static MessageManager instance;
+    private static volatile MessageManager instance;
 
-    private MessageManager() {}
+    private MessageManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
+    }
 
     public static MessageManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new MessageManager();
+            synchronized (MessageManager.class) {
+                if (instance == null) {
+                    instance = new MessageManager();
+                }
+            }
         }
         return instance;
     }

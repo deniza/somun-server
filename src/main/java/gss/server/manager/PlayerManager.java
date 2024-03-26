@@ -8,16 +8,25 @@ import gss.server.model.Player;
 
 public class PlayerManager {
     
-    private static PlayerManager instance;
+    private static volatile PlayerManager instance;
 
     private final HashMap<Integer, Player> players = new HashMap<>();
 
     private PlayerManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
     }
 
     public static PlayerManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new PlayerManager();
+            synchronized (PlayerManager.class) {
+                if (instance == null) {
+                    instance = new PlayerManager();
+                }
+            }
         }
         return instance;
     }

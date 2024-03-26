@@ -8,14 +8,26 @@ import gss.server.model.Player;
 
 public class ConnectionManager {
     
-    private static ConnectionManager instance;
+    private static volatile ConnectionManager instance;
 
     private HashMap<Integer, GssConnection> pidConMap = new HashMap<>();
     private HashMap<GssConnection, Integer> conPidMap = new HashMap<>();
 
+    private ConnectionManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
+    }
+
     public static ConnectionManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new ConnectionManager();
+            synchronized (ConnectionManager.class) {
+                if (instance == null) {
+                    instance = new ConnectionManager();
+                }
+            }
         }
         return instance;
     }

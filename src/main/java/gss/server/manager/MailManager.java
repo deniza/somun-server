@@ -24,9 +24,14 @@ public class MailManager {
     private Session session;
     private ExecutorService execService;
 
-    private static MailManager instance;
+    private static volatile MailManager instance;
 
     private MailManager() {
+
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
 
         if (MailEnabled == false) {
             return;
@@ -46,8 +51,13 @@ public class MailManager {
     }
 
     public static MailManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new MailManager();
+            synchronized (MailManager.class) {
+                if (instance == null) {
+                    instance = new MailManager();
+                }
+            }
         }
         return instance;
     }

@@ -7,14 +7,23 @@ import gss.server.model.Player;
 
 public class AuthenticationManager {
 
-    private static AuthenticationManager instance;
+    private static volatile AuthenticationManager instance;
 
-    private AuthenticationManager() {        
+    private AuthenticationManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
     }
     
     public static AuthenticationManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new AuthenticationManager();
+            synchronized (AuthenticationManager.class) {
+                if (instance == null) {
+                    instance = new AuthenticationManager();
+                }
+            }
         }
         return instance;
     }

@@ -9,13 +9,23 @@ import java.util.List;
 
 public class FriendsManager {
 
-    private static FriendsManager instance;
+    private static volatile FriendsManager instance;
 
-    private FriendsManager() {}
+    private FriendsManager() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
+    }
 
     public static FriendsManager get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new FriendsManager();
+            synchronized (FriendsManager.class) {
+                if (instance == null) {
+                    instance = new FriendsManager();
+                }
+            }
         }
         return instance;
     }

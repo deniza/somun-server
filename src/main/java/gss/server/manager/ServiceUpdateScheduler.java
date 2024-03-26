@@ -16,11 +16,23 @@ public class ServiceUpdateScheduler {
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     
-    private static ServiceUpdateScheduler instance;
+    private static volatile ServiceUpdateScheduler instance;
+
+    private ServiceUpdateScheduler() {
+        // Prevent form the reflection api.
+        if (instance != null) {
+            throw new RuntimeException("Use get() method to get the single instance of this class.");
+        }
+    }
 
     public static ServiceUpdateScheduler get() {
+        // Double check locking pattern
         if (instance == null) {
-            instance = new ServiceUpdateScheduler();
+            synchronized (ServiceUpdateScheduler.class) {
+                if (instance == null) {
+                    instance = new ServiceUpdateScheduler();
+                }
+            }
         }
         return instance;
     }
