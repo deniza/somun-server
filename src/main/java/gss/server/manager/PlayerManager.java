@@ -37,7 +37,7 @@ public class PlayerManager {
 
     }
 
-    public Player getPlayer(int playerId) {
+    public synchronized Player getPlayer(int playerId) {
 
         // reserved for unset player
         if (playerId == 0) {
