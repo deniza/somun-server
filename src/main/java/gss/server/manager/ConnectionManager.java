@@ -2,6 +2,7 @@ package gss.server.manager;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import gss.network.GssConnection;
 import gss.server.model.Player;
@@ -10,8 +11,8 @@ public class ConnectionManager {
     
     private static volatile ConnectionManager instance;
 
-    private HashMap<Integer, GssConnection> pidConMap = new HashMap<>();
-    private HashMap<GssConnection, Integer> conPidMap = new HashMap<>();
+    private ConcurrentHashMap<Integer, GssConnection> pidConMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<GssConnection, Integer> conPidMap = new ConcurrentHashMap<>();
 
     private ConnectionManager() {
         // Prevent form the reflection api.
