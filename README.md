@@ -56,6 +56,10 @@ SOMUN provides following client libraries for different platforms:
 * somun-solar2d for Solar2d game engine: [somun-solar2d](https://github.com/deniza/somun-solar2d)
 * somun-flutter for Flutter: [somun-flutter](https://github.com/deniza/somun-flutter)
 
+## Documentation
+
+Detailed documentation for Somun Server is available in the `docs` directory of this repository. You can start with the [Documentation Index](docs/index.MD) for an overview and links to specific topics.
+
 ## Contributing
 
 SOMUN welcomes all forms of contributions from the community. This includes:
