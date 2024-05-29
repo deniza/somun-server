@@ -49,7 +49,6 @@ public class SampleGameHandler extends GameHandler {
 
         GameState privateState = session.getPrivateState();
         privateState.setData(VAR_NUMBER_TO_FIND, new Random().nextInt(100) + 1);
-        session.setPrivateState(privateState);
 
     }
 
