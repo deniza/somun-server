@@ -1,9 +1,8 @@
 package gss;
 
-import gss.experiments.MongoExperiments;
 import gss.server.Somun;
 import gss.server.manager.storage.StorageManager;
-import gss.server.samplegame.SampleGameHandler;
+import gss.server.samplegame.GuessTheNumberGameHandler;
 
 /**
  *
@@ -23,7 +22,7 @@ public class Main {
         GssLogger.info("Running GSS server");
 
         Somun server = new Somun();
-        server.start(new SampleGameHandler());
+        server.start(new GuessTheNumberGameHandler());
 
     }
 

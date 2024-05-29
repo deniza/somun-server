@@ -9,7 +9,7 @@ import gss.server.model.GameHandler;
 import gss.server.model.GameSession;
 import gss.server.model.GameState;
 
-public class SampleGameHandler extends GameHandler {
+public class GuessTheNumberGameHandler extends GameHandler {
 
     private final String VAR_NUMBER_TO_FIND = "numberToFind";
 
@@ -18,7 +18,7 @@ public class SampleGameHandler extends GameHandler {
     @Override
     public void start() {
 
-        GssLogger.info("SampleGameHandler started");
+        GssLogger.info("GuessTheNumberGameHandler started");
 
         // add some forbidden usernames for testing hook functionality
         forbiddenUsernames.add("admin");
@@ -29,7 +29,7 @@ public class SampleGameHandler extends GameHandler {
         // This hook will log the player id and password when a player logs in
         HookManager.get().addHook(AuthHook_loginUsingIdPassword.class, hook -> {
             AuthHook_loginUsingIdPassword hook_loginUsingIdPassword = (AuthHook_loginUsingIdPassword) hook;
-            GssLogger.info("SampleGameHandler hook called: " + hook_loginUsingIdPassword.playerId + " " + hook_loginUsingIdPassword.password);
+            GssLogger.info("GuessTheNumberGameHandler hook called: " + hook_loginUsingIdPassword.playerId + " " + hook_loginUsingIdPassword.password);
         });
 
         // This hook will prevent players from using forbidden usernames
