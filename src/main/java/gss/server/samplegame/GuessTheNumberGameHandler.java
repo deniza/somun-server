@@ -113,7 +113,7 @@ public class GuessTheNumberGameHandler extends GameHandler {
      */
     @Override
     public void onGameFinished(GameSession session) {
-        super.onGameFinished(session);
+        // Called when a game is finished
     }
 
     /**
