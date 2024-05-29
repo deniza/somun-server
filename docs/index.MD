@@ -12,6 +12,10 @@ Welcome to the Somun Server documentation! This is your one-stop shop for learni
 * **Game Logic with GameHandler:** Dive into creating custom game logic by extending the `GameHandler` class. This guide explains how to handle player actions, manage game states, and implement your game's rules: [basic-game-handler.MD](basic-game-handler.MD)
 * **GameState Management:** Learn how to leverage `GameState` objects to store and manage both public and private data within your game sessions, ensuring efficient and secure data handling: [using-gamestate-objects.MD](using-gamestate-objects.MD)
 
+**Tutorials:**
+* **Creating a Simple Turn-Based Guess the Number Game (Server):** Follow this step-by-step tutorial to create a basic turn-based game using Somun's game server framework. This tutorial covers setting up the game handler, managing game sessions, and handling player moves: [guessthenumber-steps-server.MD]()
+* **Creating a Simple Turn-Based Guess the Number Game (Client):** Pair this client-side tutorial with the server-side tutorial to build a complete turn-based game using Somun. Learn how to create the client-side game logic, connect to the server, and handle player interactions: [guessthenumber-steps-client.MD]()
+
 **Notifications:**
 
 * **Enabling Push Notifications:**
