@@ -11,10 +11,16 @@ import gss.server.model.GameState;
 
 public class GuessTheNumberGameHandler extends GameHandler {
 
+    // We will store the number to find in the private state using this key to access it
     private final String VAR_NUMBER_TO_FIND = "numberToFind";
 
+    // We will use this set to test hook functionality
     private final HashSet<String> forbiddenUsernames = new HashSet<>();
 
+    /**
+     * This function is called when the game handler is created.
+     * We will use this function to set up our test hooks.
+     */
     @Override
     public void start() {
 
@@ -44,10 +50,12 @@ public class GuessTheNumberGameHandler extends GameHandler {
 
     }
 
+    /**
+     * This function is called when a new game is created.
+     */
     @Override
     public void onGameCreated(GameSession session) {
 
-        // This function is called once when a game is created.
         // We will generate a random number between 1 and 100 and store it in the private state.
         // This number will be the number that the players will try to guess.
 
@@ -56,11 +64,12 @@ public class GuessTheNumberGameHandler extends GameHandler {
 
     }
 
+    /**
+     * This function is called when a player makes a move.
+     * jsonData is the data sent by the player.
+     */
     @Override
     public void onPlayerMakeMove(GameSession session, String jsonData) {
-
-        // This function is called when a player makes a move.
-        // We will check if the number the player guessed is the same as the number we generated in onGameCreated.
 
         // Get the number to find from the private state
         GameState privateState = session.getPrivateState();
@@ -98,20 +107,22 @@ public class GuessTheNumberGameHandler extends GameHandler {
 
     }
 
+    /**
+     * This function is called when a game is finished.
+     * We don't need to do anything here, but we could do some cleanup if needed.
+     */
     @Override
     public void onGameFinished(GameSession session) {
-
-        // This function is called when a game is finished.
-        // We don't need to do anything here, but we could do some cleanup if needed.
-
         super.onGameFinished(session);
-
     }
 
+    /**
+     * This function is called when a player issues an RPC call.
+     * We can use this to handle custom RPC calls if needed.
+     */
     @Override
     public void onRpcCall(String functionName, String jsonData) {
 
-        // This is the place we handle custom RPC calls.
         // We can define custom RPC calls in the client and call them from the client.
         // We can use this to implement custom game logic or any other functionality we need.
 
