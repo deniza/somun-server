@@ -4,6 +4,7 @@ Welcome to the Somun Server documentation! This is your one-stop shop for learni
 
 **Getting Started:**
 
+* **Introduction to Somun Server:** High level overview of the Somun Server project: [introduction-to-somun-server.MD](introduction-to-somun-server.MD)
 * **Installing MongoDB:** Learn how to install and configure MongoDB, the NoSQL database that powers Somun, on Windows, macOS, and Linux systems: [installing-mongodb.MD](installing-mongodb.MD)
 * **Server Configuration:** Understand the various options available in the `server.conf` file to customize the behavior and functionality of your Somun server: [server.conf.MD](server.conf.MD)
 
