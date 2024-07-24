@@ -75,7 +75,7 @@ A basic client SDK implementation for the Solar2D framework was developed, facil
 
 ## Conclusion
 
-The Somun Server system, created within the scope of the project, has been tested and developed under real-world conditions in our "Kelimelik" and "Arkadaş Okey" game projects and has become an integral part of these projects' server-side software architecture. The system provides significant advantages in new online game development projects and prototyping processes, such as:
+The Somun Server system, created within the scope of the project, has been tested and developed under real-world conditions in some of our published online game projects and has become an integral part of these projects' server-side software architecture. The system provides significant advantages in new online game development projects and prototyping processes, such as:
 
 - **Rapid Prototyping**: The modular structure and ready-to-use modules shorten the development time of new game mechanics and features from months to weeks.
 - **Cost Savings**: Optimized network communication and data usage reduce data center costs and development/operation costs by utilizing ready-made infrastructure.
