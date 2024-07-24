@@ -73,13 +73,17 @@ SOMUN welcomes all forms of contributions from the community. This includes:
 
 Please refer to the [CONTRIBUTING.md](docs/CONTRIBUTING.md) file for detailed guidelines and contribution processes.
 
+## Main Contributors
+
+* Deniz Aydınoğlu (Project Admin): https://github.com/deniza
+* Neslihan Aydınoğlu: https://github.com/neslihe2
+
 ## Research Background
 
 This project is developed as part of a research initiative at Odtü Teknokent. We aim to explore and advance the development of open-source server software for online games, focusing on modularity, scalability, and community collaboration.
 
-<img src="https://he2apps.com/somun/teknokent-logo.png" alt="Odtü Teknokent Logo">
+[<img src="https://he2apps.com/somun/teknokent-logo.png" alt="Odtü Teknokent Logo">](https://odtuteknokent.com.tr)
 
 ## License
 
-This project is licensed under the MIT license. See the LICENSE.txt file for details.
-
+This project is licensed under the MIT license. See the [LICENSE.txt](LICENSE.txt) file for details.
