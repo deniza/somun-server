@@ -165,4 +165,4 @@ public void onPlayerMakeMove(GameSession session, String jsonData) {
 
 This is a complete basic sample of the "Guess the Number" game server-side implementation using the Somun open-source game server. All the client authentication, state synchronization, state persistence to the database, and network communication parts are taken care of by the Somun game server stack.
 
-To have a fully running game, we now have to code the client-side implementation of this game. Follow [How to Create Guess The Number Game Step by Step (Client)](docs/guessthenumber-steps-client.MD) for the next steps.
+To have a fully running game, we now have to code the client-side implementation of this game. Follow [How to Create Guess The Number Game Step by Step (Client)](guessthenumber-steps-client.MD) for the next steps.
