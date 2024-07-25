@@ -80,4 +80,3 @@ These options configure various server limits to ensure proper operation and sec
 * Make sure to restart the Somun server after making changes to the `server.conf` file for the new settings to take effect.
 * Always keep a backup of the original `server.conf` file before making any modifications.
 * Refer to the official Somun documentation for more detailed information on server configuration options and settings.
-```
