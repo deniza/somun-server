@@ -7,7 +7,7 @@
 
 <img src="https://he2apps.com/somun/somun-logo-icon-small.png" alt="Somun Logo" width="64" height="auto">
 
-SOMUN is a modular, open-source server software system written in Java, designed for developing and deploying online games. It provides core functionalities like network communication, user management, matchmaking, data storage, and gameplay mechanics. SOMUN aims to offer developers a flexible and efficient platform to build their online games without reinventing the wheel.
+SOMUN is a modular, open-source game server written in Java, designed for developing and deploying turnbased online games. It provides core functionalities like network communication, game state synchronization, user management, matchmaking, data storage, and core turnbased gameplay mechanics. SOMUN aims to offer developers a flexible and efficient platform to build their online games without reinventing the wheel.
 
 > Somun means "nut of a bolt" in Turkish, and it is a metaphor for the core of a game server that holds everything together.
 
@@ -15,8 +15,8 @@ SOMUN is a modular, open-source server software system written in Java, designed
 
 <img src="https://he2apps.com/somun/somun-admin.png" alt="Somun Admin Page" width="auto" height="auto">
 
-* **Modular design:** SOMUN consists of independent modules that can be easily integrated or extended to meet specific needs.
-* **High performance:** Optimized network communication and data management for handling large numbers of concurrent users.
+* **Modular design:** SOMUN consists of independent modules that can be easily integrated or extended to meet specific needs of your online game project.
+* **High performance:** Optimized network communication by using event driven asynchronous java NIO API and NoSQL data management for handling large numbers of concurrent users.
 * **Scalability:** SOMUN can be deployed on various environments, from local development machines to cloud instances, scaling to accommodate growing player bases.
 * **Open source:** Freely available for use, modification, and contribution under the MIT license.
 * **Community support:** Encourages contributions and collaboration to enhance the platform and its capabilities.
