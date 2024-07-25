@@ -13,6 +13,8 @@ SOMUN is a modular, open-source server software system written in Java, designed
 
 ## Features
 
+<img src="https://he2apps.com/somun/somun-admin.png" alt="Somun Admin Page" width="auto" height="auto">
+
 * **Modular design:** SOMUN consists of independent modules that can be easily integrated or extended to meet specific needs.
 * **High performance:** Optimized network communication and data management for handling large numbers of concurrent users.
 * **Scalability:** SOMUN can be deployed on various environments, from local development machines to cloud instances, scaling to accommodate growing player bases.
