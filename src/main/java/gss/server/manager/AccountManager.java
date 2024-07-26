@@ -51,6 +51,9 @@ public class AccountManager {
         }
 
         PlayerManager.get().addPlayer(player);
+        PlayerManager.get().incrementOnlineCount();
+
+        player.setOnline(true);
 
         return player;
 
@@ -68,6 +71,9 @@ public class AccountManager {
             if (result == StorageInterface.CreatePlayerResult.SUCCESS) {
 
                 PlayerManager.get().addPlayer(player);
+                PlayerManager.get().incrementOnlineCount();
+
+                player.setOnline(true);
 
                 con.invokeMethod("Account_createAccountAccepted", new Object[] {player.getPlayerId(), player.getName(), player.getPassword()});
 

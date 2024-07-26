@@ -104,6 +104,9 @@ public class FacebookAuthenticationManager implements ServiceUpdateInterface {
                         if (result == StorageInterface.CreatePlayerResult.SUCCESS) {
 
                             PlayerManager.get().addPlayer(player);
+                            PlayerManager.get().incrementOnlineCount();
+
+                            player.setOnline(true);
 
                             vData.getConnection().invokeMethod("Account_createAccountAccepted", new Object[] {player.getPlayerId(), player.getName(), player.getPassword()});
 
