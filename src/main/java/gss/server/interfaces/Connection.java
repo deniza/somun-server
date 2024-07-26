@@ -10,11 +10,6 @@ import gss.server.model.Player;
 public class Connection extends GssInterface  {
 
     @Override
-    public void clientConnected(GssConnection con) {
-    }
-
-
-    @Override
     public void clientDisconnected(GssConnection con) {
 
         Player player = getPlayer(con);
