@@ -3,6 +3,7 @@ package gss.server;
 import gss.GssLogger;
 import gss.network.Gss;
 import gss.network.GssConfig;
+import gss.server.manager.AdminDashboardServer;
 import gss.server.manager.GameManager;
 import gss.server.manager.ServiceUpdateScheduler;
 import gss.server.manager.facebook.FacebookAuthenticationManager;
@@ -40,6 +41,10 @@ public class Somun {
         ServiceUpdateScheduler.get().register(FacebookAuthenticationManager.get());
         ServiceUpdateScheduler.get().register(GroupsManager.get());
         ServiceUpdateScheduler.get().start();
+
+        if (Config.getBoolean("admin_interface_enabled")) {
+            AdminDashboardServer.get().start();
+        }
 
         GameManager.get().setGameHandler(gameHandler);
         this.gameHandler.start();
