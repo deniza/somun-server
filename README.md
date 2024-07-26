@@ -7,7 +7,7 @@
 
 <img src="https://he2apps.com/somun/somun-logo-icon-small.png" alt="Somun Logo" width="64" height="auto">
 
-SOMUN is a modular, open-source game server written in Java, designed for developing and deploying turnbased online games. It provides core functionalities like network communication, game state synchronization, user management, matchmaking, data storage, and core turnbased gameplay mechanics. SOMUN aims to offer developers a flexible and efficient platform to build their online games without reinventing the wheel.
+SOMUN is a modular, open-source game server written in Java, designed for developing and deploying turn-based online games. It provides core functionalities like network communication, game state synchronization, user management, matchmaking, data storage, and core turn-based gameplay mechanics. SOMUN aims to offer developers a flexible and efficient platform to build their online games without reinventing the wheel.
 
 > Somun means "nut of a bolt" in Turkish, and it is a metaphor for the core of a game server that holds everything together.
 
