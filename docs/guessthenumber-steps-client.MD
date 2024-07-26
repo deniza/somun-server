@@ -137,4 +137,4 @@ end)
 
 That's it! You learned the key points of the "Guess the Number" client-side implementation. Please study the code of this sample project more thoroughly to gain better insights into how to handle various state changes and the flow of the game logic.
 
-Looking for server implementation? Follow: [How to Create Guess The Number Game Step by Step (Server)](docs/guessthenumber-steps-server.MD)
+Looking for server implementation? Follow: [How to Create Guess The Number Game Step by Step (Server)](guessthenumber-steps-server.MD)
