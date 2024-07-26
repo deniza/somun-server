@@ -31,6 +31,9 @@ public class Account extends GssInterface {
             call(con, "Account", "createGuestAccountRejected", "Error creating guest account");
         }
         else  {
+
+            ConnectionManager.get().register(player.getPlayerId(), con);
+
             call(con, "Account", "createGuestAccountAccepted", player.getPlayerId(), player.getName(), player.getPassword());
         }
 
@@ -41,7 +44,10 @@ public class Account extends GssInterface {
 
         GssLogger.info("[Account] createAccount called");
 
-        AccountManager.get().createAccount(username, password, con);
+        Player player = AccountManager.get().createAccount(username, password, con);
+        if (player != null) {
+            ConnectionManager.get().register(player.getPlayerId(), con);
+        }
 
     }
 

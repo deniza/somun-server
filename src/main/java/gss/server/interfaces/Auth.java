@@ -72,11 +72,4 @@ public class Auth extends GssInterface {
 
     }
 
-    @Override
-    public void clientDisconnected(GssConnection con) {
-        
-        ConnectionManager.get().unregister(con);
-
-    }
-
 }

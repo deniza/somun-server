@@ -59,7 +59,7 @@ public class AccountManager {
 
     }
 
-    public void createAccount(String username, String password, GssConnection con) {
+    public Player createAccount(String username, String password, GssConnection con) {
 
         if (CredentialUtils.checkUsernameValidity(username) && CredentialUtils.checkPasswordValidity(password)) {
 
@@ -89,10 +89,14 @@ public class AccountManager {
 
             }
 
+            return player;
+
         }
         else {
 
             con.invokeMethod("Account_createAccountRejected", new Object[] {"Invalid username or password"});
+
+            return null;
 
         }
 

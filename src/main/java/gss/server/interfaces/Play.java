@@ -124,18 +124,4 @@ public class Play extends GssInterface {
 
     }
 
-    @Override
-    public void clientDisconnected(GssConnection con) {
-
-        Player player = getPlayer(con);
-
-        if (player == null) {
-            return;
-        }
-
-        GameManager.get().playerDisconnected(player);
-        PlayerManager.get().playerDisconnected(player);
-
-    }
-
 }
