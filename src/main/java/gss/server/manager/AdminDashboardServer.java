@@ -99,7 +99,10 @@ public class AdminDashboardServer {
 
         serverRunning.set(false);
         exchange.getResponseSender().send("Server is shutting down");
-        // Implement actual shutdown logic here if needed
+
+        GssLogger.info("Received shutdownn command from admin interface. Shutting down server.");
+        System.exit(0);
+
     }
 
     private void handleAdminPage(HttpServerExchange exchange) throws IOException {
