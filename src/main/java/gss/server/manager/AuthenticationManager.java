@@ -40,6 +40,7 @@ public class AuthenticationManager {
 
                 player.setOnline(true);
 
+                PlayerManager.get().incrementOnlineCount();
                 PlayerManager.get().addPlayer(player);
                 GameManager.get().loadPlayerGameSessions(player);
 
@@ -64,6 +65,8 @@ public class AuthenticationManager {
             player.setOnline(true);
 
             PlayerManager.get().addPlayer(player);
+            PlayerManager.get().incrementOnlineCount();
+
             GameManager.get().loadPlayerGameSessions(player);
 
             return player;

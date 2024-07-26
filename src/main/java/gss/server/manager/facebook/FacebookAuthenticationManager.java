@@ -84,6 +84,8 @@ public class FacebookAuthenticationManager implements ServiceUpdateInterface {
                         player.setOnline(true);
 
                         PlayerManager.get().addPlayer(player);
+                        PlayerManager.get().incrementOnlineCount();
+
                         GameManager.get().loadPlayerGameSessions(player);
 
                         vData.getConnection().invokeMethod("Auth_facebookLoginResponse", new Object[] {1, vData.getPid(), vData.getFbuid(), vData.getName(), vData.getFullName()});

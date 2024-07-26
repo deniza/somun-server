@@ -12,6 +12,8 @@ public class PlayerManager {
 
     private final HashMap<Integer, Player> players = new HashMap<>();
 
+    private int onlineCount = 0;
+
     private PlayerManager() {
         // Prevent form the reflection api.
         if (instance != null) {
@@ -66,6 +68,17 @@ public class PlayerManager {
 
     public void playerDisconnected(Player player) {
         player.setOnline(false);
+        decrementOnlineCount();
+    }
+
+    public void incrementOnlineCount() {
+        onlineCount++;
+        AdminDashboardServer.get().getStats().setOnlinePlayers(onlineCount);
+    }
+
+    public void decrementOnlineCount() {
+        onlineCount = Math.max(0, onlineCount - 1);
+        AdminDashboardServer.get().getStats().setOnlinePlayers(onlineCount);
     }
 
 }
