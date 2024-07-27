@@ -27,6 +27,7 @@ public class Somun {
 
         GssConfig config = new GssConfig();
         config.setLocalPort(Config.getInt("port"));
+        config.setLocalIp(Config.getString("bind_host"));
         config.addInterface(new gss.server.interfaces.Connection());
         config.addInterface(new gss.server.interfaces.Auth());
         config.addInterface(new gss.server.interfaces.Account());
